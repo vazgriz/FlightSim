@@ -1,0 +1,2 @@
+Assets/Scenes/Main/LightingData.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Scenes/Main/ReflectionProbe-0.exr filter=lfs diff=lfs merge=lfs -text

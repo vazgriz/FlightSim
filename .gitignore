@@ -61,3 +61,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+
+Assets/Scenes/Main/
+
+Assets/Scenes/Main.meta
