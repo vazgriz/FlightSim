@@ -1612,6 +1612,7 @@ GameObject:
   - component: {fileID: 4839539601850002971}
   - component: {fileID: 1978894345480606398}
   - component: {fileID: 1030071069971577036}
+  - component: {fileID: 3168297468136084144}
   m_Layer: 0
   m_Name: F15
   m_TagString: Untagged
@@ -1700,6 +1701,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxThrust: 222411
   throttleSpeed: 1
+--- !u!114 &3168297468136084144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849735085998360814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 012b957c1492f8244a19c3a3aba35b77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  afterburnerGraphics:
+  - {fileID: 6744892543747878457}
+  - {fileID: 8270134564511878965}
+  afterburnerThreshold: 0.75
+  afterburnerMinSize: 0.25
+  afterburnerMaxSize: 1
 --- !u!1001 &6432379551381147201
 PrefabInstance:
   m_ObjectHideFlags: 0
