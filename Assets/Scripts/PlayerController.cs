@@ -30,7 +30,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         cameraTransform.SetParent(planeTransform, true);
-        if (planeHUD != null) planeHUD.SetPlane(plane);
+        if (planeHUD != null) {
+            planeHUD.SetPlane(plane);
+            planeHUD.SetCamera(camera);
+        }
     }
 
     public void SetThrottleInput(InputAction.CallbackContext context) {
