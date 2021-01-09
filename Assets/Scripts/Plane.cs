@@ -9,6 +9,13 @@ public class Plane : MonoBehaviour {
     float throttleSpeed;
 
     [SerializeField]
+    float liftPower;
+    [SerializeField]
+    AnimationCurve liftAOACurve;
+    [SerializeField]
+    AnimationCurve inducedDragCurve;
+
+    [SerializeField]
     AnimationCurve dragForward;
     [SerializeField]
     AnimationCurve dragBack;
@@ -27,6 +34,8 @@ public class Plane : MonoBehaviour {
     public float Throttle { get; private set; }
     public Vector3 Velocity { get; private set; }
     public Vector3 LocalVelocity { get; private set; }
+    public float AngleOfAttack { get; private set; }
+    public float AngleOfAttackYaw { get; private set; }
 
     void Start() {
         Rigidbody = GetComponent<Rigidbody>();
@@ -45,9 +54,16 @@ public class Plane : MonoBehaviour {
         Throttle = Utilities.MoveTo(Throttle, target, throttleSpeed * Mathf.Abs(throttleInput), dt);
     }
 
+    void CalculateAngleOfAttack() {
+        AngleOfAttack = Mathf.Atan2(-LocalVelocity.y, LocalVelocity.z);
+        AngleOfAttackYaw = Mathf.Atan2(LocalVelocity.x, LocalVelocity.z);
+    }
+
     void CalculateState() {
         Velocity = Rigidbody.velocity;
         LocalVelocity = Quaternion.Inverse(Rigidbody.rotation) * Velocity;  //transform world velocity into local space
+
+        CalculateAngleOfAttack();
     }
 
     void UpdateThrust() {
@@ -71,6 +87,38 @@ public class Plane : MonoBehaviour {
         Rigidbody.AddRelativeForce(drag);
     }
 
+    Vector3 CalculateLift(float angleOfAttack, Vector3 rightAxis, float liftPower, AnimationCurve aoaCurve, AnimationCurve inducedDragCurve) {
+        //lift = velocity^2 * coefficient * liftPower
+        //coefficient varies with AOA
+        var liftVelocity = Vector3.ProjectOnPlane(LocalVelocity, rightAxis);   //project velocity onto YZ plane
+        var liftCoefficient = aoaCurve.Evaluate(angleOfAttack * Mathf.Rad2Deg);
+        var liftForce = liftVelocity.sqrMagnitude * liftCoefficient * liftPower;
+
+        //lift is perpendicular to velocity
+        var liftDirection = Vector3.Cross(Rigidbody.velocity.normalized, rightAxis);
+        var lift = liftDirection * liftForce;
+
+        //induced drag varies with square of lift coefficient
+        var dragForce = liftCoefficient * liftCoefficient;
+        var dragDirection = -liftVelocity.normalized;
+        var inducedDrag = dragDirection * dragForce * inducedDragCurve.Evaluate(Mathf.Max(0, LocalVelocity.z));
+
+        return lift + inducedDrag;
+    }
+
+    void UpdateLift() {
+        if (LocalVelocity.sqrMagnitude < 1f) return;
+
+        var liftForce = CalculateLift(
+            AngleOfAttack, Vector3.right,
+            liftPower,
+            liftAOACurve,
+            inducedDragCurve
+        );
+
+        Rigidbody.AddRelativeForce(liftForce);
+    }
+
     void FixedUpdate() {
         float dt = Time.fixedDeltaTime;
 
@@ -81,9 +129,10 @@ public class Plane : MonoBehaviour {
 
         //apply updates
         UpdateThrust();
-
-        CalculateState();
+        UpdateLift();
 
         UpdateDrag();
+
+        CalculateState();
     }
 }
