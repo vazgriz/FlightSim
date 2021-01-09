@@ -29,7 +29,7 @@
                 {
                     "name": "negative",
                     "id": "db898ab6-62ed-46c8-aa8c-185c8d579b9d",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
