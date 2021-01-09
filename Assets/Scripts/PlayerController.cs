@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour {
     new Camera camera;
     [SerializeField]
     Plane plane;
+    [SerializeField]
+    PlaneHUD planeHUD;
 
     Transform cameraTransform;
     Transform planeTransform;
@@ -25,8 +27,10 @@ public class PlayerController : MonoBehaviour {
             planeTransform = null;
         } else {
             planeTransform = plane.GetComponent<Transform>();
-            cameraTransform.SetParent(planeTransform, true);
         }
+
+        cameraTransform.SetParent(planeTransform, true);
+        if (planeHUD != null) planeHUD.SetPlane(plane);
     }
 
     public void SetThrottleInput(InputAction.CallbackContext context) {
