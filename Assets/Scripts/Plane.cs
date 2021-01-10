@@ -193,7 +193,7 @@ public class Plane : MonoBehaviour {
         UpdateLift();
         UpdateSteering(dt);
 
-        UpdateDrag();
+        //UpdateDrag();
         UpdateAngularDrag();
 
         CalculateState();

@@ -1767,7 +1767,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 0.25
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1843,7 +1843,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 0.25
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1853,11 +1853,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  pitchSpeed: 30
-  rollSpeed: 90
+  pitchSpeed: 45
+  rollSpeed: 120
   yawSpeed: 15
-  pitchAcceleration: 60
-  rollAcceleration: 180
+  pitchAcceleration: 90
+  rollAcceleration: 240
   yawAcceleration: 30
   steeringCurve:
     serializedVersion: 2
@@ -1872,7 +1872,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 200
+      time: 250
       value: 1
       inSlope: 0
       outSlope: 0
@@ -1897,7 +1897,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 0.5
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1921,7 +1921,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 2
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1945,7 +1945,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 2
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1969,7 +1969,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 2
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1993,7 +1993,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 2
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -2017,7 +2017,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 1
+      value: 2
       inSlope: 0
       outSlope: 0
       tangentMode: 136
