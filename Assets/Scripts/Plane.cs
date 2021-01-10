@@ -16,6 +16,21 @@ public class Plane : MonoBehaviour {
     AnimationCurve inducedDragCurve;
 
     [SerializeField]
+    float pitchSpeed;
+    [SerializeField]
+    float rollSpeed;
+    [SerializeField]
+    float yawSpeed;
+    [SerializeField]
+    float pitchAcceleration;
+    [SerializeField]
+    float rollAcceleration;
+    [SerializeField]
+    float yawAcceleration;
+    [SerializeField]
+    AnimationCurve steeringCurve;
+
+    [SerializeField]
     AnimationCurve dragForward;
     [SerializeField]
     AnimationCurve dragBack;
@@ -31,6 +46,7 @@ public class Plane : MonoBehaviour {
     Vector3 angularDrag;
 
     float throttleInput;
+    Vector3 controlInput;
 
     public Rigidbody Rigidbody { get; private set; }
     public float Throttle { get; private set; }
@@ -46,6 +62,10 @@ public class Plane : MonoBehaviour {
 
     public void SetThrottleInput(float input) {
         throttleInput = input;
+    }
+
+    public void SetControlInput(Vector3 input) {
+        controlInput = input;
     }
 
     void UpdateThrottle(float dt) {
@@ -126,7 +146,29 @@ public class Plane : MonoBehaviour {
     void UpdateAngularDrag() {
         var av = LocalAngularVelocity;
         var drag = av.sqrMagnitude * -av.normalized;    //squared, opposite direction of angular velocity
-        Rigidbody.AddRelativeTorque(Vector3.Scale(drag, angularDrag), ForceMode.Acceleration);
+        Rigidbody.AddRelativeTorque(Vector3.Scale(drag, angularDrag), ForceMode.Acceleration);  //ignore rigidbody mass
+    }
+
+    float CalculateSteering(float dt, float angularVelocity, float targetVelocity, float acceleration) {
+        var error = targetVelocity - angularVelocity;
+        var accel = acceleration * dt;
+        return Mathf.Clamp(error, -accel, accel);
+    }
+
+    void UpdateSteering(float dt) {
+        var speed = Mathf.Max(0, LocalVelocity.z);
+        var steeringPower = steeringCurve.Evaluate(speed);
+
+        var av = LocalAngularVelocity * Mathf.Rad2Deg;
+        var targetAV = Vector3.Scale(controlInput, new Vector3(pitchSpeed, yawSpeed, rollSpeed) * steeringPower);
+
+        var correction = new Vector3(
+            CalculateSteering(dt, av.x, targetAV.x, pitchAcceleration * steeringPower),
+            CalculateSteering(dt, av.y, targetAV.y, yawAcceleration * steeringPower),
+            CalculateSteering(dt, av.z, targetAV.z, rollAcceleration * steeringPower)
+        );
+
+        Rigidbody.AddRelativeTorque(correction * Mathf.Deg2Rad, ForceMode.VelocityChange);    //ignore rigidbody mass
     }
 
     void FixedUpdate() {
@@ -140,6 +182,7 @@ public class Plane : MonoBehaviour {
         //apply updates
         UpdateThrust();
         UpdateLift();
+        UpdateSteering(dt);
 
         UpdateDrag();
         UpdateAngularDrag();

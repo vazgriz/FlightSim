@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour {
     Transform cameraTransform;
     Transform planeTransform;
 
+    Vector3 controlInput;
+
     void Start() {
         cameraTransform = camera.GetComponent<Transform>();
 
@@ -39,5 +41,25 @@ public class PlayerController : MonoBehaviour {
     public void SetThrottleInput(InputAction.CallbackContext context) {
         if (plane == null) return;
         plane.SetThrottleInput(context.ReadValue<float>());
+    }
+
+    public void OnRollPitchInput(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        var input = context.ReadValue<Vector2>();
+        controlInput = new Vector3(input.y, controlInput.y, -input.x);
+    }
+
+    public void OnYawInput(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        var input = context.ReadValue<float>();
+        controlInput = new Vector3(controlInput.x, input, controlInput.z);
+    }
+
+    void Update() {
+        if (plane == null) return;
+
+        plane.SetControlInput(controlInput);
     }
 }

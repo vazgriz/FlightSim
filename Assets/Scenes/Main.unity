@@ -318,6 +318,36 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0d46f8f2-2f6f-4fe2-8623-427c869c3bde
     m_ActionName: Plane/Throttle[/XInputControllerWindows/leftTrigger,/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 342582036}
+        m_MethodName: OnRollPitchInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7173b259-7215-456e-ba7f-dba1aaad27e1
+    m_ActionName: Plane/RollPitch[/XInputControllerWindows/leftStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 342582036}
+        m_MethodName: OnYawInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 56c160cd-3545-4284-abef-8d6eb62ab74c
+    m_ActionName: Plane/Yaw[/XInputControllerWindows/leftTrigger,/XInputControllerWindows/rightTrigger]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Plane
