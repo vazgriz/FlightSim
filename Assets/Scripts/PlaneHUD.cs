@@ -1,15 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     Bar throttleBar;
     [SerializeField]
     Transform velocityMarker;
+    [SerializeField]
+    Text airspeed;
 
     Plane plane;
     new Camera camera;
+
+    const float metersToKnots = 1.94384f;
 
     public void SetPlane(Plane plane) {
         this.plane = plane;
@@ -28,6 +33,11 @@ public class PlaneHUD : MonoBehaviour {
         velocityMarker.localPosition = new Vector3(plane.AngleOfAttackYaw, -plane.AngleOfAttack, 0) * Mathf.Rad2Deg * degreesToPixels;
     }
 
+    void UpdateAirspeed() {
+        var speed = plane.LocalVelocity.z * metersToKnots;
+        airspeed.text = string.Format("{0:0}", speed);
+    }
+
     void LateUpdate() {
         if (plane == null) return;
         if (camera == null) return;
@@ -37,5 +47,6 @@ public class PlaneHUD : MonoBehaviour {
         throttleBar.SetValue(plane.Throttle);
 
         UpdateVelocityMarker(degreesToPixels);
+        UpdateAirspeed();
     }
 }
