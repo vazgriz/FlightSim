@@ -1853,10 +1853,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  pitchSpeed: 45
+  pitchSpeed: 30
   rollSpeed: 120
   yawSpeed: 15
-  pitchAcceleration: 90
+  pitchAcceleration: 60
   rollAcceleration: 240
   yawAcceleration: 30
   steeringCurve:

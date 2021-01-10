@@ -10,6 +10,10 @@ public class PlaneHUD : MonoBehaviour {
     Transform velocityMarker;
     [SerializeField]
     Text airspeed;
+    [SerializeField]
+    Text aoaIndicator;
+    [SerializeField]
+    Text gforceIndicator;
 
     Plane plane;
     new Camera camera;
@@ -38,6 +42,15 @@ public class PlaneHUD : MonoBehaviour {
         airspeed.text = string.Format("{0:0}", speed);
     }
 
+    void UpdateAOA() {
+        aoaIndicator.text = string.Format("{0:0.0} AOA", plane.AngleOfAttack * Mathf.Rad2Deg);
+    }
+
+    void UpdateGForce() {
+        var gforce = plane.LocalGForce.y / 9.81f;
+        gforceIndicator.text = string.Format("{0:0.0} G", gforce);
+    }
+
     void LateUpdate() {
         if (plane == null) return;
         if (camera == null) return;
@@ -48,5 +61,7 @@ public class PlaneHUD : MonoBehaviour {
 
         UpdateVelocityMarker(degreesToPixels);
         UpdateAirspeed();
+        UpdateAOA();
+        UpdateGForce();
     }
 }
