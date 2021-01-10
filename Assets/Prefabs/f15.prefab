@@ -1701,7 +1701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxThrust: 222411
   throttleSpeed: 1
-  liftPower: 100
+  liftPower: 150
   liftAOACurve:
     serializedVersion: 2
     m_Curve:
@@ -1767,7 +1767,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 0.25
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 136

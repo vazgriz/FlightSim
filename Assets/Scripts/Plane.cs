@@ -136,8 +136,8 @@ public class Plane : MonoBehaviour {
         //lift = velocity^2 * coefficient * liftPower
         //coefficient varies with AOA
         var liftVelocity = Vector3.ProjectOnPlane(LocalVelocity, rightAxis);   //project velocity onto YZ plane
-        var liftCoefficient = aoaCurve.Evaluate(angleOfAttack * Mathf.Rad2Deg);
-        var liftForce = liftVelocity.sqrMagnitude * liftCoefficient * liftPower;
+        var liftCoefficient = aoaCurve.Evaluate(angleOfAttack * Mathf.Rad2Deg) * liftPower;
+        var liftForce = liftVelocity.sqrMagnitude * liftCoefficient;
 
         //lift is perpendicular to velocity
         var liftDirection = Vector3.Cross(Vector3.forward, rightAxis);
@@ -209,7 +209,7 @@ public class Plane : MonoBehaviour {
         UpdateLift();
         UpdateSteering(dt);
 
-        //UpdateDrag();
+        UpdateDrag();
         UpdateAngularDrag();
 
         //calculate again, so that other systems can read this plane's state
