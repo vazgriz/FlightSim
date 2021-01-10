@@ -107,9 +107,9 @@ public class Plane : MonoBehaviour {
         //calculate coefficient of drag depending on direction on velocity
         var coefficient = Utilities.Scale6(
             lv.normalized,
-            dragRight.Evaluate(lv.x), dragLeft.Evaluate(-lv.x),
-            dragTop.Evaluate(lv.y), dragBottom.Evaluate(-lv.y),
-            dragForward.Evaluate(lv.z), dragBack.Evaluate(-lv.z)
+            dragRight.Evaluate(Mathf.Abs(lv.x)), dragLeft.Evaluate(Mathf.Abs(lv.x)),
+            dragTop.Evaluate(Mathf.Abs(lv.y)), dragBottom.Evaluate(Mathf.Abs(lv.y)),
+            dragForward.Evaluate(Mathf.Abs(lv.z)), dragBack.Evaluate(Mathf.Abs(lv.z))
         );
 
         var drag = coefficient.magnitude * lv2 * -lv.normalized;    //drag is opposite direction of velocity
@@ -125,7 +125,7 @@ public class Plane : MonoBehaviour {
         var liftForce = liftVelocity.sqrMagnitude * liftCoefficient * liftPower;
 
         //lift is perpendicular to velocity
-        var liftDirection = Vector3.Cross(Rigidbody.velocity.normalized, rightAxis);
+        var liftDirection = Vector3.Cross(Vector3.forward, rightAxis);
         var lift = liftDirection * liftForce;
 
         //induced drag varies with square of lift coefficient
