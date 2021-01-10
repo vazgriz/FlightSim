@@ -54,10 +54,13 @@ public class Plane : MonoBehaviour {
     float throttleInput;
     Vector3 controlInput;
 
+    Vector3 lastVelocity;
+
     public Rigidbody Rigidbody { get; private set; }
     public float Throttle { get; private set; }
     public Vector3 Velocity { get; private set; }
     public Vector3 LocalVelocity { get; private set; }
+    public Vector3 LocalGForce { get; private set; }
     public Vector3 LocalAngularVelocity { get; private set; }
     public float AngleOfAttack { get; private set; }
     public float AngleOfAttackYaw { get; private set; }
@@ -88,12 +91,24 @@ public class Plane : MonoBehaviour {
         AngleOfAttackYaw = Mathf.Atan2(LocalVelocity.x, LocalVelocity.z);
     }
 
-    void CalculateState() {
+    void CalculateGForce(float dt, Quaternion invRotation) {
+        var acceleration = (Velocity - lastVelocity) / dt;
+        LocalGForce = invRotation * acceleration;
+        lastVelocity = Velocity;
+    }
+
+    void CalculateState(float dt, bool firstThisFrame) {
+        var invRotation = Quaternion.Inverse(Rigidbody.rotation);
         Velocity = Rigidbody.velocity;
-        LocalVelocity = Quaternion.Inverse(Rigidbody.rotation) * Velocity;  //transform world velocity into local space
-        LocalAngularVelocity = Quaternion.Inverse(Rigidbody.rotation) * Rigidbody.angularVelocity;  //transform into local space
+        LocalVelocity = invRotation * Velocity;  //transform world velocity into local space
+        LocalAngularVelocity = invRotation * Rigidbody.angularVelocity;  //transform into local space
 
         CalculateAngleOfAttack();
+
+        if (firstThisFrame) {
+            //can only calculate G Force once per frame
+            CalculateGForce(dt, invRotation);
+        }
     }
 
     void UpdateThrust() {
@@ -183,7 +198,8 @@ public class Plane : MonoBehaviour {
     void FixedUpdate() {
         float dt = Time.fixedDeltaTime;
 
-        CalculateState();
+        //calculate at start, to capture any changes that happened externally
+        CalculateState(dt, true);
 
         //handle user input
         UpdateThrottle(dt);
@@ -196,6 +212,7 @@ public class Plane : MonoBehaviour {
         //UpdateDrag();
         UpdateAngularDrag();
 
-        CalculateState();
+        //calculate again, so that other systems can read this plane's state
+        CalculateState(dt, false);
     }
 }
