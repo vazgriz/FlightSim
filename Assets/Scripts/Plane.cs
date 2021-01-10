@@ -14,6 +14,12 @@ public class Plane : MonoBehaviour {
     AnimationCurve liftAOACurve;
     [SerializeField]
     AnimationCurve inducedDragCurve;
+    [SerializeField]
+    float rudderPower;
+    [SerializeField]
+    AnimationCurve rudderAOACurve;
+    [SerializeField]
+    AnimationCurve rudderInducedDragCurve;
 
     [SerializeField]
     float pitchSpeed;
@@ -140,7 +146,10 @@ public class Plane : MonoBehaviour {
             inducedDragCurve
         );
 
+        var yawForce = CalculateLift(AngleOfAttackYaw, Vector3.up, rudderPower, rudderAOACurve, rudderInducedDragCurve);
+
         Rigidbody.AddRelativeForce(liftForce);
+        Rigidbody.AddRelativeForce(yawForce);
     }
 
     void UpdateAngularDrag() {
