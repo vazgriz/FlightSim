@@ -1701,6 +1701,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxThrust: 222411
   throttleSpeed: 1
+  gLimit: 4
+  gLimitPitch: 8
   liftPower: 150
   liftAOACurve:
     serializedVersion: 2
@@ -1777,7 +1779,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rudderPower: 50
+  rudderPower: 100
   rudderAOACurve:
     serializedVersion: 2
     m_Curve:

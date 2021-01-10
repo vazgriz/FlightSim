@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,10 @@ public class Plane : MonoBehaviour {
     float maxThrust;
     [SerializeField]
     float throttleSpeed;
+    [SerializeField]
+    float gLimit;
+    [SerializeField]
+    float gLimitPitch;
 
     [SerializeField]
     float liftPower;
@@ -179,6 +183,51 @@ public class Plane : MonoBehaviour {
         Rigidbody.AddRelativeTorque(Vector3.Scale(drag, angularDrag), ForceMode.Acceleration);  //ignore rigidbody mass
     }
 
+    Vector3 CalculateGForce(Vector3 angularVelocity, Vector3 velocity) {
+        //estiamte G Force from angular velocity and velocity
+        //Velocity = AngularVelocity * Radius
+        //G = Velocity^2 / R
+        //G = (Velocity * AngularVelocity * Radius) / Radius
+        //G = Velocity * AngularVelocity
+        //G = V cross A
+        return Vector3.Cross(angularVelocity, velocity);
+    }
+
+    Vector3 CalculateGForceLimit(Vector3 input) {
+        return Utilities.Scale6(input,
+            gLimit, gLimitPitch,    //pitch down, pitch up
+            gLimit, gLimit,         //yaw
+            gLimit, gLimit          //roll
+        ) * 9.81f;
+    }
+
+    float CalculateGLimiter(Vector3 controlInput, Vector3 maxAngularVelocity) {
+        if (controlInput.magnitude < 0.01f) {
+            return 1;
+        }
+
+        //project controlInput onto unit cube
+        //this ensures at least one axis == 1
+        var norm = Mathf.Max(Mathf.Abs(controlInput.x), Mathf.Abs(controlInput.y), Mathf.Abs(controlInput.z));
+        var maxInput = new Vector3(
+            controlInput.x / norm,
+            controlInput.y / norm,
+            controlInput.z / norm
+        );
+
+        var limit = CalculateGForceLimit(maxInput);
+        var maxGForce = CalculateGForce(Vector3.Scale(maxInput, maxAngularVelocity), LocalVelocity);
+
+        if (maxGForce.magnitude > limit.magnitude) {
+            //example:
+            //maxGForce = 16G, limit = 8G
+            //so this is 8 / 16 or 0.5
+            return limit.magnitude / maxGForce.magnitude;
+        }
+
+        return 1;
+    }
+
     float CalculateSteering(float dt, float angularVelocity, float targetVelocity, float acceleration) {
         var error = targetVelocity - angularVelocity;
         var accel = acceleration * dt;
@@ -186,11 +235,14 @@ public class Plane : MonoBehaviour {
     }
 
     void UpdateSteering(float dt) {
+        var maxTurn = new Vector3(pitchSpeed, yawSpeed, rollSpeed);
         var speed = Mathf.Max(0, LocalVelocity.z);
         var steeringPower = steeringCurve.Evaluate(speed);
 
+        var gForceScaling = CalculateGLimiter(controlInput, maxTurn * Mathf.Deg2Rad * steeringPower);
+
+        var targetAV = Vector3.Scale(controlInput, maxTurn * steeringPower * gForceScaling);
         var av = LocalAngularVelocity * Mathf.Rad2Deg;
-        var targetAV = Vector3.Scale(controlInput, new Vector3(pitchSpeed, yawSpeed, rollSpeed) * steeringPower);
 
         var correction = new Vector3(
             CalculateSteering(dt, av.x, targetAV.x, pitchAcceleration * steeringPower),
