@@ -322,6 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe603688705746944839053187df62da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateRate: 10
   throttleBar: {fileID: 4819415882130369159}
   velocityMarker: {fileID: 1124648712}
   airspeed: {fileID: 1934544312}

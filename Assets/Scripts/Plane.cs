@@ -87,6 +87,12 @@ public class Plane : MonoBehaviour {
     }
 
     void CalculateAngleOfAttack() {
+        if (LocalVelocity.sqrMagnitude < 0.1f) {
+            AngleOfAttack = 0;
+            AngleOfAttackYaw = 0;
+            return;
+        }
+
         AngleOfAttack = Mathf.Atan2(-LocalVelocity.y, LocalVelocity.z);
         AngleOfAttackYaw = Mathf.Atan2(LocalVelocity.x, LocalVelocity.z);
     }

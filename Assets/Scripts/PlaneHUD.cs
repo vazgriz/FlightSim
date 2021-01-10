@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlaneHUD : MonoBehaviour {
     [SerializeField]
+    float updateRate;
+    [SerializeField]
     Bar throttleBar;
     [SerializeField]
     Transform velocityMarker;
@@ -17,6 +19,8 @@ public class PlaneHUD : MonoBehaviour {
 
     Plane plane;
     new Camera camera;
+
+    float lastUpdateTime;
 
     const float metersToKnots = 1.94384f;
 
@@ -61,7 +65,11 @@ public class PlaneHUD : MonoBehaviour {
 
         UpdateVelocityMarker(degreesToPixels);
         UpdateAirspeed();
-        UpdateAOA();
-        UpdateGForce();
+
+        if (Time.time > lastUpdateTime + (1f / updateRate)) {
+            UpdateAOA();
+            UpdateGForce();
+            lastUpdateTime = Time.time;
+        }
     }
 }
