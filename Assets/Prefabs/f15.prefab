@@ -1921,6 +1921,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  angularDrag: {x: 0, y: 0, z: 0}
 --- !u!114 &3168297468136084144
 MonoBehaviour:
   m_ObjectHideFlags: 0

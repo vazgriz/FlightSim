@@ -27,6 +27,8 @@ public class Plane : MonoBehaviour {
     AnimationCurve dragTop;
     [SerializeField]
     AnimationCurve dragBottom;
+    [SerializeField]
+    Vector3 angularDrag;
 
     float throttleInput;
 
@@ -34,6 +36,7 @@ public class Plane : MonoBehaviour {
     public float Throttle { get; private set; }
     public Vector3 Velocity { get; private set; }
     public Vector3 LocalVelocity { get; private set; }
+    public Vector3 LocalAngularVelocity { get; private set; }
     public float AngleOfAttack { get; private set; }
     public float AngleOfAttackYaw { get; private set; }
 
@@ -62,6 +65,7 @@ public class Plane : MonoBehaviour {
     void CalculateState() {
         Velocity = Rigidbody.velocity;
         LocalVelocity = Quaternion.Inverse(Rigidbody.rotation) * Velocity;  //transform world velocity into local space
+        LocalAngularVelocity = Quaternion.Inverse(Rigidbody.rotation) * Rigidbody.angularVelocity;  //transform into local space
 
         CalculateAngleOfAttack();
     }
@@ -119,6 +123,12 @@ public class Plane : MonoBehaviour {
         Rigidbody.AddRelativeForce(liftForce);
     }
 
+    void UpdateAngularDrag() {
+        var av = LocalAngularVelocity;
+        var drag = av.sqrMagnitude * -av.normalized;    //squared, opposite direction of angular velocity
+        Rigidbody.AddRelativeTorque(Vector3.Scale(drag, angularDrag), ForceMode.Acceleration);
+    }
+
     void FixedUpdate() {
         float dt = Time.fixedDeltaTime;
 
@@ -132,6 +142,7 @@ public class Plane : MonoBehaviour {
         UpdateLift();
 
         UpdateDrag();
+        UpdateAngularDrag();
 
         CalculateState();
     }
