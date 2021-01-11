@@ -7,7 +7,11 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     float updateRate;
     [SerializeField]
+    float hudFocusDistance;
+    [SerializeField]
     Bar throttleBar;
+    [SerializeField]
+    Transform hudCenter;
     [SerializeField]
     Transform velocityMarker;
     [SerializeField]
@@ -18,7 +22,9 @@ public class PlaneHUD : MonoBehaviour {
     Text gforceIndicator;
 
     Plane plane;
+    Transform planeTransform;
     new Camera camera;
+    Transform cameraTransform;
 
     float lastUpdateTime;
 
@@ -26,10 +32,23 @@ public class PlaneHUD : MonoBehaviour {
 
     public void SetPlane(Plane plane) {
         this.plane = plane;
+
+        if (plane == null) {
+            planeTransform = null;
+        }
+        else {
+            planeTransform = plane.GetComponent<Transform>();
+        }
     }
 
     public void SetCamera(Camera camera) {
         this.camera = camera;
+
+        if (camera == null) {
+            cameraTransform = null;
+        } else {
+            cameraTransform = camera.GetComponent<Transform>();
+        }
     }
 
     void UpdateVelocityMarker(float degreesToPixels) {
@@ -55,6 +74,19 @@ public class PlaneHUD : MonoBehaviour {
         gforceIndicator.text = string.Format("{0:0.0} G", gforce);
     }
 
+    Vector2 TransformToHUDSpace(Vector3 screenSpace) {
+        return screenSpace - new Vector3(camera.pixelWidth / 2, camera.pixelHeight / 2);
+    }
+
+    void UpdateHUDCenter() {
+        var rotation = cameraTransform.localEulerAngles;
+        var focusPoint = camera.WorldToScreenPoint(planeTransform.position + planeTransform.forward * hudFocusDistance);
+        var hudPos = TransformToHUDSpace(focusPoint);
+
+        hudCenter.localPosition = new Vector3(hudPos.x, hudPos.y, 0);
+        hudCenter.localEulerAngles = new Vector3(0, 0, -rotation.z);
+    }
+
     void LateUpdate() {
         if (plane == null) return;
         if (camera == null) return;
@@ -64,6 +96,7 @@ public class PlaneHUD : MonoBehaviour {
         throttleBar.SetValue(plane.Throttle);
 
         UpdateVelocityMarker(degreesToPixels);
+        UpdateHUDCenter();
         UpdateAirspeed();
 
         if (Time.time > lastUpdateTime + (1f / updateRate)) {
