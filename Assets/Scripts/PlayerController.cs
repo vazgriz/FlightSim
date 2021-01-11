@@ -11,31 +11,23 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     PlaneHUD planeHUD;
 
-    Transform cameraTransform;
-    Transform planeTransform;
-
     Vector3 controlInput;
+    PlaneCamera planeCamera;
 
     void Start() {
-        cameraTransform = camera.GetComponent<Transform>();
-
+        planeCamera = GetComponent<PlaneCamera>();
         SetPlane(plane);    //SetPlane if var is set in inspector
     }
 
     void SetPlane(Plane plane) {
         this.plane = plane;
 
-        if (plane == null) {
-            planeTransform = null;
-        } else {
-            planeTransform = plane.GetComponent<Transform>();
-        }
-
-        cameraTransform.SetParent(planeTransform, true);
         if (planeHUD != null) {
             planeHUD.SetPlane(plane);
             planeHUD.SetCamera(camera);
         }
+
+        planeCamera.SetPlane(plane);
     }
 
     public void SetThrottleInput(InputAction.CallbackContext context) {
@@ -55,6 +47,13 @@ public class PlayerController : MonoBehaviour {
 
         var input = context.ReadValue<float>();
         controlInput = new Vector3(controlInput.x, input, controlInput.z);
+    }
+
+    public void OnCameraInput(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        var input = context.ReadValue<Vector2>();
+        planeCamera.SetInput(input);
     }
 
     void Update() {
