@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +24,14 @@ public class Plane : MonoBehaviour {
     AnimationCurve rudderAOACurve;
     [SerializeField]
     AnimationCurve rudderInducedDragCurve;
+    [SerializeField]
+    float flapsLiftPower;
+    [SerializeField]
+    float flapsAOABias;
+    [SerializeField]
+    float flapsDrag;
+    [SerializeField]
+    float flapsRetractSpeed;
 
     [SerializeField]
     float pitchSpeed;
@@ -72,6 +80,7 @@ public class Plane : MonoBehaviour {
     public float AngleOfAttack { get; private set; }
     public float AngleOfAttackYaw { get; private set; }
     public bool AirbrakeDeployed { get; private set; }
+    public bool FlapsDeployed { get; private set; }
 
     void Start() {
         Rigidbody = GetComponent<Rigidbody>();
@@ -83,6 +92,12 @@ public class Plane : MonoBehaviour {
 
     public void SetControlInput(Vector3 input) {
         controlInput = input;
+    }
+
+    public void ToggleFlaps() {
+        if (LocalVelocity.z < flapsRetractSpeed) {
+            FlapsDeployed = !FlapsDeployed;
+        }
     }
 
     void UpdateThrottle(float dt) {
@@ -124,6 +139,10 @@ public class Plane : MonoBehaviour {
         if (firstThisFrame) {
             //can only calculate G Force once per frame
             CalculateGForce(dt, invRotation);
+
+            if (LocalVelocity.z > flapsRetractSpeed) {
+                FlapsDeployed = false;
+            }
         }
     }
 
@@ -136,13 +155,14 @@ public class Plane : MonoBehaviour {
         var lv2 = lv.sqrMagnitude;  //velocity squared
 
         float airbrakeDrag = AirbrakeDeployed ? this.airbrakeDrag : 0;
+        float flapsDrag = FlapsDeployed ? this.flapsDrag : 0;
 
         //calculate coefficient of drag depending on direction on velocity
         var coefficient = Utilities.Scale6(
             lv.normalized,
             dragRight.Evaluate(Mathf.Abs(lv.x)), dragLeft.Evaluate(Mathf.Abs(lv.x)),
             dragTop.Evaluate(Mathf.Abs(lv.y)), dragBottom.Evaluate(Mathf.Abs(lv.y)),
-            dragForward.Evaluate(Mathf.Abs(lv.z)) + airbrakeDrag,   //include extra drag from airbrake
+            dragForward.Evaluate(Mathf.Abs(lv.z)) + airbrakeDrag + flapsDrag,   //include extra drag for forward coefficient
             dragBack.Evaluate(Mathf.Abs(lv.z))
         );
 
@@ -173,9 +193,12 @@ public class Plane : MonoBehaviour {
     void UpdateLift() {
         if (LocalVelocity.sqrMagnitude < 1f) return;
 
+        float flapsLiftPower = FlapsDeployed ? this.flapsLiftPower : 0;
+        float flapsAOABias = FlapsDeployed ? this.flapsAOABias : 0;
+
         var liftForce = CalculateLift(
-            AngleOfAttack, Vector3.right,
-            liftPower,
+            AngleOfAttack + (flapsAOABias * Mathf.Deg2Rad), Vector3.right,
+            liftPower + flapsLiftPower,
             liftAOACurve,
             inducedDragCurve
         );

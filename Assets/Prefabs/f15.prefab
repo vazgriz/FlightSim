@@ -1855,6 +1855,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  flapsLiftPower: 100
+  flapsAOABias: 1
+  flapsDrag: 5
+  flapsRetractSpeed: 125
   pitchSpeed: 30
   rollSpeed: 120
   yawSpeed: 15
@@ -1874,7 +1878,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 250
+      time: 200
       value: 1
       inSlope: 0
       outSlope: 0
@@ -2030,7 +2034,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   angularDrag: {x: 1, y: 1, z: 1}
-  airbrakeDrag: 1
+  airbrakeDrag: 5
 --- !u!114 &3168297468136084144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2053,6 +2057,7 @@ MonoBehaviour:
   maxElevatorDeflection: 20
   maxRudderDeflection: 20
   airbrakeDeflection: 45
+  flapsDeflection: 30
   deflectionSpeed: 5
   rightAileron: {fileID: 7098709419306614170}
   leftAileron: {fileID: 9015424067187965477}
@@ -2063,6 +2068,9 @@ MonoBehaviour:
   - {fileID: 5036458651028698839}
   - {fileID: 8180032383524918375}
   airbrake: {fileID: 4376326503470435326}
+  flaps:
+  - {fileID: 7287516894575911195}
+  - {fileID: 6457283437137519601}
 --- !u!1001 &6432379551381147201
 PrefabInstance:
   m_ObjectHideFlags: 0

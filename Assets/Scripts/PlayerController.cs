@@ -56,6 +56,14 @@ public class PlayerController : MonoBehaviour {
         planeCamera.SetInput(input);
     }
 
+    public void OnFlapsInput(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        if (context.phase == InputActionPhase.Performed) {
+            plane.ToggleFlaps();
+        }
+    }
+
     void Update() {
         if (plane == null) return;
 
