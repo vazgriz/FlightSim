@@ -54,6 +54,8 @@ public class Plane : MonoBehaviour {
     AnimationCurve dragBottom;
     [SerializeField]
     Vector3 angularDrag;
+    [SerializeField]
+    float airbrakeDrag;
 
     float throttleInput;
     Vector3 controlInput;
@@ -69,6 +71,7 @@ public class Plane : MonoBehaviour {
     public Vector3 LocalAngularVelocity { get; private set; }
     public float AngleOfAttack { get; private set; }
     public float AngleOfAttackYaw { get; private set; }
+    public bool AirbrakeDeployed { get; private set; }
 
     void Start() {
         Rigidbody = GetComponent<Rigidbody>();
@@ -89,6 +92,8 @@ public class Plane : MonoBehaviour {
         //throttle input is [-1, 1]
         //throttle is [0, 1]
         Throttle = Utilities.MoveTo(Throttle, target, throttleSpeed * Mathf.Abs(throttleInput), dt);
+
+        AirbrakeDeployed = Throttle == 0 && throttleInput == -1;
     }
 
     void CalculateAngleOfAttack() {
@@ -130,12 +135,15 @@ public class Plane : MonoBehaviour {
         var lv = LocalVelocity;
         var lv2 = lv.sqrMagnitude;  //velocity squared
 
+        float airbrakeDrag = AirbrakeDeployed ? this.airbrakeDrag : 0;
+
         //calculate coefficient of drag depending on direction on velocity
         var coefficient = Utilities.Scale6(
             lv.normalized,
             dragRight.Evaluate(Mathf.Abs(lv.x)), dragLeft.Evaluate(Mathf.Abs(lv.x)),
             dragTop.Evaluate(Mathf.Abs(lv.y)), dragBottom.Evaluate(Mathf.Abs(lv.y)),
-            dragForward.Evaluate(Mathf.Abs(lv.z)), dragBack.Evaluate(Mathf.Abs(lv.z))
+            dragForward.Evaluate(Mathf.Abs(lv.z)) + airbrakeDrag,   //include extra drag from airbrake
+            dragBack.Evaluate(Mathf.Abs(lv.z))
         );
 
         var drag = coefficient.magnitude * lv2 * -lv.normalized;    //drag is opposite direction of velocity

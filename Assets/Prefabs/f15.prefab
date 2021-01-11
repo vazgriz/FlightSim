@@ -2030,6 +2030,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   angularDrag: {x: 1, y: 1, z: 1}
+  airbrakeDrag: 1
 --- !u!114 &3168297468136084144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2051,6 +2052,7 @@ MonoBehaviour:
   maxAileronDeflection: 20
   maxElevatorDeflection: 20
   maxRudderDeflection: 20
+  airbrakeDeflection: 45
   deflectionSpeed: 5
   rightAileron: {fileID: 7098709419306614170}
   leftAileron: {fileID: 9015424067187965477}
@@ -2060,6 +2062,7 @@ MonoBehaviour:
   rudders:
   - {fileID: 5036458651028698839}
   - {fileID: 8180032383524918375}
+  airbrake: {fileID: 4376326503470435326}
 --- !u!1001 &6432379551381147201
 PrefabInstance:
   m_ObjectHideFlags: 0

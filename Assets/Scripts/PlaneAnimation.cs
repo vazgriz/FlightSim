@@ -18,6 +18,8 @@ public class PlaneAnimation : MonoBehaviour {
     [SerializeField]
     float maxRudderDeflection;
     [SerializeField]
+    float airbrakeDeflection;
+    [SerializeField]
     float deflectionSpeed;
     [SerializeField]
     Transform rightAileron;
@@ -27,11 +29,14 @@ public class PlaneAnimation : MonoBehaviour {
     List<Transform> elevators;
     [SerializeField]
     List<Transform> rudders;
+    [SerializeField]
+    Transform airbrake;
 
     Plane plane;
     List<Transform> afterburnersTransforms;
     Dictionary<Transform, Quaternion> neutralPoses;
     Vector3 deflection;
+    float airbrakePosition;
 
     void Start() {
         plane = GetComponent<Plane>();
@@ -52,6 +57,8 @@ public class PlaneAnimation : MonoBehaviour {
         foreach (var t in rudders) {
             AddNeutralPose(t);
         }
+
+        AddNeutralPose(airbrake);
     }
 
     void AddNeutralPose(Transform transform) {
@@ -94,10 +101,19 @@ public class PlaneAnimation : MonoBehaviour {
         }
     }
 
+    void UpdateAirbrakes(float dt) {
+        var target = plane.AirbrakeDeployed ? 1 : 0;
+
+        airbrakePosition = Utilities.MoveTo(airbrakePosition, target, deflectionSpeed, dt);
+
+        airbrake.localRotation = neutralPoses[airbrake] * Quaternion.Euler(-airbrakePosition * airbrakeDeflection, 0, 0);
+    }
+
     void LateUpdate() {
         float dt = Time.deltaTime;
 
         UpdateAfterburners();
         UpdateControlSurfaces(dt);
+        UpdateAirbrakes(dt);
     }
 }
