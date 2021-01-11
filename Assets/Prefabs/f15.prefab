@@ -2048,6 +2048,18 @@ MonoBehaviour:
   afterburnerThreshold: 0.75
   afterburnerMinSize: 0.25
   afterburnerMaxSize: 1
+  maxAileronDeflection: 20
+  maxElevatorDeflection: 20
+  maxRudderDeflection: 20
+  deflectionSpeed: 5
+  rightAileron: {fileID: 7098709419306614170}
+  leftAileron: {fileID: 9015424067187965477}
+  elevators:
+  - {fileID: 5719306870350747766}
+  - {fileID: 758815499812652947}
+  rudders:
+  - {fileID: 5036458651028698839}
+  - {fileID: 8180032383524918375}
 --- !u!1001 &6432379551381147201
 PrefabInstance:
   m_ObjectHideFlags: 0

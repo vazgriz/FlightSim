@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,6 +62,7 @@ public class Plane : MonoBehaviour {
 
     public Rigidbody Rigidbody { get; private set; }
     public float Throttle { get; private set; }
+    public Vector3 EffectiveInput { get; private set; }
     public Vector3 Velocity { get; private set; }
     public Vector3 LocalVelocity { get; private set; }
     public Vector3 LocalGForce { get; private set; }
@@ -251,6 +252,20 @@ public class Plane : MonoBehaviour {
         );
 
         Rigidbody.AddRelativeTorque(correction * Mathf.Deg2Rad, ForceMode.VelocityChange);    //ignore rigidbody mass
+
+        var correctionInput = new Vector3(
+            Mathf.Clamp((targetAV.x - av.x) / pitchAcceleration, -1, 1),
+            Mathf.Clamp((targetAV.y - av.y) / yawAcceleration, -1, 1),
+            Mathf.Clamp((targetAV.z - av.z) / rollAcceleration, -1, 1)
+        );
+
+        var effectiveInput = (correctionInput + controlInput) * gForceScaling;
+
+        EffectiveInput = new Vector3(
+            Mathf.Clamp(effectiveInput.x, -1, 1),
+            Mathf.Clamp(effectiveInput.y, -1, 1),
+            Mathf.Clamp(effectiveInput.z, -1, 1)
+        );
     }
 
     void FixedUpdate() {
