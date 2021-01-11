@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,10 +65,16 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     float airbrakeDrag;
 
+    [SerializeField]
+    List<Collider> landingGear;
+    [SerializeField]
+    PhysicMaterial landingGearBrakesMaterial;
+
     float throttleInput;
     Vector3 controlInput;
 
     Vector3 lastVelocity;
+    PhysicMaterial landingGearDefaultMaterial;
 
     public Rigidbody Rigidbody { get; private set; }
     public float Throttle { get; private set; }
@@ -84,6 +90,10 @@ public class Plane : MonoBehaviour {
 
     void Start() {
         Rigidbody = GetComponent<Rigidbody>();
+
+        if (landingGear.Count > 0) {
+            landingGearDefaultMaterial = landingGear[0].sharedMaterial;
+        }
     }
 
     public void SetThrottleInput(float input) {
@@ -109,6 +119,16 @@ public class Plane : MonoBehaviour {
         Throttle = Utilities.MoveTo(Throttle, target, throttleSpeed * Mathf.Abs(throttleInput), dt);
 
         AirbrakeDeployed = Throttle == 0 && throttleInput == -1;
+
+        if (AirbrakeDeployed) {
+            foreach (var lg in landingGear) {
+                lg.sharedMaterial = landingGearBrakesMaterial;
+            }
+        } else {
+            foreach (var lg in landingGear) {
+                lg.sharedMaterial = landingGearDefaultMaterial;
+            }
+        }
     }
 
     void CalculateAngleOfAttack() {
