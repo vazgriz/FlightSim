@@ -15,12 +15,18 @@ public class PlaneCamera : MonoBehaviour {
     float lookAlpha;
     [SerializeField]
     float movementAlpha;
+    [SerializeField]
+    Vector3 deathOffset;
+    [SerializeField]
+    float deathSensitivity;
 
     Transform cameraTransform;
     Plane plane;
     Transform planeTransform;
-    Vector2 look;
+    Vector2 lookInput;
+    bool dead;
 
+    Vector2 look;
     Vector2 lookAverage;
     Vector3 movementAverage;
 
@@ -41,20 +47,34 @@ public class PlaneCamera : MonoBehaviour {
     }
 
     public void SetInput(Vector2 input) {
-        look = input;
+        lookInput = input;
     }
 
     void LateUpdate() {
         if (plane == null) return;
 
-        var lookAngle = Vector2.Scale(look, this.lookAngle);
-        lookAverage = (lookAverage * (1 - lookAlpha)) + (lookAngle * lookAlpha);
+        var cameraOffset = this.cameraOffset;
+
+        if (plane.Dead) {
+            look += lookInput * deathSensitivity * Time.deltaTime;
+            look.x = (look.x + 360f) % 360f;
+            look.y = Mathf.Clamp(look.y, -lookAngle.y, lookAngle.y);
+
+            lookAverage = look;
+            movementAverage = new Vector3();
+
+            cameraOffset = deathOffset;
+        } else {
+            var lookAngle = Vector2.Scale(lookInput, this.lookAngle);
+            lookAverage = (lookAverage * (1 - lookAlpha)) + (lookAngle * lookAlpha);
+
+            var angularVelocity = plane.LocalAngularVelocity;
+            angularVelocity.z = -angularVelocity.z;
+
+            movementAverage = (movementAverage * (1 - movementAlpha)) + (angularVelocity * movementAlpha);
+        }
+
         var rotation = Quaternion.Euler(-lookAverage.y, lookAverage.x, 0);
-
-        var angularVelocity = plane.LocalAngularVelocity;
-        angularVelocity.z = -angularVelocity.z;
-
-        movementAverage = (movementAverage * (1 - movementAlpha)) + (angularVelocity * movementAlpha);
 
         var offsetRotation = Quaternion.Euler(new Vector3(movementAverage.x, movementAverage.y) * -movementScale);
         var offset = rotation * offsetRotation * cameraOffset;

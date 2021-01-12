@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Plane : MonoBehaviour {
     [SerializeField]
+    float maxHealth;
+    [SerializeField]
+    float health;
+    [SerializeField]
     float maxThrust;
     [SerializeField]
     float throttleSpeed;
@@ -69,12 +73,40 @@ public class Plane : MonoBehaviour {
     List<Collider> landingGear;
     [SerializeField]
     PhysicMaterial landingGearBrakesMaterial;
+    [SerializeField]
+    List<GameObject> graphics;
+    [SerializeField]
+    GameObject crashEffect;
 
     float throttleInput;
     Vector3 controlInput;
 
     Vector3 lastVelocity;
     PhysicMaterial landingGearDefaultMaterial;
+
+    public float MaxHealth {
+        get {
+            return maxHealth;
+        }
+        set {
+            maxHealth = Mathf.Max(0, value);
+        }
+    }
+
+    public float Health {
+        get {
+            return health;
+        }
+        private set {
+            health = Mathf.Clamp(value, 0, maxHealth);
+
+            if (health == 0 && MaxHealth != 0 && !Dead) {
+                Die();
+            }
+        }
+    }
+
+    public bool Dead { get; private set; }
 
     public Rigidbody Rigidbody { get; private set; }
     public float Throttle { get; private set; }
@@ -97,16 +129,32 @@ public class Plane : MonoBehaviour {
     }
 
     public void SetThrottleInput(float input) {
+        if (Dead) return;
         throttleInput = input;
     }
 
     public void SetControlInput(Vector3 input) {
+        if (Dead) return;
         controlInput = input;
     }
 
     public void ToggleFlaps() {
         if (LocalVelocity.z < flapsRetractSpeed) {
             FlapsDeployed = !FlapsDeployed;
+        }
+    }
+
+    public void ApplyDamage(float damage) {
+        Health -= damage;
+    }
+
+    void Die() {
+        throttleInput = 0;
+        Throttle = 0;
+        Dead = true;
+
+        foreach (var go in graphics) {
+            go.SetActive(false);
         }
     }
 
@@ -331,12 +379,33 @@ public class Plane : MonoBehaviour {
         //apply updates
         UpdateThrust();
         UpdateLift();
-        UpdateSteering(dt);
+
+        if (!Dead) {
+            UpdateSteering(dt);
+        }
 
         UpdateDrag();
         UpdateAngularDrag();
 
         //calculate again, so that other systems can read this plane's state
         CalculateState(dt, false);
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        for (int i = 0; i < collision.contactCount; i++) {
+            var contact = collision.contacts[i];
+
+            if (landingGear.Contains(contact.thisCollider)) {
+                return;
+            }
+
+            Health = 0;
+
+            Rigidbody.isKinematic = true;
+            Rigidbody.position = contact.point;
+            Rigidbody.rotation = Quaternion.Euler(0, Rigidbody.rotation.eulerAngles.y, 0);
+
+            crashEffect.SetActive(true);
+        }
     }
 }

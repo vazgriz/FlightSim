@@ -534,6 +534,8 @@ MonoBehaviour:
   movementScale: 5
   lookAlpha: 0.25
   movementAlpha: 0.0625
+  deathOffset: {x: 0, y: 12, z: -40}
+  deathSensitivity: 120
 --- !u!1 &470319346
 GameObject:
   m_ObjectHideFlags: 0
