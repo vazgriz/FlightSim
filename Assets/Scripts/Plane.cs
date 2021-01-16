@@ -16,6 +16,7 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     float gLimitPitch;
 
+    [Header("Lift")]
     [SerializeField]
     float liftPower;
     [SerializeField]
@@ -37,6 +38,7 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     float flapsRetractSpeed;
 
+    [Header("Steering")]
     [SerializeField]
     float pitchSpeed;
     [SerializeField]
@@ -52,6 +54,7 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     AnimationCurve steeringCurve;
 
+    [Header("Drag")]
     [SerializeField]
     AnimationCurve dragForward;
     [SerializeField]
@@ -69,6 +72,7 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     float airbrakeDrag;
 
+    [Header("Misc")]
     [SerializeField]
     List<Collider> landingGear;
     [SerializeField]
@@ -118,7 +122,21 @@ public class Plane : MonoBehaviour {
     public float AngleOfAttack { get; private set; }
     public float AngleOfAttackYaw { get; private set; }
     public bool AirbrakeDeployed { get; private set; }
-    public bool FlapsDeployed { get; private set; }
+
+    [SerializeField]
+    bool flapsDeployed;
+    public bool FlapsDeployed {
+        get {
+            return flapsDeployed;
+        }
+        private set {
+            flapsDeployed = value;
+
+            foreach (var lg in landingGear) {
+                lg.enabled = value;
+            }
+        }
+    }
 
     void Start() {
         Rigidbody = GetComponent<Rigidbody>();
