@@ -255,7 +255,7 @@ public class Plane : MonoBehaviour {
         var liftForce = liftVelocity.sqrMagnitude * liftCoefficient;
 
         //lift is perpendicular to velocity
-        var liftDirection = Vector3.Cross(Vector3.forward, rightAxis);
+        var liftDirection = Vector3.Cross(liftVelocity.normalized, rightAxis);
         var lift = liftDirection * liftForce;
 
         //induced drag varies with square of lift coefficient
