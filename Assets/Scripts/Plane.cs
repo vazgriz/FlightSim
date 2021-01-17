@@ -189,6 +189,12 @@ public class Plane : MonoBehaviour {
         }
     }
 
+    void UpdateFlaps() {
+        if (LocalVelocity.z > flapsRetractSpeed) {
+            FlapsDeployed = false;
+        }
+    }
+
     void CalculateAngleOfAttack() {
         if (LocalVelocity.sqrMagnitude < 0.1f) {
             AngleOfAttack = 0;
@@ -200,28 +206,20 @@ public class Plane : MonoBehaviour {
         AngleOfAttackYaw = Mathf.Atan2(LocalVelocity.x, LocalVelocity.z);
     }
 
-    void CalculateGForce(float dt, Quaternion invRotation) {
+    void CalculateGForce(float dt) {
+        var invRotation = Quaternion.Inverse(Rigidbody.rotation);
         var acceleration = (Velocity - lastVelocity) / dt;
         LocalGForce = invRotation * acceleration;
         lastVelocity = Velocity;
     }
 
-    void CalculateState(float dt, bool firstThisFrame) {
+    void CalculateState(float dt) {
         var invRotation = Quaternion.Inverse(Rigidbody.rotation);
         Velocity = Rigidbody.velocity;
         LocalVelocity = invRotation * Velocity;  //transform world velocity into local space
         LocalAngularVelocity = invRotation * Rigidbody.angularVelocity;  //transform into local space
 
         CalculateAngleOfAttack();
-
-        if (firstThisFrame) {
-            //can only calculate G Force once per frame
-            CalculateGForce(dt, invRotation);
-
-            if (LocalVelocity.z > flapsRetractSpeed) {
-                FlapsDeployed = false;
-            }
-        }
     }
 
     void UpdateThrust() {
@@ -380,7 +378,9 @@ public class Plane : MonoBehaviour {
         float dt = Time.fixedDeltaTime;
 
         //calculate at start, to capture any changes that happened externally
-        CalculateState(dt, true);
+        CalculateState(dt);
+        CalculateGForce(dt);
+        UpdateFlaps();
 
         //handle user input
         UpdateThrottle(dt);
@@ -397,7 +397,7 @@ public class Plane : MonoBehaviour {
         UpdateAngularDrag();
 
         //calculate again, so that other systems can read this plane's state
-        CalculateState(dt, false);
+        CalculateState(dt);
     }
 
     void OnCollisionEnter(Collision collision) {
