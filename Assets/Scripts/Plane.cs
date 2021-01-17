@@ -40,17 +40,9 @@ public class Plane : MonoBehaviour {
 
     [Header("Steering")]
     [SerializeField]
-    float pitchSpeed;
+    Vector3 turnSpeed;
     [SerializeField]
-    float rollSpeed;
-    [SerializeField]
-    float yawSpeed;
-    [SerializeField]
-    float pitchAcceleration;
-    [SerializeField]
-    float rollAcceleration;
-    [SerializeField]
-    float yawAcceleration;
+    Vector3 turnAcceleration;
     [SerializeField]
     AnimationCurve steeringCurve;
 
@@ -353,27 +345,26 @@ public class Plane : MonoBehaviour {
     }
 
     void UpdateSteering(float dt) {
-        var maxTurn = new Vector3(pitchSpeed, yawSpeed, rollSpeed);
         var speed = Mathf.Max(0, LocalVelocity.z);
         var steeringPower = steeringCurve.Evaluate(speed);
 
-        var gForceScaling = CalculateGLimiter(controlInput, maxTurn * Mathf.Deg2Rad * steeringPower);
+        var gForceScaling = CalculateGLimiter(controlInput, turnSpeed * Mathf.Deg2Rad * steeringPower);
 
-        var targetAV = Vector3.Scale(controlInput, maxTurn * steeringPower * gForceScaling);
+        var targetAV = Vector3.Scale(controlInput, turnSpeed * steeringPower * gForceScaling);
         var av = LocalAngularVelocity * Mathf.Rad2Deg;
 
         var correction = new Vector3(
-            CalculateSteering(dt, av.x, targetAV.x, pitchAcceleration * steeringPower),
-            CalculateSteering(dt, av.y, targetAV.y, yawAcceleration * steeringPower),
-            CalculateSteering(dt, av.z, targetAV.z, rollAcceleration * steeringPower)
+            CalculateSteering(dt, av.x, targetAV.x, turnAcceleration.x * steeringPower),
+            CalculateSteering(dt, av.y, targetAV.y, turnAcceleration.y * steeringPower),
+            CalculateSteering(dt, av.z, targetAV.z, turnAcceleration.z * steeringPower)
         );
 
         Rigidbody.AddRelativeTorque(correction * Mathf.Deg2Rad, ForceMode.VelocityChange);    //ignore rigidbody mass
 
         var correctionInput = new Vector3(
-            Mathf.Clamp((targetAV.x - av.x) / pitchAcceleration, -1, 1),
-            Mathf.Clamp((targetAV.y - av.y) / yawAcceleration, -1, 1),
-            Mathf.Clamp((targetAV.z - av.z) / rollAcceleration, -1, 1)
+            Mathf.Clamp((targetAV.x - av.x) / turnAcceleration.x, -1, 1),
+            Mathf.Clamp((targetAV.y - av.y) / turnAcceleration.y, -1, 1),
+            Mathf.Clamp((targetAV.z - av.z) / turnAcceleration.z, -1, 1)
         );
 
         var effectiveInput = (correctionInput + controlInput) * gForceScaling;
