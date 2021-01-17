@@ -26,9 +26,17 @@ public class PlaneHUD : MonoBehaviour {
     new Camera camera;
     Transform cameraTransform;
 
+    GameObject hudCenterGO;
+    GameObject velocityMarkerGO;
+
     float lastUpdateTime;
 
     const float metersToKnots = 1.94384f;
+
+    void Start() {
+        hudCenterGO = hudCenter.gameObject;
+        velocityMarkerGO = velocityMarker.gameObject;
+    }
 
     public void SetPlane(Plane plane) {
         this.plane = plane;
@@ -51,13 +59,21 @@ public class PlaneHUD : MonoBehaviour {
         }
     }
 
-    void UpdateVelocityMarker(float degreesToPixels) {
-        if (plane.LocalVelocity.sqrMagnitude < 1) {
-            velocityMarker.localPosition = new Vector3();
-            return;
+    void UpdateVelocityMarker() {
+        var velocity = planeTransform.forward;
+
+        if (plane.LocalVelocity.sqrMagnitude > 1) {
+            velocity = plane.Rigidbody.velocity;
         }
 
-        velocityMarker.localPosition = new Vector3(plane.AngleOfAttackYaw, -plane.AngleOfAttack, 0) * Mathf.Rad2Deg * degreesToPixels;
+        var hudPos = TransformToHUDSpace(plane.Rigidbody.position + velocity * hudFocusDistance);
+
+        if (hudPos.z > 0) {
+            velocityMarkerGO.SetActive(true);
+            velocityMarker.localPosition = new Vector3(hudPos.x, hudPos.y, 0);
+        } else {
+            velocityMarkerGO.SetActive(false);
+        }
     }
 
     void UpdateAirspeed() {
@@ -74,17 +90,22 @@ public class PlaneHUD : MonoBehaviour {
         gforceIndicator.text = string.Format("{0:0.0} G", gforce);
     }
 
-    Vector2 TransformToHUDSpace(Vector3 screenSpace) {
+    Vector3 TransformToHUDSpace(Vector3 worldSpace) {
+        var screenSpace = camera.WorldToScreenPoint(worldSpace);
         return screenSpace - new Vector3(camera.pixelWidth / 2, camera.pixelHeight / 2);
     }
 
     void UpdateHUDCenter() {
         var rotation = cameraTransform.localEulerAngles;
-        var focusPoint = camera.WorldToScreenPoint(planeTransform.position + planeTransform.forward * hudFocusDistance);
-        var hudPos = TransformToHUDSpace(focusPoint);
+        var hudPos = TransformToHUDSpace(planeTransform.position + planeTransform.forward * hudFocusDistance);
 
-        hudCenter.localPosition = new Vector3(hudPos.x, hudPos.y, 0);
-        hudCenter.localEulerAngles = new Vector3(0, 0, -rotation.z);
+        if (hudPos.z > 0) {
+            hudCenterGO.SetActive(true);
+            hudCenter.localPosition = new Vector3(hudPos.x, hudPos.y, 0);
+            hudCenter.localEulerAngles = new Vector3(0, 0, -rotation.z);
+        } else {
+            hudCenterGO.SetActive(false);
+        }
     }
 
     void LateUpdate() {
@@ -95,8 +116,14 @@ public class PlaneHUD : MonoBehaviour {
 
         throttleBar.SetValue(plane.Throttle);
 
-        UpdateVelocityMarker(degreesToPixels);
-        UpdateHUDCenter();
+        if (!plane.Dead) {
+            UpdateVelocityMarker();
+            UpdateHUDCenter();
+        } else {
+            hudCenterGO.SetActive(false);
+            velocityMarkerGO.SetActive(false);
+        }
+
         UpdateAirspeed();
 
         if (Time.time > lastUpdateTime + (1f / updateRate)) {
