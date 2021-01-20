@@ -1772,7 +1772,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 100
-      value: 75
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1861,7 +1861,7 @@ MonoBehaviour:
   flapsLiftPower: 100
   flapsAOABias: 1
   flapsDrag: 5
-  flapsRetractSpeed: 125
+  flapsRetractSpeed: 115
   turnSpeed: {x: 30, y: 15, z: 120}
   turnAcceleration: {x: 60, y: 30, z: 240}
   steeringCurve:

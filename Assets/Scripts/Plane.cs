@@ -260,7 +260,7 @@ public class Plane : MonoBehaviour {
 
         //induced drag varies with square of lift coefficient
         var dragForce = liftCoefficient * liftCoefficient;
-        var dragDirection = -liftVelocity.normalized;
+        var dragDirection = -liftVelocity;
         var inducedDrag = dragDirection * dragForce * inducedDragCurve.Evaluate(Mathf.Max(0, LocalVelocity.z));
 
         return lift + inducedDrag;
