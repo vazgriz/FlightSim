@@ -1614,7 +1614,7 @@ GameObject:
   - component: {fileID: 1030071069971577036}
   - component: {fileID: 3168297468136084144}
   m_Layer: 0
-  m_Name: f15
+  m_Name: F15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1758,7 +1758,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  inducedDrag: 1
+  inducedDrag: 75
   inducedDragCurve:
     serializedVersion: 2
     m_Curve:
@@ -1863,8 +1863,8 @@ MonoBehaviour:
   flapsAOABias: 1
   flapsDrag: 5
   flapsRetractSpeed: 115
-  turnSpeed: {x: 30, y: 15, z: 120}
-  turnAcceleration: {x: 60, y: 30, z: 240}
+  turnSpeed: {x: 30, y: 15, z: 180}
+  turnAcceleration: {x: 60, y: 30, z: 360}
   steeringCurve:
     serializedVersion: 2
     m_Curve:
