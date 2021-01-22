@@ -22,6 +22,8 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     AnimationCurve liftAOACurve;
     [SerializeField]
+    float inducedDrag;
+    [SerializeField]
     AnimationCurve inducedDragCurve;
     [SerializeField]
     float rudderPower;
@@ -248,11 +250,13 @@ public class Plane : MonoBehaviour {
     }
 
     Vector3 CalculateLift(float angleOfAttack, Vector3 rightAxis, float liftPower, AnimationCurve aoaCurve, AnimationCurve inducedDragCurve) {
+        var liftVelocity = Vector3.ProjectOnPlane(LocalVelocity, rightAxis);   //project velocity onto YZ plane
+        var lift2 = liftVelocity.sqrMagnitude;
+
         //lift = velocity^2 * coefficient * liftPower
         //coefficient varies with AOA
-        var liftVelocity = Vector3.ProjectOnPlane(LocalVelocity, rightAxis);   //project velocity onto YZ plane
-        var liftCoefficient = aoaCurve.Evaluate(angleOfAttack * Mathf.Rad2Deg) * liftPower;
-        var liftForce = liftVelocity.sqrMagnitude * liftCoefficient;
+        var liftCoefficient = aoaCurve.Evaluate(angleOfAttack * Mathf.Rad2Deg);
+        var liftForce = lift2 * liftCoefficient * liftPower;
 
         //lift is perpendicular to velocity
         var liftDirection = Vector3.Cross(liftVelocity.normalized, rightAxis);
@@ -260,8 +264,8 @@ public class Plane : MonoBehaviour {
 
         //induced drag varies with square of lift coefficient
         var dragForce = liftCoefficient * liftCoefficient;
-        var dragDirection = -liftVelocity;
-        var inducedDrag = dragDirection * dragForce * inducedDragCurve.Evaluate(Mathf.Max(0, LocalVelocity.z));
+        var dragDirection = -liftVelocity.normalized;
+        var inducedDrag = dragDirection * lift2 * dragForce * this.inducedDrag * inducedDragCurve.Evaluate(Mathf.Max(0, LocalVelocity.z));
 
         return lift + inducedDrag;
     }
