@@ -7,6 +7,8 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     float updateRate;
     [SerializeField]
+    List<GameObject> helpDialogs;
+    [SerializeField]
     float hudFocusDistance;
     [SerializeField]
     Bar throttleBar;
@@ -56,6 +58,12 @@ public class PlaneHUD : MonoBehaviour {
             cameraTransform = null;
         } else {
             cameraTransform = camera.GetComponent<Transform>();
+        }
+    }
+
+    public void ToggleHelpDialogs() {
+        foreach (var dialog in helpDialogs) {
+            dialog.SetActive(!dialog.activeSelf);
         }
     }
 

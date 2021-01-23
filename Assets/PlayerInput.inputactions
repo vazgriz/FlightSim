@@ -6,6 +6,14 @@
             "id": "c7f86140-7852-43b7-af8a-e120f923445d",
             "actions": [
                 {
+                    "name": "ToggleHelp",
+                    "type": "Button",
+                    "id": "a601469b-e3aa-422a-806a-4f7dcba55332",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Throttle",
                     "type": "Value",
                     "id": "0d46f8f2-2f6f-4fe2-8623-427c869c3bde",
@@ -143,6 +151,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleFlaps",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f0a780e-ba4d-4467-a1fe-9234a00c0440",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHelp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
