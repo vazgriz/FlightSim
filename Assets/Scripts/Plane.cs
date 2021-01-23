@@ -318,14 +318,8 @@ public class Plane : MonoBehaviour {
             return 1;
         }
 
-        //project controlInput onto unit cube
-        //this ensures at least one axis == 1
-        var norm = Mathf.Max(Mathf.Abs(controlInput.x), Mathf.Abs(controlInput.y), Mathf.Abs(controlInput.z));
-        var maxInput = new Vector3(
-            controlInput.x / norm,
-            controlInput.y / norm,
-            controlInput.z / norm
-        );
+        //if the player gives input with magnitude less than 1, scale up their input so that magnitude == 1
+        var maxInput = controlInput.normalized;
 
         var limit = CalculateGForceLimit(maxInput);
         var maxGForce = CalculateGForce(Vector3.Scale(maxInput, maxAngularVelocity), LocalVelocity);
