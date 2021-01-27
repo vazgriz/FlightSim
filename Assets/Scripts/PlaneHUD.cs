@@ -22,6 +22,8 @@ public class PlaneHUD : MonoBehaviour {
     Text aoaIndicator;
     [SerializeField]
     Text gforceIndicator;
+    [SerializeField]
+    Text altitude;
 
     Plane plane;
     Transform planeTransform;
@@ -34,6 +36,7 @@ public class PlaneHUD : MonoBehaviour {
     float lastUpdateTime;
 
     const float metersToKnots = 1.94384f;
+    const float metersToFeet = 3.28084f;
 
     void Start() {
         hudCenterGO = hudCenter.gameObject;
@@ -98,6 +101,11 @@ public class PlaneHUD : MonoBehaviour {
         gforceIndicator.text = string.Format("{0:0.0} G", gforce);
     }
 
+    void UpdateAltitude() {
+        var altitude = plane.Rigidbody.position.y * metersToFeet;
+        this.altitude.text = string.Format("{0:0}", altitude);
+    }
+
     Vector3 TransformToHUDSpace(Vector3 worldSpace) {
         var screenSpace = camera.WorldToScreenPoint(worldSpace);
         return screenSpace - new Vector3(camera.pixelWidth / 2, camera.pixelHeight / 2);
@@ -133,7 +141,9 @@ public class PlaneHUD : MonoBehaviour {
         }
 
         UpdateAirspeed();
+        UpdateAltitude();
 
+        //update these elements at reduced rate to make reading them easier
         if (Time.time > lastUpdateTime + (1f / updateRate)) {
             UpdateAOA();
             UpdateGForce();
