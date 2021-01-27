@@ -9,6 +9,8 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     List<GameObject> helpDialogs;
     [SerializeField]
+    Compass compass;
+    [SerializeField]
     float hudFocusDistance;
     [SerializeField]
     Bar throttleBar;
@@ -52,6 +54,10 @@ public class PlaneHUD : MonoBehaviour {
         else {
             planeTransform = plane.GetComponent<Transform>();
         }
+
+        if (compass != null) {
+            compass.SetPlane(plane);
+        }
     }
 
     public void SetCamera(Camera camera) {
@@ -61,6 +67,10 @@ public class PlaneHUD : MonoBehaviour {
             cameraTransform = null;
         } else {
             cameraTransform = camera.GetComponent<Transform>();
+        }
+
+        if (compass != null) {
+            compass.SetCamera(camera);
         }
     }
 
