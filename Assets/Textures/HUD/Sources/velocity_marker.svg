@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128mm"
+   height="128mm"
+   viewBox="0 0 128 128"
+   version="1.1"
+   id="svg3732"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="velocity_marker.svg">
+  <defs
+     id="defs3726" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="208.55545"
+     inkscape:cy="259.71691"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:pagecheckerboard="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     fit-margin-left="-0.1" />
+  <metadata
+     id="metadata3729">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-168.99995)">
+    <path
+       style="fill:#ffffff;stroke:none;stroke-width:19.92833519;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="M 241.89062 120.94531 A 120.94488 120.94488 0 0 0 120.94531 241.89062 A 120.94488 120.94488 0 0 0 241.89062 362.83398 A 120.94488 120.94488 0 0 0 362.83398 241.89062 A 120.94488 120.94488 0 0 0 241.89062 120.94531 z M 241.89062 151.18164 A 90.708661 90.708661 0 0 1 332.59766 241.89062 A 90.708661 90.708661 0 0 1 241.89062 332.59766 A 90.708661 90.708661 0 0 1 151.18164 241.89062 A 90.708661 90.708661 0 0 1 241.89062 151.18164 z "
+       transform="matrix(0.26458333,0,0,0.26458333,0,168.99995)"
+       id="path4620" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:5.90477419;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect5183"
+       width="36"
+       height="8"
+       x="0"
+       y="228.99995" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:5.90477419;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect5183-8"
+       width="36"
+       height="8"
+       x="92"
+       y="228.99995" />
+    <rect
+       style="fill:#ffffff;stroke:none;stroke-width:5.90477419;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect5183-8-8"
+       width="36"
+       height="8"
+       x="169.00014"
+       y="-68"
+       transform="rotate(90)" />
+  </g>
+</svg>
