@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -14,8 +12,11 @@
    viewBox="0 0 1024 48"
    version="1.1"
    id="svg3761"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="pitch_horizon.svg">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="pitch_horizon.svg"
+   inkscape:export-filename="E:\Code\Projects\FlightSim\Assets\Textures\HUD\Sources\pitch_horizon.png"
+   inkscape:export-xdpi="25.4"
+   inkscape:export-ydpi="25.4">
   <defs
      id="defs3755" />
   <sodipodi:namedview
@@ -26,17 +27,18 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.24748737"
-     inkscape:cx="452.09442"
-     inkscape:cy="-243.63555"
+     inkscape:cx="1518.8155"
+     inkscape:cy="-372.93508"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:pagecheckerboard="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1001"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1" />
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata3758">
     <rdf:RDF>

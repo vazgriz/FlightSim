@@ -11,6 +11,8 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     Compass compass;
     [SerializeField]
+    PitchLadder pitchLadder;
+    [SerializeField]
     float hudFocusDistance;
     [SerializeField]
     Bar throttleBar;
@@ -58,6 +60,10 @@ public class PlaneHUD : MonoBehaviour {
         if (compass != null) {
             compass.SetPlane(plane);
         }
+
+        if (pitchLadder != null) {
+            pitchLadder.SetPlane(plane);
+        }
     }
 
     public void SetCamera(Camera camera) {
@@ -71,6 +77,10 @@ public class PlaneHUD : MonoBehaviour {
 
         if (compass != null) {
             compass.SetCamera(camera);
+        }
+
+        if (pitchLadder != null) {
+            pitchLadder.SetCamera(camera);
         }
     }
 

@@ -156,6 +156,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 908946523}
+  - {fileID: 547983813}
   m_Father: {fileID: 193187218}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -438,6 +439,7 @@ MonoBehaviour:
   - {fileID: 2112024343}
   - {fileID: 254807492}
   compass: {fileID: 893257555}
+  pitchLadder: {fileID: 547983814}
   hudFocusDistance: 1000
   throttleBar: {fileID: 4819415882130369159}
   hudCenter: {fileID: 8361743}
@@ -888,6 +890,62 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &547983812
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 547983813}
+  - component: {fileID: 547983814}
+  m_Layer: 5
+  m_Name: PitchLadder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &547983813
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547983812}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8361743}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 256, y: 256}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &547983814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547983812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9e375505380544e89aa91fe6d3b0ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pitchHorizonPrefab: {fileID: 7948608940137109692, guid: 649d07123c253e8419f775e04fd5f4e7,
+    type: 3}
+  pitchPositivePrefab: {fileID: 5456716327917858334, guid: c2d27c37b25ab6b4492090535aae91b4,
+    type: 3}
+  pitchNegativePrefab: {fileID: 7730944331091575964, guid: 3bfb8438df0675549a3c4bde325e70b3,
+    type: 3}
+  barInterval: 5
+  range: 135
 --- !u!1 &576216092
 GameObject:
   m_ObjectHideFlags: 0
