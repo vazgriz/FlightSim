@@ -20,13 +20,13 @@ public class Bar : MonoBehaviour {
             fill.anchorMin = new Vector2(0, 0);
             fill.anchorMax = new Vector2(value, 1);
         } else if (fillDirection == FillDirection.Left) {
-            fill.anchorMin = new Vector2(value, 0);
+            fill.anchorMin = new Vector2(1 - value, 0);
             fill.anchorMax = new Vector2(1, 1);
         } else if (fillDirection == FillDirection.Up) {
             fill.anchorMin = new Vector2(0, 0);
             fill.anchorMax = new Vector2(1, value);
-        } else if (fillDirection == FillDirection.Left) {
-            fill.anchorMin = new Vector2(0, value);
+        } else if (fillDirection == FillDirection.Down) {
+            fill.anchorMin = new Vector2(0, 1 - value);
             fill.anchorMax = new Vector2(1, 1);
         }
     }
