@@ -28,6 +28,10 @@ public class PlaneHUD : MonoBehaviour {
     Text gforceIndicator;
     [SerializeField]
     Text altitude;
+    [SerializeField]
+    Bar healthBar;
+    [SerializeField]
+    Text healthText;
 
     Plane plane;
     Transform planeTransform;
@@ -144,6 +148,11 @@ public class PlaneHUD : MonoBehaviour {
         }
     }
 
+    void UpdateHealth() {
+        healthBar.SetValue(plane.Health / plane.MaxHealth);
+        healthText.text = string.Format("{0:0}", plane.Health);
+    }
+
     void LateUpdate() {
         if (plane == null) return;
         if (camera == null) return;
@@ -162,6 +171,7 @@ public class PlaneHUD : MonoBehaviour {
 
         UpdateAirspeed();
         UpdateAltitude();
+        UpdateHealth();
 
         //update these elements at reduced rate to make reading them easier
         if (Time.time > lastUpdateTime + (1f / updateRate)) {
