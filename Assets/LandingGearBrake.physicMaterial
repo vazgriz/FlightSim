@@ -7,7 +7,7 @@ PhysicMaterial:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LandingGearBrake
-  dynamicFriction: 0.5
+  dynamicFriction: 0.75
   staticFriction: 0.1
   bounciness: 0
   frictionCombine: 2

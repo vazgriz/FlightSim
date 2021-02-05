@@ -1859,10 +1859,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  flapsLiftPower: 100
-  flapsAOABias: 1
+  flapsLiftPower: 150
+  flapsAOABias: 0.5
   flapsDrag: 5
-  flapsRetractSpeed: 115
+  flapsRetractSpeed: 125
   turnSpeed: {x: 30, y: 15, z: 180}
   turnAcceleration: {x: 60, y: 30, z: 360}
   steeringCurve:
