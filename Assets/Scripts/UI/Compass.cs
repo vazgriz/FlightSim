@@ -98,7 +98,7 @@ public class Compass : MonoBehaviour {
     float GetPosition(float angle) {
         float fov = camera.fieldOfView;
 
-        return (ConvertAngle(angle) / fov) * camera.pixelHeight;
+        return Utilities.TransformAngle(angle, fov, camera.pixelHeight);
     }
 
     void LateUpdate() {
@@ -111,7 +111,7 @@ public class Compass : MonoBehaviour {
             float angle = Mathf.DeltaAngle(yaw, tick.angle);
             float position = GetPosition(ConvertAngle(angle));
 
-            if (position >= transform.rect.xMin && position <= transform.rect.xMax) {
+            if (Mathf.Abs(angle) < 90f && position >= transform.rect.xMin && position <= transform.rect.xMax) {
                 //if tick position is within bounds
                 var pos = tick.transform.localPosition;
                 tick.transform.localPosition = new Vector3(position, pos.y, pos.z);

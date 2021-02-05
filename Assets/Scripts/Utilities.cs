@@ -38,4 +38,8 @@ public static class Utilities {
 
         return result;
     }
+
+    public static float TransformAngle(float angle, float fov, float pixelHeight) {
+        return (Mathf.Tan(angle * Mathf.Deg2Rad) / Mathf.Tan(fov / 2 * Mathf.Deg2Rad)) * pixelHeight / 2;
+    }
 }

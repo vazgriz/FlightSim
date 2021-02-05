@@ -79,7 +79,7 @@ public class PitchLadder : MonoBehaviour {
     float GetPosition(float angle) {
         float fov = camera.fieldOfView;
 
-        return (ConvertAngle(angle) / fov) * camera.pixelHeight;
+        return Utilities.TransformAngle(angle, fov, camera.pixelHeight);
     }
 
     void LateUpdate() {
@@ -96,7 +96,7 @@ public class PitchLadder : MonoBehaviour {
             float angle = Mathf.DeltaAngle(pitch, bar.angle);
             float position = GetPosition(ConvertAngle(angle));
 
-            if (position >= transform.rect.yMin && position <= transform.rect.yMax) {
+            if (Mathf.Abs(angle) < 90f && position >= transform.rect.yMin && position <= transform.rect.yMax) {
                 //if bar position is within bounds
                 var pos = bar.transform.localPosition;
                 bar.transform.localPosition = new Vector3(pos.x, position, pos.z);
