@@ -74,6 +74,10 @@ public class PlaneAnimation : MonoBehaviour {
         neutralPoses.Add(transform, transform.localRotation);
     }
 
+    Quaternion CalculatePose(Transform transform, Quaternion offset) {
+        return neutralPoses[transform] * offset;
+    }
+
     void UpdateAfterburners() {
         float throttle = plane.Throttle;
         float afterburnerT = Mathf.Clamp01(Mathf.InverseLerp(afterburnerThreshold, 1, throttle));
@@ -98,15 +102,15 @@ public class PlaneAnimation : MonoBehaviour {
         deflection.y = Utilities.MoveTo(deflection.y, input.y, deflectionSpeed, dt, -1, 1);
         deflection.z = Utilities.MoveTo(deflection.z, input.z, deflectionSpeed, dt, -1, 1);
 
-        rightAileron.localRotation = neutralPoses[rightAileron] * Quaternion.Euler(deflection.z * maxAileronDeflection, 0, 0);
-        leftAileron.localRotation = neutralPoses[leftAileron] * Quaternion.Euler(-deflection.z * maxAileronDeflection, 0, 0);
+        rightAileron.localRotation = CalculatePose(rightAileron, Quaternion.Euler(deflection.z * maxAileronDeflection, 0, 0));
+        leftAileron.localRotation = CalculatePose(leftAileron, Quaternion.Euler(-deflection.z * maxAileronDeflection, 0, 0));
 
         foreach (var t in elevators) {
-            t.localRotation = neutralPoses[t] * Quaternion.Euler(deflection.x * maxElevatorDeflection, 0, 0);
+            t.localRotation = CalculatePose(t, Quaternion.Euler(deflection.x * maxElevatorDeflection, 0, 0));
         }
 
         foreach (var t in rudders) {
-            t.localRotation = neutralPoses[t] * Quaternion.Euler(0, -deflection.y * maxRudderDeflection, 0);
+            t.localRotation = CalculatePose(t, Quaternion.Euler(0, -deflection.y * maxRudderDeflection, 0));
         }
     }
 
@@ -115,7 +119,7 @@ public class PlaneAnimation : MonoBehaviour {
 
         airbrakePosition = Utilities.MoveTo(airbrakePosition, target, deflectionSpeed, dt);
 
-        airbrake.localRotation = neutralPoses[airbrake] * Quaternion.Euler(-airbrakePosition * airbrakeDeflection, 0, 0);
+        airbrake.localRotation = CalculatePose(airbrake, Quaternion.Euler(-airbrakePosition * airbrakeDeflection, 0, 0));
     }
 
     void UpdateFlaps(float dt) {
@@ -124,7 +128,7 @@ public class PlaneAnimation : MonoBehaviour {
         flapsPosition = Utilities.MoveTo(flapsPosition, target, deflectionSpeed, dt);
 
         foreach (var t in flaps) {
-            t.localRotation = neutralPoses[t] * Quaternion.Euler(flapsPosition * flapsDeflection, 0, 0);
+            t.localRotation = CalculatePose(t, Quaternion.Euler(flapsPosition * flapsDeflection, 0, 0));
         }
     }
 
