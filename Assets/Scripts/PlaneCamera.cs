@@ -28,7 +28,7 @@ public class PlaneCamera : MonoBehaviour {
 
     Vector2 look;
     Vector2 lookAverage;
-    Vector3 movementAverage;
+    Vector3 avAverage;
 
     void Awake() {
         cameraTransform = camera.GetComponent<Transform>();
@@ -61,25 +61,23 @@ public class PlaneCamera : MonoBehaviour {
             look.y = Mathf.Clamp(look.y, -lookAngle.y, lookAngle.y);
 
             lookAverage = look;
-            movementAverage = new Vector3();
+            avAverage = new Vector3();
 
             cameraOffset = deathOffset;
         } else {
-            var lookAngle = Vector2.Scale(lookInput, this.lookAngle);
-            lookAverage = (lookAverage * (1 - lookAlpha)) + (lookAngle * lookAlpha);
+            var targetLookAngle = Vector2.Scale(lookInput, lookAngle);
+            lookAverage = (lookAverage * (1 - lookAlpha)) + (targetLookAngle * lookAlpha);
 
             var angularVelocity = plane.LocalAngularVelocity;
             angularVelocity.z = -angularVelocity.z;
 
-            movementAverage = (movementAverage * (1 - movementAlpha)) + (angularVelocity * movementAlpha);
+            avAverage = (avAverage * (1 - movementAlpha)) + (angularVelocity * movementAlpha);
         }
 
-        var rotation = Quaternion.Euler(-lookAverage.y, lookAverage.x, 0);
+        var rotation = Quaternion.Euler(-lookAverage.y, lookAverage.x, 0);  //get rotation from camera input
+        var turningRotation = Quaternion.Euler(new Vector3(-avAverage.x, -avAverage.y, avAverage.z) * movementScale);   //get rotation from plane's AV
 
-        var offsetRotation = Quaternion.Euler(new Vector3(movementAverage.x, movementAverage.y) * -movementScale);
-        var offset = rotation * offsetRotation * cameraOffset;
-
-        cameraTransform.localPosition = offset;
-        cameraTransform.localRotation = rotation * Quaternion.Inverse(offsetRotation) * Quaternion.Euler(0, 0, movementAverage.z * movementScale);
+        cameraTransform.localPosition = rotation * turningRotation * cameraOffset;  //calculate camera position;
+        cameraTransform.localRotation = rotation * turningRotation;                 //calculate camera rotation
     }
 }
