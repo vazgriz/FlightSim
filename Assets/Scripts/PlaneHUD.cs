@@ -13,8 +13,6 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     PitchLadder pitchLadder;
     [SerializeField]
-    float hudFocusDistance;
-    [SerializeField]
     Bar throttleBar;
     [SerializeField]
     Transform hudCenter;
@@ -101,7 +99,7 @@ public class PlaneHUD : MonoBehaviour {
             velocity = plane.Rigidbody.velocity;
         }
 
-        var hudPos = TransformToHUDSpace(plane.Rigidbody.position + velocity * hudFocusDistance);
+        var hudPos = TransformToHUDSpace(cameraTransform.position + velocity);
 
         if (hudPos.z > 0) {
             velocityMarkerGO.SetActive(true);
@@ -137,7 +135,7 @@ public class PlaneHUD : MonoBehaviour {
 
     void UpdateHUDCenter() {
         var rotation = cameraTransform.localEulerAngles;
-        var hudPos = TransformToHUDSpace(planeTransform.position + planeTransform.forward * hudFocusDistance);
+        var hudPos = TransformToHUDSpace(cameraTransform.position + planeTransform.forward);
 
         if (hudPos.z > 0) {
             hudCenterGO.SetActive(true);
