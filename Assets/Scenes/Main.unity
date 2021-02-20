@@ -441,7 +441,6 @@ MonoBehaviour:
   - {fileID: 254807492}
   compass: {fileID: 893257555}
   pitchLadder: {fileID: 547983814}
-  hudFocusDistance: 1000
   throttleBar: {fileID: 4819415882130369159}
   hudCenter: {fileID: 8361743}
   velocityMarker: {fileID: 1124648712}
@@ -1555,7 +1554,7 @@ PrefabInstance:
     - target: {fileID: 4819415882128910489, guid: 23e11d89a86f9e94a81b8c17a099347f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4819415882128910489, guid: 23e11d89a86f9e94a81b8c17a099347f,
         type: 3}
