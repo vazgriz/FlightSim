@@ -674,6 +674,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a601469b-e3aa-422a-806a-4f7dcba55332
     m_ActionName: Plane/ToggleHelp[/Keyboard/h]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 342582036}
+        m_MethodName: OnFireMissile
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 54bc0053-bbe2-45cd-80b6-dd2a4f0dee6d
+    m_ActionName: Plane/FireMissile[/XInputControllerWindows/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Plane

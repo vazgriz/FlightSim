@@ -71,6 +71,14 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void OnFireMissile(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        if (context.phase == InputActionPhase.Performed) {
+            plane.TryFireMissile();
+        }
+    }
+
     void Update() {
         if (plane == null) return;
 

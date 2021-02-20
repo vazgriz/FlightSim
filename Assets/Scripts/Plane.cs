@@ -76,11 +76,25 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     GameObject crashEffect;
 
+    [Header("Weapons")]
+    [SerializeField]
+    List<Transform> hardpoints;
+    [SerializeField]
+    float missileReloadTime;
+    [SerializeField]
+    float missileDebounceTime;
+
+    new PlaneAnimation animation;
+
     float throttleInput;
     Vector3 controlInput;
 
     Vector3 lastVelocity;
     PhysicMaterial landingGearDefaultMaterial;
+
+    int missileIndex;
+    List<float> missileReloadTimers;
+    float missileDebounceTimer;
 
     public float MaxHealth {
         get {
@@ -133,10 +147,17 @@ public class Plane : MonoBehaviour {
     }
 
     void Start() {
+        animation = GetComponent<PlaneAnimation>();
         Rigidbody = GetComponent<Rigidbody>();
 
         if (landingGear.Count > 0) {
             landingGearDefaultMaterial = landingGear[0].sharedMaterial;
+        }
+
+        missileReloadTimers = new List<float>(hardpoints.Count);
+
+        foreach (var h in hardpoints) {
+            missileReloadTimers.Add(0);
         }
     }
 
@@ -372,6 +393,39 @@ public class Plane : MonoBehaviour {
         );
     }
 
+    public void TryFireMissile() {
+        //try all available missiles
+        for (int i = 0; i < hardpoints.Count; i++) {
+            var index = (missileIndex + i) % hardpoints.Count;
+            if (missileDebounceTimer == 0 && missileReloadTimers[index] == 0) {
+                FireMissile(index);
+
+                missileIndex = (index + 1) % hardpoints.Count;
+                missileReloadTimers[index] = missileReloadTime;
+                missileDebounceTimer = missileDebounceTime;
+
+                animation.ShowMissileGraphic(index, false);
+                break;
+            }
+        }
+    }
+
+    void FireMissile(int index) {
+
+    }
+
+    void UpdateWeapons(float dt) {
+        missileDebounceTimer = Mathf.Max(0, missileDebounceTimer - dt);
+
+        for (int i = 0; i < missileReloadTimers.Count; i++) {
+            missileReloadTimers[i] = Mathf.Max(0, missileReloadTimers[i] - dt);
+
+            if (missileReloadTimers[i] == 0) {
+                animation.ShowMissileGraphic(i, true);
+            }
+        }
+    }
+
     void FixedUpdate() {
         float dt = Time.fixedDeltaTime;
 
@@ -396,6 +450,9 @@ public class Plane : MonoBehaviour {
 
         //calculate again, so that other systems can read this plane's state
         CalculateState(dt);
+
+        //update weapon state
+        UpdateWeapons(dt);
     }
 
     void OnCollisionEnter(Collision collision) {

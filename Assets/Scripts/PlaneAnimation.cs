@@ -35,6 +35,8 @@ public class PlaneAnimation : MonoBehaviour {
     Transform airbrake;
     [SerializeField]
     List<Transform> flaps;
+    [SerializeField]
+    List<GameObject> missileGraphics;
 
     Plane plane;
     List<Transform> afterburnersTransforms;
@@ -68,6 +70,10 @@ public class PlaneAnimation : MonoBehaviour {
         foreach (var t in flaps) {
             AddNeutralPose(t);
         }
+    }
+
+    public void ShowMissileGraphic(int index, bool visible) {
+        missileGraphics[index].SetActive(visible);
     }
 
     void AddNeutralPose(Transform transform) {
