@@ -2073,7 +2073,9 @@ MonoBehaviour:
   - {fileID: 3588451848796086104}
   - {fileID: 8566313077898161204}
   missileReloadTime: 5
-  missileDebounceTime: 0.25
+  missileDebounceTime: 0.125
+  missilePrefab: {fileID: 819481780962912736, guid: 9a7180302f5e734428f16bf202054963,
+    type: 3}
   flapsDeployed: 1
 --- !u!114 &3168297468136084144
 MonoBehaviour:

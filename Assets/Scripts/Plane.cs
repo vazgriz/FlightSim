@@ -83,6 +83,8 @@ public class Plane : MonoBehaviour {
     float missileReloadTime;
     [SerializeField]
     float missileDebounceTime;
+    [SerializeField]
+    GameObject missilePrefab;
 
     new PlaneAnimation animation;
 
@@ -411,7 +413,10 @@ public class Plane : MonoBehaviour {
     }
 
     void FireMissile(int index) {
-
+        var hardpoint = hardpoints[index];
+        var missileGO = Instantiate(missilePrefab, hardpoint.position, hardpoint.rotation);
+        var missile = missileGO.GetComponent<Missile>();
+        missile.Launch(null);
     }
 
     void UpdateWeapons(float dt) {
