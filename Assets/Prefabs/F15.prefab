@@ -2070,6 +2070,8 @@ MonoBehaviour:
   - {fileID: 8496231328968917689}
   - {fileID: 7622234884004090431}
   crashEffect: {fileID: 2026342940325216661}
+  flapsDeployed: 1
+  initialSpeed: 0
   hardpoints:
   - {fileID: 3588451848796086104}
   - {fileID: 8566313077898161204}
@@ -2081,7 +2083,6 @@ MonoBehaviour:
   lockRange: 2000
   lockSpeed: 30
   lockAngle: 45
-  flapsDeployed: 1
 --- !u!114 &3168297468136084144
 MonoBehaviour:
   m_ObjectHideFlags: 0

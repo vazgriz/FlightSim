@@ -75,6 +75,10 @@ public class Plane : MonoBehaviour {
     List<GameObject> graphics;
     [SerializeField]
     GameObject crashEffect;
+    [SerializeField]
+    bool flapsDeployed;
+    [SerializeField]
+    float initialSpeed;
 
     [Header("Weapons")]
     [SerializeField]
@@ -142,8 +146,6 @@ public class Plane : MonoBehaviour {
     public float AngleOfAttackYaw { get; private set; }
     public bool AirbrakeDeployed { get; private set; }
 
-    [SerializeField]
-    bool flapsDeployed;
     public bool FlapsDeployed {
         get {
             return flapsDeployed;
@@ -185,6 +187,8 @@ public class Plane : MonoBehaviour {
         }
 
         missileLockDirection = Vector3.forward;
+
+        Rigidbody.velocity = Rigidbody.rotation * new Vector3(0, 0, initialSpeed);
     }
 
     public void SetThrottleInput(float input) {
