@@ -85,6 +85,14 @@ public class Plane : MonoBehaviour {
     float missileDebounceTime;
     [SerializeField]
     GameObject missilePrefab;
+    [SerializeField]
+    Target target;
+    [SerializeField]
+    float lockRange;
+    [SerializeField]
+    float lockSpeed;
+    [SerializeField]
+    float lockAngle;
 
     new PlaneAnimation animation;
 
@@ -97,6 +105,7 @@ public class Plane : MonoBehaviour {
     int missileIndex;
     List<float> missileReloadTimers;
     float missileDebounceTimer;
+    Vector3 missileLockDirection;
 
     public float MaxHealth {
         get {
@@ -148,6 +157,19 @@ public class Plane : MonoBehaviour {
         }
     }
 
+    public bool MissileLocked { get; private set; }
+    public bool MissileTracking { get; private set; }
+    public Target Target {
+        get {
+            return target;
+        }
+    }
+    public Vector3 MissileLockDirection {
+        get {
+            return Rigidbody.rotation * missileLockDirection;
+        }
+    }
+
     void Start() {
         animation = GetComponent<PlaneAnimation>();
         Rigidbody = GetComponent<Rigidbody>();
@@ -161,6 +183,8 @@ public class Plane : MonoBehaviour {
         foreach (var h in hardpoints) {
             missileReloadTimers.Add(0);
         }
+
+        missileLockDirection = Vector3.forward;
     }
 
     public void SetThrottleInput(float input) {
@@ -420,6 +444,11 @@ public class Plane : MonoBehaviour {
     }
 
     void UpdateWeapons(float dt) {
+        UpdateWeaponCooldown(dt);
+        UpdateMissileLock(dt);
+    }
+
+    void UpdateWeaponCooldown(float dt) {
         missileDebounceTimer = Mathf.Max(0, missileDebounceTimer - dt);
 
         for (int i = 0; i < missileReloadTimers.Count; i++) {
@@ -429,6 +458,27 @@ public class Plane : MonoBehaviour {
                 animation.ShowMissileGraphic(i, true);
             }
         }
+    }
+
+    void UpdateMissileLock(float dt) {
+        //default neutral position is forward
+        Vector3 targetDir = Vector3.forward;
+        MissileTracking = false;
+
+        if (Target != null) {
+            var error = target.Position - Rigidbody.position;
+            var errorDir = Quaternion.Inverse(Rigidbody.rotation) * error.normalized; //transform into local space
+
+            if (error.magnitude <= lockRange && Vector3.Angle(Vector3.forward, errorDir) <= lockAngle) {
+                MissileTracking = true;
+                targetDir = errorDir;
+            }
+        }
+
+        //missile lock either rotates towards the target, or towards the neutral position
+        missileLockDirection = Vector3.RotateTowards(missileLockDirection, targetDir, Mathf.Deg2Rad * lockSpeed * dt, 0);
+
+        MissileLocked = Target != null && MissileTracking && Vector3.Angle(missileLockDirection, targetDir) < lockSpeed * dt;
     }
 
     void FixedUpdate() {
