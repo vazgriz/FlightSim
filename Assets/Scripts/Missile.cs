@@ -12,6 +12,8 @@ public class Missile : MonoBehaviour {
     [SerializeField]
     float damage;
     [SerializeField]
+    float damageRadius;
+    [SerializeField]
     float turningGForce;
     [SerializeField]
     LayerMask collisionMask;
@@ -45,6 +47,16 @@ public class Missile : MonoBehaviour {
         renderer.enabled = false;
         exploded = true;
         explosionGraphic.SetActive(true);
+
+        var hits = Physics.OverlapSphere(rigidbody.position, damageRadius, collisionMask.value);
+
+        foreach (var hit in hits) {
+            Plane other = hit.gameObject.GetComponent<Plane>();
+
+            if (other != null && other != owner) {
+                other.ApplyDamage(damage);
+            }
+        }
     }
 
     void CheckCollision() {

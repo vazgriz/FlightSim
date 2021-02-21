@@ -52,6 +52,7 @@ MonoBehaviour:
   speed: 400
   trackingAngle: 90
   damage: 50
+  damageRadius: 5
   turningGForce: 6
   collisionMask:
     serializedVersion: 2
