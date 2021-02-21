@@ -74,7 +74,9 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     List<GameObject> graphics;
     [SerializeField]
-    GameObject crashEffect;
+    GameObject damageEffect;
+    [SerializeField]
+    GameObject deathEffect;
     [SerializeField]
     bool flapsDeployed;
     [SerializeField]
@@ -126,6 +128,12 @@ public class Plane : MonoBehaviour {
         }
         private set {
             health = Mathf.Clamp(value, 0, maxHealth);
+
+            if (health <= MaxHealth * .75f && health > 0) {
+                damageEffect.SetActive(true);
+            } else {
+                damageEffect.SetActive(false);
+            }
 
             if (health == 0 && MaxHealth != 0 && !Dead) {
                 Die();
@@ -216,9 +224,8 @@ public class Plane : MonoBehaviour {
         Throttle = 0;
         Dead = true;
 
-        foreach (var go in graphics) {
-            go.SetActive(false);
-        }
+        damageEffect.GetComponent<ParticleSystem>().Pause();
+        deathEffect.SetActive(true);
     }
 
     void UpdateThrottle(float dt) {
@@ -528,7 +535,11 @@ public class Plane : MonoBehaviour {
             Rigidbody.position = contact.point;
             Rigidbody.rotation = Quaternion.Euler(0, Rigidbody.rotation.eulerAngles.y, 0);
 
-            crashEffect.SetActive(true);
+            foreach (var go in graphics) {
+                go.SetActive(false);
+            }
+
+            return;
         }
     }
 }
