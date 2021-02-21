@@ -71,7 +71,9 @@ public class Missile : MonoBehaviour {
     void TrackTarget(float dt) {
         if (target == null) return;
 
-        var error = target.Position - rigidbody.position;
+        var targetPosition = Utilities.FirstOrderIntercept(rigidbody.position, Vector3.zero, speed, target.Position, target.Velocity);
+
+        var error = targetPosition - rigidbody.position;
         var targetDir = error.normalized;
         var currentDir = rigidbody.rotation * Vector3.forward;
 
