@@ -17,6 +17,8 @@ public class Missile : MonoBehaviour {
     LayerMask collisionMask;
     [SerializeField]
     new MeshRenderer renderer;
+    [SerializeField]
+    GameObject explosionGraphic;
 
     Plane owner;
     Target target;
@@ -42,6 +44,7 @@ public class Missile : MonoBehaviour {
         rigidbody.isKinematic = true;
         renderer.enabled = false;
         exploded = true;
+        explosionGraphic.SetActive(true);
     }
 
     void CheckCollision() {
@@ -54,6 +57,7 @@ public class Missile : MonoBehaviour {
             Plane other = hit.collider.gameObject.GetComponent<Plane>();
 
             if (other == null || other != owner) {
+                rigidbody.position = hit.point;
                 Explode();
             }
         }
@@ -65,7 +69,11 @@ public class Missile : MonoBehaviour {
         timer = Mathf.Max(0, Time.fixedDeltaTime);
 
         if (timer == 0) {
-            Destroy(gameObject);
+            if (exploded) {
+                Destroy(gameObject);
+            } else {
+                Explode();
+            }
         }
 
         if (exploded) return;
