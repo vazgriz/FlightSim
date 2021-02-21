@@ -6,6 +6,12 @@ public class Target : MonoBehaviour {
     [SerializeField]
     new string name;
 
+    public string Name {
+        get {
+            return name;
+        }
+    }
+
     public Vector3 Position {
         get {
             return rigidbody.position;

@@ -7,6 +7,10 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     float updateRate;
     [SerializeField]
+    Color normalColor;
+    [SerializeField]
+    Color lockColor;
+    [SerializeField]
     List<GameObject> helpDialogs;
     [SerializeField]
     Compass compass;
@@ -30,6 +34,14 @@ public class PlaneHUD : MonoBehaviour {
     Bar healthBar;
     [SerializeField]
     Text healthText;
+    [SerializeField]
+    Transform targetBox;
+    [SerializeField]
+    Text targetName;
+    [SerializeField]
+    Text targetRange;
+    [SerializeField]
+    Transform missileLock;
 
     Plane plane;
     Transform planeTransform;
@@ -38,6 +50,10 @@ public class PlaneHUD : MonoBehaviour {
 
     GameObject hudCenterGO;
     GameObject velocityMarkerGO;
+    GameObject targetBoxGO;
+    Image targetBoxImage;
+    GameObject missileLockGO;
+    Image missileLockImage;
 
     float lastUpdateTime;
 
@@ -47,6 +63,10 @@ public class PlaneHUD : MonoBehaviour {
     void Start() {
         hudCenterGO = hudCenter.gameObject;
         velocityMarkerGO = velocityMarker.gameObject;
+        targetBoxGO = targetBox.gameObject;
+        targetBoxImage = targetBox.GetComponent<Image>();
+        missileLockGO = missileLock.gameObject;
+        missileLockImage = missileLock.GetComponent<Image>();
     }
 
     public void SetPlane(Plane plane) {
@@ -151,6 +171,47 @@ public class PlaneHUD : MonoBehaviour {
         healthText.text = string.Format("{0:0}", plane.Health);
     }
 
+    void UpdateWeapons() {
+        if (plane.Target == null) {
+            targetBoxGO.SetActive(false);
+            missileLockGO.SetActive(false);
+            return;
+        }
+
+        var targetDistance = Vector3.Distance(plane.Rigidbody.position, plane.Target.Position);
+        var targetPos = TransformToHUDSpace(plane.Target.Position);
+        var missileLockPos = plane.MissileLocked ? targetPos : TransformToHUDSpace(plane.Rigidbody.position + plane.MissileLockDirection * targetDistance);
+
+        if (targetPos.z > 0) {
+            targetBoxGO.SetActive(true);
+            targetBox.localPosition = new Vector3(targetPos.x, targetPos.y, 0);
+        } else {
+            targetBoxGO.SetActive(false);
+        }
+
+        if (plane.MissileTracking && missileLockPos.z > 0) {
+            missileLockGO.SetActive(true);
+            missileLock.localPosition = new Vector3(missileLockPos.x, missileLockPos.y, 0);
+        } else {
+            missileLockGO.SetActive(false);
+        }
+
+        if (plane.MissileLocked) {
+            targetBoxImage.color = lockColor;
+            targetName.color = lockColor;
+            targetRange.color = lockColor;
+            missileLockImage.color = lockColor;
+        } else {
+            targetBoxImage.color = normalColor;
+            targetName.color = normalColor;
+            targetRange.color = normalColor;
+            missileLockImage.color = normalColor;
+        }
+
+        targetName.text = plane.Target.Name;
+        targetRange.text = string.Format("{0:0 m}", targetDistance);
+    }
+
     void LateUpdate() {
         if (plane == null) return;
         if (camera == null) return;
@@ -170,6 +231,7 @@ public class PlaneHUD : MonoBehaviour {
         UpdateAirspeed();
         UpdateAltitude();
         UpdateHealth();
+        UpdateWeapons();
 
         //update these elements at reduced rate to make reading them easier
         if (Time.time > lastUpdateTime + (1f / updateRate)) {
