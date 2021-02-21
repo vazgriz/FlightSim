@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1397158608921222460}
   - component: {fileID: 7883338570026377371}
   - component: {fileID: 3884362863021845156}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,6 +53,10 @@ MonoBehaviour:
   trackingAngle: 90
   damage: 50
   turningG: 6
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 311
+  renderer: {fileID: 1397158608921222460}
 --- !u!33 &4638493424015319493
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -141,7 +145,7 @@ GameObject:
   - component: {fileID: 55156526204606141}
   - component: {fileID: 2235490794808305861}
   - component: {fileID: 4380990124406346708}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}

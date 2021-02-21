@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7952187885672950636}
   - component: {fileID: 7691887832806261862}
   - component: {fileID: 3602783313260952736}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Canopy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 6426920809220315807}
   - component: {fileID: 1672179245118975198}
   - component: {fileID: 3657721933575621385}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 4376326503470435326}
   - component: {fileID: 7010500817967484201}
   - component: {fileID: 7922172098410255018}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Airbrake
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 7098709419306614170}
   - component: {fileID: 4668271052301664118}
   - component: {fileID: 4592467459201710784}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightAileron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 758815499812652947}
   - component: {fileID: 4831563583816967610}
   - component: {fileID: 2322639782884279842}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightElevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 7287516894575911195}
   - component: {fileID: 2919462139429348977}
   - component: {fileID: 8060768349212739129}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftFlap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -485,7 +485,7 @@ GameObject:
   - component: {fileID: 5343631034706615089}
   - component: {fileID: 4579143570428399930}
   - component: {fileID: 2079677627474253712}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rudders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 7352216910062621371}
   - component: {fileID: 6223773576863424774}
   - component: {fileID: 5730748780101204830}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Engines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -643,7 +643,7 @@ GameObject:
   - component: {fileID: 6798936512676114800}
   - component: {fileID: 5206971659160004631}
   - component: {fileID: 369926998889339833}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fuselage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,7 @@ GameObject:
   - component: {fileID: 4330752875807938262}
   - component: {fileID: 956603723666317286}
   - component: {fileID: 7409007733480097166}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cockpit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -801,7 +801,7 @@ GameObject:
   - component: {fileID: 6457283437137519601}
   - component: {fileID: 5408413217478566599}
   - component: {fileID: 6578477345026651450}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightFlap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -880,7 +880,7 @@ GameObject:
   - component: {fileID: 8180032383524918375}
   - component: {fileID: 8695983382723743149}
   - component: {fileID: 2938276818429083382}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightRudder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -959,7 +959,7 @@ GameObject:
   - component: {fileID: 5719306870350747766}
   - component: {fileID: 6767168454768825717}
   - component: {fileID: 6237894408360720180}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftElevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1038,7 +1038,7 @@ GameObject:
   - component: {fileID: 5675005270414269744}
   - component: {fileID: 7399124971475234242}
   - component: {fileID: 5254364840220983912}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Nose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1117,7 +1117,7 @@ GameObject:
   - component: {fileID: 5036458651028698839}
   - component: {fileID: 3097546668340806927}
   - component: {fileID: 5300018054544441453}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftRudder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1194,7 +1194,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3588451848796086104}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hardpoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1225,7 +1225,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4057628315991148046}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Afterburner1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1257,7 +1257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4953204198609509365}
   - component: {fileID: 1080852128345951242}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gear1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1301,7 +1301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8566313077898161204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hardpoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1333,7 +1333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8930903521151951746}
   - component: {fileID: 7525370270416780603}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gear3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1379,7 +1379,7 @@ GameObject:
   - component: {fileID: 9015424067187965477}
   - component: {fileID: 7702052099272687852}
   - component: {fileID: 340168008746259036}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftAileron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1456,7 +1456,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 210230462849128899}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Afterburner2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1488,7 +1488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3723392299779095551}
   - component: {fileID: 824935307425706135}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gear2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1534,7 +1534,7 @@ GameObject:
   - component: {fileID: 2435498629789956648}
   - component: {fileID: 458221452051196549}
   - component: {fileID: 5961418588593550158}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UpperFuselage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1615,7 +1615,7 @@ GameObject:
   - component: {fileID: 1978894345480606398}
   - component: {fileID: 1030071069971577036}
   - component: {fileID: 3168297468136084144}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: F15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2188,6 +2188,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: missile
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: dd3d7065258cc4f40b6713630d03a2e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd3d7065258cc4f40b6713630d03a2e4, type: 3}
 --- !u!4 &5223936927945674381 stripped
@@ -2274,6 +2279,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: missile
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: dd3d7065258cc4f40b6713630d03a2e4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd3d7065258cc4f40b6713630d03a2e4, type: 3}
 --- !u!1 &3131462138389546337 stripped
@@ -2355,6 +2365,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: afterburner
       objectReference: {fileID: 0}
+    - target: {fileID: 8348422454787297666, guid: 55d909449977d3f498214c5b65eab6af,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55d909449977d3f498214c5b65eab6af, type: 3}
 --- !u!4 &2072978791921380816 stripped
@@ -2430,6 +2445,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: afterburner
       objectReference: {fileID: 0}
+    - target: {fileID: 8348422454787297666, guid: 55d909449977d3f498214c5b65eab6af,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55d909449977d3f498214c5b65eab6af, type: 3}
 --- !u!4 &2835047076867357301 stripped
@@ -2454,6 +2474,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8116138975141828757, guid: e64ae45176ab9bf40b2103f37b94d2f8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8116138975141828758, guid: e64ae45176ab9bf40b2103f37b94d2f8,
         type: 3}
