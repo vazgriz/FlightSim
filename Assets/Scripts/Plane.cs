@@ -440,7 +440,7 @@ public class Plane : MonoBehaviour {
         var hardpoint = hardpoints[index];
         var missileGO = Instantiate(missilePrefab, hardpoint.position, hardpoint.rotation);
         var missile = missileGO.GetComponent<Missile>();
-        missile.Launch(this, null);
+        missile.Launch(this, MissileLocked ? Target : null);
     }
 
     void UpdateWeapons(float dt) {

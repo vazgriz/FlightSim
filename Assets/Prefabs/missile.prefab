@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4638493424015319493}
   - component: {fileID: 1397158608921222460}
   - component: {fileID: 7883338570026377371}
-  - component: {fileID: 3884362863021845156}
   m_Layer: 9
   m_Name: missile
   m_TagString: Untagged
@@ -53,7 +52,7 @@ MonoBehaviour:
   speed: 400
   trackingAngle: 90
   damage: 50
-  turningG: 6
+  turningGForce: 6
   collisionMask:
     serializedVersion: 2
     m_Bits: 311
@@ -122,20 +121,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &3884362863021845156
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 819481780962912736}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.0625
-  m_Height: 3.2
-  m_Direction: 2
-  m_Center: {x: -0.00000021606684, y: -0.000000044703484, z: -1.46825}
 --- !u!1 &3628309837548143191
 GameObject:
   m_ObjectHideFlags: 0

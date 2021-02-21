@@ -12,7 +12,7 @@ public class Missile : MonoBehaviour {
     [SerializeField]
     float damage;
     [SerializeField]
-    float turningG;
+    float turningGForce;
     [SerializeField]
     LayerMask collisionMask;
     [SerializeField]
@@ -48,6 +48,9 @@ public class Missile : MonoBehaviour {
     }
 
     void CheckCollision() {
+        //missile can travel very fast, collision may not be detected by physics system
+        //use raycasts to check for collisions
+
         var currentPosition = rigidbody.position;
         var error = currentPosition - lastPosition;
         var ray = new Ray(lastPosition, error.normalized);
@@ -65,9 +68,31 @@ public class Missile : MonoBehaviour {
         lastPosition = currentPosition;
     }
 
-    void FixedUpdate() {
-        timer = Mathf.Max(0, Time.fixedDeltaTime);
+    void TrackTarget(float dt) {
+        if (target == null) return;
 
+        var error = target.Position - rigidbody.position;
+        var targetDir = error.normalized;
+        var currentDir = rigidbody.rotation * Vector3.forward;
+
+        //if angle to target is too large, explode
+        if (Vector3.Angle(currentDir, targetDir) > trackingAngle) {
+            Explode();
+            return;
+        }
+
+        //calculate turning rate from G Force and speed
+        float maxTurnRate = (turningGForce * 9.81f) / speed;  //radians / s
+        var dir = Vector3.RotateTowards(currentDir, targetDir, maxTurnRate * dt, 0);
+
+        rigidbody.rotation = Quaternion.LookRotation(dir);
+    }
+
+    void FixedUpdate() {
+        timer = Mathf.Max(0, timer - Time.fixedDeltaTime);
+
+        //explode missile automatically after lifetime ends
+        //timer is reused to keep missile graphics alive after explosion
         if (timer == 0) {
             if (exploded) {
                 Destroy(gameObject);
@@ -79,6 +104,9 @@ public class Missile : MonoBehaviour {
         if (exploded) return;
 
         CheckCollision();
+        TrackTarget(Time.fixedDeltaTime);
+
+        //set speed to direction of travel
         rigidbody.velocity = rigidbody.rotation * new Vector3(0, 0, speed);
     }
 }
