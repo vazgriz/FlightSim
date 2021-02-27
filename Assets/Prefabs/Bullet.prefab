@@ -51,7 +51,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 256
-  width: 1
+  width: 2.5
 --- !u!120 &2669934981140404944
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -93,10 +93,10 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 5}
+  - {x: 0, y: 0, z: 10}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.25
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:

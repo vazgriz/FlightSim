@@ -2116,8 +2116,9 @@ MonoBehaviour:
   lockRange: 2000
   lockSpeed: 30
   lockAngle: 45
-  cannonFireRate: 600
+  cannonFireRate: 900
   cannonDebounceTime: 0.125
+  cannonSpread: 0.25
   cannonSpawnPoint: {fileID: 8714942240040698235}
   bulletPrefab: {fileID: 2669934981140404945, guid: a6a331fa124eaf148bd5a44b8f133e51,
     type: 3}

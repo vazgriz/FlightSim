@@ -105,6 +105,8 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     float cannonDebounceTime;
     [SerializeField]
+    float cannonSpread;
+    [SerializeField]
     Transform cannonSpawnPoint;
     [SerializeField]
     GameObject bulletPrefab;
@@ -516,7 +518,9 @@ public class Plane : MonoBehaviour {
         if (cannonFiring && cannonFiringTimer == 0) {
             cannonFiringTimer = 60f / cannonFireRate;
 
-            var bulletGO = Instantiate(bulletPrefab, cannonSpawnPoint.position, cannonSpawnPoint.rotation);
+            var spread = Random.insideUnitCircle * cannonSpread;
+
+            var bulletGO = Instantiate(bulletPrefab, cannonSpawnPoint.position, cannonSpawnPoint.rotation * Quaternion.Euler(spread.x, spread.y, 0));
             var bullet = bulletGO.GetComponent<Bullet>();
             bullet.Fire(this);
         }
