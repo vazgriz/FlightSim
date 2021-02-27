@@ -42,6 +42,14 @@ public class PlaneHUD : MonoBehaviour {
     Text targetRange;
     [SerializeField]
     Transform missileLock;
+    [SerializeField]
+    Transform reticle;
+    [SerializeField]
+    RectTransform reticleLine;
+    [SerializeField]
+    float cannonRange;
+    [SerializeField]
+    float bulletSpeed;
 
     Plane plane;
     Transform planeTransform;
@@ -54,6 +62,7 @@ public class PlaneHUD : MonoBehaviour {
     Image targetBoxImage;
     GameObject missileLockGO;
     Image missileLockImage;
+    GameObject reticleGO;
 
     float lastUpdateTime;
 
@@ -67,6 +76,7 @@ public class PlaneHUD : MonoBehaviour {
         targetBoxImage = targetBox.GetComponent<Image>();
         missileLockGO = missileLock.gameObject;
         missileLockImage = missileLock.GetComponent<Image>();
+        reticleGO = reticle.gameObject;
     }
 
     public void SetPlane(Plane plane) {
@@ -210,6 +220,24 @@ public class PlaneHUD : MonoBehaviour {
 
         targetName.text = plane.Target.Name;
         targetRange.text = string.Format("{0:0 m}", targetDistance);
+
+        var leadPos = Utilities.FirstOrderIntercept(plane.Rigidbody.position, Vector3.zero, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
+        var reticlePos = TransformToHUDSpace(leadPos);
+
+        if (reticlePos.z > 0 && targetDistance <= cannonRange) {
+            reticleGO.SetActive(true);
+            reticle.localPosition = new Vector3(reticlePos.x, reticlePos.y, 0);
+
+            var reticlePos2 = new Vector2(reticlePos.x, reticlePos.y);
+            var targetPos2 = new Vector2(targetPos.x, targetPos.y);
+            var reticleError = reticlePos2 - targetPos2;
+
+            var lineAngle = Vector2.SignedAngle(Vector3.up, reticleError);
+            reticleLine.localEulerAngles = new Vector3(0, 0, lineAngle + 180f);
+            reticleLine.sizeDelta = new Vector2(reticleLine.sizeDelta.x, reticleError.magnitude);
+        } else {
+            reticleGO.SetActive(false);
+        }
     }
 
     void LateUpdate() {

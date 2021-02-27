@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="160"
+   height="159.99998"
+   viewBox="0 0 42.333332 42.333328"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="reticle.svg"
+   inkscape:export-filename="E:\Code\Projects\FlightSim\Assets\Textures\HUD\reticle.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="2.6158875"
+     inkscape:cy="40.533845"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="true"
+     inkscape:document-rotation="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     units="px" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-24.444946,-192.97249)">
+    <path
+       id="path832"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.700048"
+       d="m 45.611748,192.97249 a 21.166728,21.166725 0 0 0 -21.166802,21.1668 21.166728,21.166725 0 0 0 21.166802,21.16653 21.166728,21.166725 0 0 0 21.166531,-21.16653 21.166728,21.166725 0 0 0 -21.166531,-21.1668 z m -0.05606,4.23336 a 16.933382,16.933379 0 0 1 0.05606,0 16.933382,16.933379 0 0 1 16.933443,16.93344 16.933382,16.933379 0 0 1 -16.933443,16.93343 16.933382,16.933379 0 0 1 -16.933442,-16.93343 16.933382,16.933379 0 0 1 16.877382,-16.93344 z" />
+    <ellipse
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.780772"
+       id="path854"
+       cx="45.611671"
+       cy="214.13921"
+       rx="4.2333455"
+       ry="4.233345" />
+  </g>
+</svg>
