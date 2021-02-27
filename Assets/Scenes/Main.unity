@@ -2254,12 +2254,18 @@ MonoBehaviour:
   plane: {fileID: 1255898895}
   minSpeed: 150
   maxSpeed: 450
-  canUseMissiles: 1
+  canUseMissiles: 0
+  canUseCannon: 1
   missileLockFiringDelay: 1
   missileFiringCooldown: 5
   missileMinRange: 500
   missileMaxRange: 1500
   missileMaxFireAngle: 20
+  bulletSpeed: 1000
+  cannonRange: 1000
+  cannonMaxFireAngle: 5
+  cannonBurstLength: 0.5
+  cannonBurstCooldown: 2.5
 --- !u!114 &1255898895 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1030071069971577036, guid: 868b13a7be7adb148b89b9bcf56bb6a6,

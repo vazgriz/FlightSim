@@ -12,6 +12,8 @@ public class AIController : MonoBehaviour {
     [SerializeField]
     bool canUseMissiles;
     [SerializeField]
+    bool canUseCannon;
+    [SerializeField]
     float missileLockFiringDelay;
     [SerializeField]
     float missileFiringCooldown;
@@ -21,11 +23,25 @@ public class AIController : MonoBehaviour {
     float missileMaxRange;
     [SerializeField]
     float missileMaxFireAngle;
+    [SerializeField]
+    float bulletSpeed;
+    [SerializeField]
+    float cannonRange;
+    [SerializeField]
+    float cannonMaxFireAngle;
+    [SerializeField]
+    float cannonBurstLength;
+    [SerializeField]
+    float cannonBurstCooldown;
 
     Plane targetPlane;
 
     float missileDelayTimer;
     float missileCooldownTimer;
+
+    bool cannonFiring;
+    float cannonBurstTimer;
+    float cannonCooldownTimer;
 
     void Start() {
         if (plane.Target != null) {
@@ -38,10 +54,16 @@ public class AIController : MonoBehaviour {
             return new Vector3();
         }
 
-        var input = new Vector3();
-        var error = plane.Target.Position - plane.Rigidbody.position;
+        var targetPosition = plane.Target.Position;
+
+        if (Vector3.Distance(targetPosition, plane.Rigidbody.position) < cannonRange) {
+            targetPosition = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, targetPosition, plane.Target.Velocity);
+        }
+
+        var error = targetPosition - plane.Rigidbody.position;
         error = Quaternion.Inverse(plane.Rigidbody.rotation) * error;   //transform into local space
 
+        var input = new Vector3();
         input.z = error.x;
         input.x = -error.y;
 
@@ -70,28 +92,51 @@ public class AIController : MonoBehaviour {
         if (canUseMissiles) {
             CalculateMissiles(dt);
         }
+
+        if (canUseCannon) {
+            CalculateCannon(dt);
+        }
     }
 
     void CalculateMissiles(float dt) {
         missileDelayTimer = Mathf.Max(0, missileDelayTimer - dt);
         missileCooldownTimer = Mathf.Max(0, missileCooldownTimer - dt);
 
-        var error = plane.Target.Position - plane.Rigidbody.position;
+        var targetPosition = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
+
+        var error = targetPosition - plane.Rigidbody.position;
         var range = error.magnitude;
         var targetDir = error.normalized;
         var targetAngle = Vector3.Angle(targetDir, plane.Rigidbody.rotation * Vector3.forward);
 
-        if (!plane.MissileLocked || range > missileMaxRange || range < missileMinRange || (targetAngle > missileMaxFireAngle && (180 - targetAngle) > missileMaxFireAngle)) {
-            //don't fire missile if not locked
-            //not in range
-            //angle between plane and target is too large
-            //angle can be close to 0 (chasing) or close to 180 (head on)
-            missileDelayTimer = missileLockFiringDelay;
-        }
-
-        if (plane.MissileLocked && missileDelayTimer == 0 && missileCooldownTimer == 0) {
+        if (range < cannonRange && missileDelayTimer == 0 && missileCooldownTimer == 0) {
             plane.TryFireMissile();
             missileCooldownTimer = missileFiringCooldown;
+        }
+    }
+
+    void CalculateCannon(float dt) {
+        if (cannonFiring) {
+            cannonBurstTimer = Mathf.Max(0, cannonBurstTimer - dt);
+
+            if (cannonBurstTimer == 0) {
+                cannonFiring = false;
+                cannonCooldownTimer = cannonBurstCooldown;
+                plane.SetCannonInput(false);
+            }
+        } else {
+            cannonCooldownTimer = Mathf.Max(0, cannonCooldownTimer - dt);
+
+            var error = plane.Target.Position - plane.Rigidbody.position;
+            var range = error.magnitude;
+            var targetDir = error.normalized;
+            var targetAngle = Vector3.Angle(targetDir, plane.Rigidbody.rotation * Vector3.forward);
+
+            if (range < cannonRange && targetAngle < cannonMaxFireAngle && cannonCooldownTimer == 0) {
+                cannonFiring = true;
+                cannonBurstTimer = cannonBurstLength;
+                plane.SetCannonInput(true);
+            }
         }
     }
 

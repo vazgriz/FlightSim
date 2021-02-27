@@ -221,7 +221,7 @@ public class PlaneHUD : MonoBehaviour {
         targetName.text = plane.Target.Name;
         targetRange.text = string.Format("{0:0 m}", targetDistance);
 
-        var leadPos = Utilities.FirstOrderIntercept(plane.Rigidbody.position, Vector3.zero, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
+        var leadPos = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
         var reticlePos = TransformToHUDSpace(leadPos);
 
         if (reticlePos.z > 0 && targetDistance <= cannonRange) {
