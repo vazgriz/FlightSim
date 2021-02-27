@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c8fba0f142b9840b9b423e66ef56eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 15
   lifetime: 5
   speed: 1000
   collisionMask:

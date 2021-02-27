@@ -46,8 +46,9 @@ public class Bullet : MonoBehaviour {
 
             if (other != null && other != owner) {
                 other.ApplyDamage(damage);
-                Destroy(gameObject);
             }
+
+            Destroy(gameObject);
         }
     }
 }
