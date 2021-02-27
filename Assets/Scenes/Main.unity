@@ -2252,8 +2252,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plane: {fileID: 1255898895}
+  steeringScaling: {x: 0.1, y: 1, z: 0.1}
   minSpeed: 150
   maxSpeed: 450
+  fineSteeringAngle: 10
   canUseMissiles: 0
   canUseCannon: 1
   missileLockFiringDelay: 1

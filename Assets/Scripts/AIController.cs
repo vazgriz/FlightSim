@@ -6,9 +6,13 @@ public class AIController : MonoBehaviour {
     [SerializeField]
     Plane plane;
     [SerializeField]
+    Vector3 steeringScaling;
+    [SerializeField]
     float minSpeed;
     [SerializeField]
     float maxSpeed;
+    [SerializeField]
+    float fineSteeringAngle;
     [SerializeField]
     bool canUseMissiles;
     [SerializeField]
@@ -63,11 +67,18 @@ public class AIController : MonoBehaviour {
         var error = targetPosition - plane.Rigidbody.position;
         error = Quaternion.Inverse(plane.Rigidbody.rotation) * error;   //transform into local space
 
+        var errorDir = error.normalized;
+
         var input = new Vector3();
-        input.z = error.x;
         input.x = -error.y;
 
-        return input;
+        if (Vector3.Angle(Vector3.forward, errorDir) < fineSteeringAngle) {
+            input.y = error.x;
+        } else {
+            input.z = error.x;
+        }
+
+        return Vector3.Scale(steeringScaling, input);
     }
 
     float CalculateThrottle() {
