@@ -79,6 +79,16 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void OnFireCannon(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        if (context.phase == InputActionPhase.Started) {
+            plane.SetCannonInput(true);
+        } else if (context.phase == InputActionPhase.Canceled) {
+            plane.SetCannonInput(false);
+        }
+    }
+
     void Update() {
         if (plane == null) return;
 

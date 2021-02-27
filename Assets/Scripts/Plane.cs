@@ -99,6 +99,15 @@ public class Plane : MonoBehaviour {
     float lockSpeed;
     [SerializeField]
     float lockAngle;
+    [SerializeField]
+    [Tooltip("Firing rate in Rounds Per Minute")]
+    float cannonFireRate;
+    [SerializeField]
+    float cannonDebounceTime;
+    [SerializeField]
+    Transform cannonSpawnPoint;
+    [SerializeField]
+    GameObject bulletPrefab;
 
     new PlaneAnimation animation;
 
@@ -112,6 +121,10 @@ public class Plane : MonoBehaviour {
     List<float> missileReloadTimers;
     float missileDebounceTimer;
     Vector3 missileLockDirection;
+
+    bool cannonFiring;
+    float cannonDebounceTimer;
+    float cannonFiringTimer;
 
     public float MaxHealth {
         get {
@@ -207,6 +220,10 @@ public class Plane : MonoBehaviour {
     public void SetControlInput(Vector3 input) {
         if (Dead) return;
         controlInput = input;
+    }
+
+    public void SetCannonInput(bool input) {
+        cannonFiring = input;
     }
 
     public void ToggleFlaps() {
@@ -457,10 +474,13 @@ public class Plane : MonoBehaviour {
     void UpdateWeapons(float dt) {
         UpdateWeaponCooldown(dt);
         UpdateMissileLock(dt);
+        UpdateCannon(dt);
     }
 
     void UpdateWeaponCooldown(float dt) {
         missileDebounceTimer = Mathf.Max(0, missileDebounceTimer - dt);
+        cannonDebounceTimer = Mathf.Max(0, cannonDebounceTimer - dt);
+        cannonFiringTimer = Mathf.Max(0, cannonFiringTimer - dt);
 
         for (int i = 0; i < missileReloadTimers.Count; i++) {
             missileReloadTimers[i] = Mathf.Max(0, missileReloadTimers[i] - dt);
@@ -490,6 +510,16 @@ public class Plane : MonoBehaviour {
         missileLockDirection = Vector3.RotateTowards(missileLockDirection, targetDir, Mathf.Deg2Rad * lockSpeed * dt, 0);
 
         MissileLocked = Target != null && MissileTracking && Vector3.Angle(missileLockDirection, targetDir) < lockSpeed * dt;
+    }
+
+    void UpdateCannon(float dt) {
+        if (cannonFiring && cannonFiringTimer == 0) {
+            cannonFiringTimer = 60f / cannonFireRate;
+
+            var bulletGO = Instantiate(bulletPrefab, cannonSpawnPoint.position, cannonSpawnPoint.rotation);
+            var bullet = bulletGO.GetComponent<Bullet>();
+            bullet.Fire(this);
+        }
     }
 
     void FixedUpdate() {

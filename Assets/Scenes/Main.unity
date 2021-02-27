@@ -549,11 +549,6 @@ PrefabInstance:
       propertyPath: initialSpeed
       value: 200
       objectReference: {fileID: 0}
-    - target: {fileID: 1030071069971577036, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
-        type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 1522607480}
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -567,7 +562,7 @@ PrefabInstance:
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2500
+      value: -1500
       objectReference: {fileID: 0}
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
@@ -582,7 +577,7 @@ PrefabInstance:
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 333.551
       objectReference: {fileID: 0}
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
@@ -592,12 +587,22 @@ PrefabInstance:
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.22876385
       objectReference: {fileID: 0}
     - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: -0.97348195
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5515725321500408573, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8849735085998360814, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
         type: 3}
@@ -857,6 +862,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 54bc0053-bbe2-45cd-80b6-dd2a4f0dee6d
     m_ActionName: Plane/FireMissile[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 342582036}
+        m_MethodName: OnFireCannon
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: cc901d01-643f-4c28-918b-23ed83f6433c
+    m_ActionName: Plane/FireCannon[/XInputControllerWindows/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Plane
@@ -2349,18 +2369,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1435412849}
   m_CullTransparentMesh: 0
---- !u!114 &1522607480 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2515223684704408108, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
-    type: 3}
-  m_PrefabInstance: {fileID: 716492603949598966}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e18d00c010aab047afd893019ac2ced, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1562114784
 GameObject:
   m_ObjectHideFlags: 0
