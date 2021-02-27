@@ -12,6 +12,18 @@ public class AIController : MonoBehaviour {
     [SerializeField]
     float maxSpeed;
     [SerializeField]
+    LayerMask groundCollisionMask;
+    [SerializeField]
+    float groundCollisionDistance;
+    [SerializeField]
+    float groundAvoidanceAngle;
+    [SerializeField]
+    float groundAvoidanceMinSpeed;
+    [SerializeField]
+    float groundAvoidanceMaxSpeed;
+    [SerializeField]
+    float pitchUpThreshold;
+    [SerializeField]
     float fineSteeringAngle;
     [SerializeField]
     bool canUseMissiles;
@@ -54,6 +66,13 @@ public class AIController : MonoBehaviour {
         }
     }
 
+    Vector3 AvoidGround() {
+        //roll level and pull up
+        var roll = plane.Rigidbody.rotation.eulerAngles.z;
+        if (roll > 180f) roll -= 360f;
+        return new Vector3(-1, 0, -roll);
+    }
+
     Vector3 CalculateSteering(float dt) {
         if (plane.Target == null || targetPlane.Health == 0) {
             return new Vector3();
@@ -69,14 +88,20 @@ public class AIController : MonoBehaviour {
         error = Quaternion.Inverse(plane.Rigidbody.rotation) * error;   //transform into local space
 
         var errorDir = error.normalized;
+        var pitchError = new Vector3(0, error.y, error.z);
+        var rollError = new Vector3(error.x, error.y, 0);
 
         var targetInput = new Vector3();
-        targetInput.x = -error.y;
+
+        var pitch = Vector3.SignedAngle(Vector3.forward, pitchError, Vector3.right);
+        if (-pitch < pitchUpThreshold) pitch += 360f;
+        targetInput.x = pitch;
 
         if (Vector3.Angle(Vector3.forward, errorDir) < fineSteeringAngle) {
             targetInput.y = error.x;
         } else {
-            targetInput.z = error.x;
+            var roll = Vector3.SignedAngle(Vector3.up, rollError, Vector3.forward);
+            targetInput.z = roll;
         }
 
         targetInput.x = Mathf.Clamp(targetInput.x, -1, 1);
@@ -89,7 +114,7 @@ public class AIController : MonoBehaviour {
         return input;
     }
 
-    float CalculateThrottle() {
+    float CalculateThrottle(float minSpeed, float maxSpeed) {
         if (plane.Target == null || targetPlane.Health == 0) {
             return 0;
         }
@@ -162,7 +187,14 @@ public class AIController : MonoBehaviour {
     void FixedUpdate() {
         var dt = Time.fixedDeltaTime;
         var steering = CalculateSteering(dt);
-        var throttle = CalculateThrottle();
+        var throttle = CalculateThrottle(minSpeed, maxSpeed);
+
+        var ray = new Ray(plane.Rigidbody.position, plane.Rigidbody.rotation * Quaternion.Euler(groundAvoidanceAngle, 0, 0) * Vector3.forward);
+
+        if (Physics.Raycast(ray, groundCollisionDistance + plane.LocalAngularVelocity.z, groundCollisionMask.value)) {
+            steering = AvoidGround();
+            throttle = CalculateThrottle(groundAvoidanceMinSpeed, groundAvoidanceMaxSpeed);
+        }
 
         plane.SetControlInput(steering);
         plane.SetThrottleInput(throttle);

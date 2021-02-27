@@ -2255,6 +2255,14 @@ MonoBehaviour:
   steeringSpeed: 10
   minSpeed: 150
   maxSpeed: 250
+  groundCollisionMask:
+    serializedVersion: 2
+    m_Bits: 1
+  groundCollisionDistance: 1000
+  groundAvoidanceAngle: 5
+  groundAvoidanceMinSpeed: 125
+  groundAvoidanceMaxSpeed: 150
+  pitchUpThreshold: -15
   fineSteeringAngle: 5
   canUseMissiles: 0
   canUseCannon: 1
