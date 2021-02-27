@@ -221,7 +221,7 @@ public class Plane : MonoBehaviour {
 
     public void SetControlInput(Vector3 input) {
         if (Dead) return;
-        controlInput = input;
+        controlInput = input.normalized;
     }
 
     public void SetCannonInput(bool input) {

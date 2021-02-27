@@ -6,7 +6,7 @@ public class AIController : MonoBehaviour {
     [SerializeField]
     Plane plane;
     [SerializeField]
-    Vector3 steeringScaling;
+    float steeringSpeed;
     [SerializeField]
     float minSpeed;
     [SerializeField]
@@ -39,6 +39,7 @@ public class AIController : MonoBehaviour {
     float cannonBurstCooldown;
 
     Plane targetPlane;
+    Vector3 lastInput;
 
     float missileDelayTimer;
     float missileCooldownTimer;
@@ -53,7 +54,7 @@ public class AIController : MonoBehaviour {
         }
     }
 
-    Vector3 CalculateSteering() {
+    Vector3 CalculateSteering(float dt) {
         if (plane.Target == null || targetPlane.Health == 0) {
             return new Vector3();
         }
@@ -69,16 +70,23 @@ public class AIController : MonoBehaviour {
 
         var errorDir = error.normalized;
 
-        var input = new Vector3();
-        input.x = -error.y;
+        var targetInput = new Vector3();
+        targetInput.x = -error.y;
 
         if (Vector3.Angle(Vector3.forward, errorDir) < fineSteeringAngle) {
-            input.y = error.x;
+            targetInput.y = error.x;
         } else {
-            input.z = error.x;
+            targetInput.z = error.x;
         }
 
-        return Vector3.Scale(steeringScaling, input);
+        targetInput.x = Mathf.Clamp(targetInput.x, -1, 1);
+        targetInput.y = Mathf.Clamp(targetInput.y, -1, 1);
+        targetInput.z = Mathf.Clamp(targetInput.z, -1, 1);
+
+        var input = Vector3.MoveTowards(lastInput, targetInput, steeringSpeed * dt);
+        lastInput = input;
+
+        return input;
     }
 
     float CalculateThrottle() {
@@ -153,7 +161,7 @@ public class AIController : MonoBehaviour {
 
     void FixedUpdate() {
         var dt = Time.fixedDeltaTime;
-        var steering = CalculateSteering();
+        var steering = CalculateSteering(dt);
         var throttle = CalculateThrottle();
 
         plane.SetControlInput(steering);
