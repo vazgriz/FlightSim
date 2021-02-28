@@ -185,11 +185,14 @@ public class AIController : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        if (plane.Dead) return;
         var dt = Time.fixedDeltaTime;
         var steering = CalculateSteering(dt);
         var throttle = CalculateThrottle(minSpeed, maxSpeed);
 
-        var ray = new Ray(plane.Rigidbody.position, plane.Rigidbody.rotation * Quaternion.Euler(groundAvoidanceAngle, 0, 0) * Vector3.forward);
+        var velocityRot = Quaternion.LookRotation(plane.Rigidbody.velocity.normalized);
+
+        var ray = new Ray(plane.Rigidbody.position, velocityRot * Quaternion.Euler(groundAvoidanceAngle, 0, 0) * Vector3.forward);
 
         if (Physics.Raycast(ray, groundCollisionDistance + plane.LocalAngularVelocity.z, groundCollisionMask.value)) {
             steering = AvoidGround();

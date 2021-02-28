@@ -619,6 +619,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: F15 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8849735085998360814, guid: 868b13a7be7adb148b89b9bcf56bb6a6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 868b13a7be7adb148b89b9bcf56bb6a6, type: 3}
 --- !u!114 &221253161 stripped
@@ -2259,7 +2264,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   groundCollisionDistance: 1000
-  groundAvoidanceAngle: 5
+  groundAvoidanceAngle: 10
   groundAvoidanceMinSpeed: 125
   groundAvoidanceMaxSpeed: 150
   pitchUpThreshold: -15
