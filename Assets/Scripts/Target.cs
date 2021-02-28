@@ -24,9 +24,12 @@ public class Target : MonoBehaviour {
         }
     }
 
+    public Plane Plane { get; private set; }
+
     new Rigidbody rigidbody;
 
     void Awake() {
         rigidbody = GetComponent<Rigidbody>();
+        Plane = GetComponent<Plane>();
     }
 }

@@ -498,7 +498,7 @@ public class Plane : MonoBehaviour {
         Vector3 targetDir = Vector3.forward;
         MissileTracking = false;
 
-        if (Target != null) {
+        if (Target != null && !Target.Plane.Dead) {
             var error = target.Position - Rigidbody.position;
             var errorDir = Quaternion.Inverse(Rigidbody.rotation) * error.normalized; //transform into local space
 
