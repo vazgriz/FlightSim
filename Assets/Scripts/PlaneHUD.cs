@@ -47,6 +47,10 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     RectTransform reticleLine;
     [SerializeField]
+    RectTransform targetArrow;
+    [SerializeField]
+    float targetArrowThreshold;
+    [SerializeField]
     float cannonRange;
     [SerializeField]
     float bulletSpeed;
@@ -63,6 +67,7 @@ public class PlaneHUD : MonoBehaviour {
     GameObject missileLockGO;
     Image missileLockImage;
     GameObject reticleGO;
+    GameObject targetArrowGO;
 
     float lastUpdateTime;
 
@@ -77,6 +82,7 @@ public class PlaneHUD : MonoBehaviour {
         missileLockGO = missileLock.gameObject;
         missileLockImage = missileLock.GetComponent<Image>();
         reticleGO = reticle.gameObject;
+        targetArrowGO = targetArrow.gameObject;
     }
 
     public void SetPlane(Plane plane) {
@@ -220,6 +226,18 @@ public class PlaneHUD : MonoBehaviour {
 
         targetName.text = plane.Target.Name;
         targetRange.text = string.Format("{0:0 m}", targetDistance);
+
+        var targetDir = (plane.Target.Position - plane.Rigidbody.position).normalized;
+        var targetAngle = Vector3.Angle(cameraTransform.forward, targetDir);
+
+        if (targetAngle > targetArrowThreshold) {
+            targetArrowGO.SetActive(true);
+            //add 180 degrees if target is behind camera
+            float flip = targetPos.z > 0 ? 0 : 180;
+            targetArrow.localEulerAngles = new Vector3(0, 0, flip + Vector2.SignedAngle(Vector2.up, new Vector2(targetPos.x, targetPos.y)));
+        } else {
+            targetArrowGO.SetActive(false);
+        }
 
         var leadPos = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
         var reticlePos = TransformToHUDSpace(leadPos);
