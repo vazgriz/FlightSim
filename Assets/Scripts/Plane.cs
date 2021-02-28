@@ -225,6 +225,7 @@ public class Plane : MonoBehaviour {
     }
 
     public void SetCannonInput(bool input) {
+        if (Dead) return;
         cannonFiring = input;
     }
 
@@ -242,6 +243,7 @@ public class Plane : MonoBehaviour {
         throttleInput = 0;
         Throttle = 0;
         Dead = true;
+        cannonFiring = false;
 
         damageEffect.GetComponent<ParticleSystem>().Pause();
         deathEffect.SetActive(true);
@@ -450,6 +452,8 @@ public class Plane : MonoBehaviour {
     }
 
     public void TryFireMissile() {
+        if (Dead) return;
+
         //try all available missiles
         for (int i = 0; i < hardpoints.Count; i++) {
             var index = (missileIndex + i) % hardpoints.Count;
