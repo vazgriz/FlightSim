@@ -548,6 +548,18 @@ MonoBehaviour:
   missileArrowThreshold: 30
   cannonRange: 1000
   bulletSpeed: 1000
+  missileWarningGraphics:
+  - {fileID: 908946524}
+  - {fileID: 133852679}
+  - {fileID: 741449414}
+  - {fileID: 1404204714}
+  - {fileID: 1072515902}
+  - {fileID: 1934544312}
+  - {fileID: 17436595}
+  - {fileID: 1969671575}
+  - {fileID: 1641956028}
+  - {fileID: 1826498456}
+  - {fileID: 1124648713}
 --- !u!1001 &221253160
 PrefabInstance:
   m_ObjectHideFlags: 0

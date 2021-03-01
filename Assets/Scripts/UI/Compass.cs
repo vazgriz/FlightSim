@@ -17,10 +17,12 @@ public class Compass : MonoBehaviour {
 
     struct Tick {
         public RectTransform transform;
+        public Image image;
         public int angle;
 
-        public Tick(RectTransform transform, int angle) {
+        public Tick(RectTransform transform, Image image, int angle) {
             this.transform = transform;
+            this.image = image;
             this.angle = angle;
         }
     }
@@ -39,12 +41,15 @@ public class Compass : MonoBehaviour {
 
     new RectTransform transform;
     List<Tick> ticks;
+    List<Text> tickText;
     new Camera camera;
     Transform planeTransform;
+    List<Graphic> graphics;
 
     void Start() {
         transform = GetComponent<RectTransform>();
         ticks = new List<Tick>();
+        tickText = new List<Text>();
 
         for (int i = 0; i < 360; i++) {
             if (i % largeTickInterval == 0) {
@@ -63,9 +68,20 @@ public class Compass : MonoBehaviour {
         planeTransform = plane.GetComponent<Transform>();
     }
 
+    public void UpdateColor(Color color) {
+        foreach (var tick in ticks) {
+            tick.image.color = color;
+        }
+
+        foreach (var text in tickText) {
+            text.color = color;
+        }
+    }
+
     void MakeLargeTick(int angle) {
         var tickGO = Instantiate(tickLargePrefab, transform);
         var tickTransform = tickGO.GetComponent<RectTransform>();
+        var tickImage = tickGO.GetComponent<Image>();
 
         var textGO = Instantiate(textPrefab, tickTransform);
         var text = textGO.GetComponent<Text>();
@@ -76,14 +92,16 @@ public class Compass : MonoBehaviour {
             text.text = string.Format("{0}", angle);
         }
 
-        ticks.Add(new Tick(tickTransform, angle));
+        tickText.Add(text);
+        ticks.Add(new Tick(tickTransform, tickImage, angle));
     }
 
     void MakeSmallTick(int angle) {
         var tickGO = Instantiate(tickSmallPrefab, transform);
         var tickTransform = tickGO.GetComponent<RectTransform>();
+        var tickImage = tickGO.GetComponent<Image>();
 
-        ticks.Add(new Tick(tickTransform, angle));
+        ticks.Add(new Tick(tickTransform, tickImage, angle));
     }
 
     float ConvertAngle(float angle) {

@@ -7,9 +7,11 @@ public class PitchBar : MonoBehaviour {
     [SerializeField]
     List<Text> texts;
 
+    Image image;
     List<Transform> transforms;
 
     void Start() {
+        image = GetComponent<Image>();
         transforms = new List<Transform>();
 
         foreach (var text in texts) {
@@ -26,6 +28,14 @@ public class PitchBar : MonoBehaviour {
     public void UpdateRoll(float angle) {
         foreach (var transform in transforms) {
             transform.localEulerAngles = new Vector3(0, 0, angle);
+        }
+    }
+
+    public void UpdateColor(Color color) {
+        image.color = color;
+
+        foreach (var text in texts) {
+            text.color = color;
         }
     }
 }

@@ -56,12 +56,18 @@ public class PitchLadder : MonoBehaviour {
         planeTransform = plane.GetComponent<Transform>();
     }
 
+    public void UpdateColor(Color color) {
+        foreach (var bar in bars) {
+            bar.bar.UpdateColor(color);
+        }
+    }
+
     void CreateBar(int angle, GameObject prefab) {
         var barGO = Instantiate(prefab, transform);
         var barTransform = barGO.GetComponent<RectTransform>();
         var bar = barGO.GetComponent<PitchBar>();
 
-        if (bar != null) bar.SetNumber(angle);
+        bar.SetNumber(angle);
 
         bars.Add(new Bar(barTransform, angle, bar));
     }

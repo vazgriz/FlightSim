@@ -59,6 +59,9 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     float bulletSpeed;
 
+    [SerializeField]
+    List<Graphic> missileWarningGraphics;
+
     Plane plane;
     Target selfTarget;
     Transform planeTransform;
@@ -283,8 +286,22 @@ public class PlaneHUD : MonoBehaviour {
             } else {
                 missileArrowGO.SetActive(false);
             }
+
+            foreach (var graphic in missileWarningGraphics) {
+                graphic.color = lockColor;
+            }
+
+            pitchLadder.UpdateColor(lockColor);
+            compass.UpdateColor(lockColor);
         } else {
             missileArrowGO.SetActive(false);
+
+            foreach (var graphic in missileWarningGraphics) {
+                graphic.color = normalColor;
+            }
+
+            pitchLadder.UpdateColor(normalColor);
+            compass.UpdateColor(normalColor);
         }
     }
 
