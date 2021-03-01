@@ -49,7 +49,10 @@ public class AIController : MonoBehaviour {
     float cannonBurstLength;
     [SerializeField]
     float cannonBurstCooldown;
+    [SerializeField]
+    float minMissileDodgeDistance;
 
+    Target selfTarget;
     Plane targetPlane;
     Vector3 lastInput;
 
@@ -60,10 +63,18 @@ public class AIController : MonoBehaviour {
     float cannonBurstTimer;
     float cannonCooldownTimer;
 
+    List<Vector3> dodgeOffsets;
+    const float dodgeUpdateInterval = 0.25f;
+    float dodgeTimer;
+
     void Start() {
+        selfTarget = plane.GetComponent<Target>();
+
         if (plane.Target != null) {
             targetPlane = plane.Target.GetComponent<Plane>();
         }
+
+        dodgeOffsets = new List<Vector3>();
     }
 
     Vector3 AvoidGround() {
@@ -73,15 +84,23 @@ public class AIController : MonoBehaviour {
         return new Vector3(-1, 0, -roll);
     }
 
-    Vector3 CalculateSteering(float dt) {
-        if (plane.Target == null || targetPlane.Health == 0) {
-            return new Vector3();
+    Vector3 GetTargetPosition() {
+        if (plane.Target == null) {
+            return plane.Rigidbody.position;
         }
 
         var targetPosition = plane.Target.Position;
 
         if (Vector3.Distance(targetPosition, plane.Rigidbody.position) < cannonRange) {
-            targetPosition = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, targetPosition, plane.Target.Velocity);
+            return Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, targetPosition, plane.Target.Velocity);
+        }
+
+        return targetPosition;
+    }
+
+    Vector3 CalculateSteering(float dt, Vector3 targetPosition) {
+        if (plane.Target != null && targetPlane.Health == 0) {
+            return new Vector3();
         }
 
         var error = targetPosition - plane.Rigidbody.position;
@@ -114,11 +133,45 @@ public class AIController : MonoBehaviour {
         return input;
     }
 
-    float CalculateThrottle(float minSpeed, float maxSpeed) {
-        if (plane.Target == null || targetPlane.Health == 0) {
-            return 0;
+    Vector3 GetMissileDodgePosition(float dt, Missile missile) {
+        dodgeTimer = Mathf.Max(0, dodgeTimer - dt);
+        var missilePos = missile.Rigidbody.position;
+
+        var dist = Mathf.Max(minMissileDodgeDistance, Vector3.Distance(missilePos, plane.Rigidbody.position));
+
+        //calculate dodge points
+        if (dodgeTimer == 0) {
+            var missileForward = missile.Rigidbody.rotation * Vector3.forward;
+            dodgeOffsets.Clear();
+
+            //4 dodge points: up, down, left, right
+
+            dodgeOffsets.Add(new Vector3(0, dist, 0));
+            dodgeOffsets.Add(new Vector3(0, -dist, 0));
+            dodgeOffsets.Add(Vector3.Cross(missileForward, Vector3.up) * dist);
+            dodgeOffsets.Add(Vector3.Cross(missileForward, Vector3.up) * -dist);
+
+            dodgeTimer = dodgeUpdateInterval;
         }
 
+        //select nearest dodge point
+        float min = float.PositiveInfinity;
+        Vector3 minDodge = missilePos + dodgeOffsets[0];
+
+        foreach (var offset in dodgeOffsets) {
+            var dodgePosition = missilePos + offset;
+            var offsetDist = Vector3.Distance(dodgePosition, plane.Rigidbody.position);
+
+            if (offsetDist < min) {
+                minDodge = dodgePosition;
+                min = offsetDist;
+            }
+        }
+
+        return minDodge;
+    }
+
+    float CalculateThrottle(float minSpeed, float maxSpeed) {
         float input = 0;
 
         if (plane.LocalVelocity.z < minSpeed) {
@@ -204,7 +257,16 @@ public class AIController : MonoBehaviour {
             steering = AvoidGround();
             throttle = CalculateThrottle(groundAvoidanceMinSpeed, groundAvoidanceMaxSpeed);
         } else {
-            steering = CalculateSteering(dt);
+            Vector3 targetPosition;
+
+            var incomingMissile = selfTarget.GetIncomingMissile();
+            if (incomingMissile != null) {
+                targetPosition = GetMissileDodgePosition(dt, incomingMissile);
+            } else {
+                targetPosition = GetTargetPosition();
+            }
+
+            steering = CalculateSteering(dt, targetPosition);
             throttle = CalculateThrottle(minSpeed, maxSpeed);
         }
 
