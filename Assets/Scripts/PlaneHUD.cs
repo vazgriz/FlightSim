@@ -49,13 +49,18 @@ public class PlaneHUD : MonoBehaviour {
     [SerializeField]
     RectTransform targetArrow;
     [SerializeField]
+    RectTransform missileArrow;
+    [SerializeField]
     float targetArrowThreshold;
+    [SerializeField]
+    float missileArrowThreshold;
     [SerializeField]
     float cannonRange;
     [SerializeField]
     float bulletSpeed;
 
     Plane plane;
+    Target selfTarget;
     Transform planeTransform;
     new Camera camera;
     Transform cameraTransform;
@@ -68,6 +73,7 @@ public class PlaneHUD : MonoBehaviour {
     Image missileLockImage;
     GameObject reticleGO;
     GameObject targetArrowGO;
+    GameObject missileArrowGO;
 
     float lastUpdateTime;
 
@@ -83,6 +89,7 @@ public class PlaneHUD : MonoBehaviour {
         missileLockImage = missileLock.GetComponent<Image>();
         reticleGO = reticle.gameObject;
         targetArrowGO = targetArrow.gameObject;
+        missileArrowGO = missileArrow.gameObject;
     }
 
     public void SetPlane(Plane plane) {
@@ -90,9 +97,11 @@ public class PlaneHUD : MonoBehaviour {
 
         if (plane == null) {
             planeTransform = null;
+            selfTarget = null;
         }
         else {
             planeTransform = plane.GetComponent<Transform>();
+            selfTarget = plane.GetComponent<Target>();
         }
 
         if (compass != null) {
@@ -258,6 +267,27 @@ public class PlaneHUD : MonoBehaviour {
         }
     }
 
+    void UpdateWarnings() {
+        var incomingMissile = selfTarget.GetIncomingMissile();
+
+        if (incomingMissile != null) {
+            var missilePos = TransformToHUDSpace(incomingMissile.Rigidbody.position);
+            var missileDir = (incomingMissile.Rigidbody.position - plane.Rigidbody.position).normalized;
+            var missileAngle = Vector3.Angle(cameraTransform.forward, missileDir);
+
+            if (missileAngle > missileArrowThreshold) {
+                missileArrowGO.SetActive(true);
+                //add 180 degrees if target is behind camera
+                float flip = missilePos.z > 0 ? 0 : 180;
+                missileArrow.localEulerAngles = new Vector3(0, 0, flip + Vector2.SignedAngle(Vector2.up, new Vector2(missilePos.x, missilePos.y)));
+            } else {
+                missileArrowGO.SetActive(false);
+            }
+        } else {
+            missileArrowGO.SetActive(false);
+        }
+    }
+
     void LateUpdate() {
         if (plane == null) return;
         if (camera == null) return;
@@ -278,6 +308,7 @@ public class PlaneHUD : MonoBehaviour {
         UpdateAltitude();
         UpdateHealth();
         UpdateWeapons();
+        UpdateWarnings();
 
         //update these elements at reduced rate to make reading them easier
         if (Time.time > lastUpdateTime + (1f / updateRate)) {

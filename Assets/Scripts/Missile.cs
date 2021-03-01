@@ -24,31 +24,34 @@ public class Missile : MonoBehaviour {
 
     Plane owner;
     Target target;
-    new Rigidbody rigidbody;
     bool exploded;
     Vector3 lastPosition;
     float timer;
+
+    public Rigidbody Rigidbody { get; private set; }
 
     public void Launch(Plane owner, Target target) {
         this.owner = owner;
         this.target = target;
 
-        rigidbody = GetComponent<Rigidbody>();
+        Rigidbody = GetComponent<Rigidbody>();
 
-        lastPosition = rigidbody.position;
+        lastPosition = Rigidbody.position;
         timer = lifetime;
+
+        if (target!= null) target.NotifyMissileLaunched(this, true);
     }
 
     void Explode() {
         if (exploded) return;
 
         timer = lifetime;
-        rigidbody.isKinematic = true;
+        Rigidbody.isKinematic = true;
         renderer.enabled = false;
         exploded = true;
         explosionGraphic.SetActive(true);
 
-        var hits = Physics.OverlapSphere(rigidbody.position, damageRadius, collisionMask.value);
+        var hits = Physics.OverlapSphere(Rigidbody.position, damageRadius, collisionMask.value);
 
         foreach (var hit in hits) {
             Plane other = hit.gameObject.GetComponent<Plane>();
@@ -57,13 +60,15 @@ public class Missile : MonoBehaviour {
                 other.ApplyDamage(damage);
             }
         }
+
+        if (target != null) target.NotifyMissileLaunched(this, false);
     }
 
     void CheckCollision() {
         //missile can travel very fast, collision may not be detected by physics system
         //use raycasts to check for collisions
 
-        var currentPosition = rigidbody.position;
+        var currentPosition = Rigidbody.position;
         var error = currentPosition - lastPosition;
         var ray = new Ray(lastPosition, error.normalized);
         RaycastHit hit;
@@ -72,7 +77,7 @@ public class Missile : MonoBehaviour {
             Plane other = hit.collider.gameObject.GetComponent<Plane>();
 
             if (other == null || other != owner) {
-                rigidbody.position = hit.point;
+                Rigidbody.position = hit.point;
                 Explode();
             }
         }
@@ -83,11 +88,11 @@ public class Missile : MonoBehaviour {
     void TrackTarget(float dt) {
         if (target == null) return;
 
-        var targetPosition = Utilities.FirstOrderIntercept(rigidbody.position, Vector3.zero, speed, target.Position, target.Velocity);
+        var targetPosition = Utilities.FirstOrderIntercept(Rigidbody.position, Vector3.zero, speed, target.Position, target.Velocity);
 
-        var error = targetPosition - rigidbody.position;
+        var error = targetPosition - Rigidbody.position;
         var targetDir = error.normalized;
-        var currentDir = rigidbody.rotation * Vector3.forward;
+        var currentDir = Rigidbody.rotation * Vector3.forward;
 
         //if angle to target is too large, explode
         if (Vector3.Angle(currentDir, targetDir) > trackingAngle) {
@@ -99,7 +104,7 @@ public class Missile : MonoBehaviour {
         float maxTurnRate = (turningGForce * 9.81f) / speed;  //radians / s
         var dir = Vector3.RotateTowards(currentDir, targetDir, maxTurnRate * dt, 0);
 
-        rigidbody.rotation = Quaternion.LookRotation(dir);
+        Rigidbody.rotation = Quaternion.LookRotation(dir);
     }
 
     void FixedUpdate() {
@@ -121,6 +126,6 @@ public class Missile : MonoBehaviour {
         TrackTarget(Time.fixedDeltaTime);
 
         //set speed to direction of travel
-        rigidbody.velocity = rigidbody.rotation * new Vector3(0, 0, speed);
+        Rigidbody.velocity = Rigidbody.rotation * new Vector3(0, 0, speed);
     }
 }
