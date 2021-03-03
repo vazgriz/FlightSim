@@ -53,7 +53,7 @@ MonoBehaviour:
   trackingAngle: 90
   damage: 50
   damageRadius: 5
-  turningGForce: 6
+  turningGForce: 5
   collisionMask:
     serializedVersion: 2
     m_Bits: 311
