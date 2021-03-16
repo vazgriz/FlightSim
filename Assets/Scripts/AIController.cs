@@ -81,7 +81,7 @@ public class AIController : MonoBehaviour {
         //roll level and pull up
         var roll = plane.Rigidbody.rotation.eulerAngles.z;
         if (roll > 180f) roll -= 360f;
-        return new Vector3(-1, 0, -roll);
+        return new Vector3(-1, 0, Mathf.Clamp(-roll, -1, 1));
     }
 
     Vector3 GetTargetPosition() {
@@ -107,8 +107,8 @@ public class AIController : MonoBehaviour {
         error = Quaternion.Inverse(plane.Rigidbody.rotation) * error;   //transform into local space
 
         var errorDir = error.normalized;
-        var pitchError = new Vector3(0, error.y, error.z);
-        var rollError = new Vector3(error.x, error.y, 0);
+        var pitchError = new Vector3(0, error.y, error.z).normalized;
+        var rollError = new Vector3(error.x, error.y, 0).normalized;
 
         var targetInput = new Vector3();
 
