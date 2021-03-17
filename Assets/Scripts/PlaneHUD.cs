@@ -58,11 +58,14 @@ public class PlaneHUD : MonoBehaviour {
     float cannonRange;
     [SerializeField]
     float bulletSpeed;
+    [SerializeField]
+    GameObject aiMessage;
 
     [SerializeField]
     List<Graphic> missileWarningGraphics;
 
     Plane plane;
+    AIController aiController;
     Target selfTarget;
     Transform planeTransform;
     new Camera camera;
@@ -103,6 +106,7 @@ public class PlaneHUD : MonoBehaviour {
             selfTarget = null;
         }
         else {
+            aiController = plane.GetComponent<AIController>();
             planeTransform = plane.GetComponent<Transform>();
             selfTarget = plane.GetComponent<Target>();
         }
@@ -319,6 +323,10 @@ public class PlaneHUD : MonoBehaviour {
         } else {
             hudCenterGO.SetActive(false);
             velocityMarkerGO.SetActive(false);
+        }
+
+        if (aiController != null) {
+            aiMessage.SetActive(aiController.enabled);
         }
 
         UpdateAirspeed();

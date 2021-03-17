@@ -1646,6 +1646,7 @@ GameObject:
   - component: {fileID: 1030071069971577036}
   - component: {fileID: 3168297468136084144}
   - component: {fileID: 2515223684704408108}
+  - component: {fileID: 3737572916587997159}
   m_Layer: 8
   m_Name: F15
   m_TagString: Untagged
@@ -2174,6 +2175,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: F-15
+--- !u!114 &3737572916587997159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8849735085998360814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523b6d4a45fda5a4990cea481944fdae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plane: {fileID: 1030071069971577036}
+  steeringSpeed: 10
+  minSpeed: 150
+  maxSpeed: 250
+  groundCollisionMask:
+    serializedVersion: 2
+    m_Bits: 1
+  groundCollisionDistance: 500
+  groundAvoidanceAngle: 10
+  groundAvoidanceMinSpeed: 125
+  groundAvoidanceMaxSpeed: 150
+  pitchUpThreshold: -15
+  fineSteeringAngle: 5
+  canUseMissiles: 1
+  canUseCannon: 1
+  missileLockFiringDelay: 1
+  missileFiringCooldown: 5
+  missileMinRange: 500
+  missileMaxRange: 1500
+  missileMaxFireAngle: 10
+  bulletSpeed: 1000
+  cannonRange: 1000
+  cannonMaxFireAngle: 5
+  cannonBurstLength: 0.5
+  cannonBurstCooldown: 2.5
+  minMissileDodgeDistance: 100
 --- !u!1001 &938316883078604183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2344,15 +2383,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd3d7065258cc4f40b6713630d03a2e4, type: 3}
---- !u!4 &2102734494034147186 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: dd3d7065258cc4f40b6713630d03a2e4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6364955368057216104}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3131462138389546337 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: dd3d7065258cc4f40b6713630d03a2e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6364955368057216104}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2102734494034147186 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: dd3d7065258cc4f40b6713630d03a2e4,
     type: 3}
   m_PrefabInstance: {fileID: 6364955368057216104}
   m_PrefabAsset: {fileID: 0}

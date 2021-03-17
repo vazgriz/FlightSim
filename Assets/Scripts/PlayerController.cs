@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 
     Vector3 controlInput;
     PlaneCamera planeCamera;
+    AIController aiController;
 
     void Start() {
         planeCamera = GetComponent<PlaneCamera>();
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 
     void SetPlane(Plane plane) {
         this.plane = plane;
+        aiController = plane.GetComponent<AIController>();
 
         if (planeHUD != null) {
             planeHUD.SetPlane(plane);
@@ -39,6 +41,8 @@ public class PlayerController : MonoBehaviour {
 
     public void SetThrottleInput(InputAction.CallbackContext context) {
         if (plane == null) return;
+        if (aiController.enabled) return;
+
         plane.SetThrottleInput(context.ReadValue<float>());
     }
 
@@ -89,8 +93,17 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void OnToggleAI(InputAction.CallbackContext context) {
+        if (plane == null) return;
+
+        if (aiController != null) {
+            aiController.enabled = !aiController.enabled;
+        }
+    }
+
     void Update() {
         if (plane == null) return;
+        if (aiController.enabled) return;
 
         plane.SetControlInput(controlInput);
     }
