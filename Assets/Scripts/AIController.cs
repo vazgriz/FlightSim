@@ -81,7 +81,7 @@ public class AIController : MonoBehaviour {
         //roll level and pull up
         var roll = plane.Rigidbody.rotation.eulerAngles.z;
         if (roll > 180f) roll -= 360f;
-        return new Vector3(-1, 0, Mathf.Clamp(-roll, -1, 1));
+        return new Vector3(-1, 0, Mathf.Clamp(-roll * 0.01f, -1, 1));
     }
 
     Vector3 GetTargetPosition() {
@@ -120,7 +120,7 @@ public class AIController : MonoBehaviour {
             targetInput.y = error.x;
         } else {
             var roll = Vector3.SignedAngle(Vector3.up, rollError, Vector3.forward);
-            targetInput.z = roll;
+            targetInput.z = roll * 0.01f;
         }
 
         targetInput.x = Mathf.Clamp(targetInput.x, -1, 1);
