@@ -12,6 +12,10 @@ public class AIController : MonoBehaviour {
     [SerializeField]
     float maxSpeed;
     [SerializeField]
+    float recoverSpeedMin;
+    [SerializeField]
+    float recoverSpeedMax;
+    [SerializeField]
     LayerMask groundCollisionMask;
     [SerializeField]
     float groundCollisionDistance;
@@ -25,6 +29,8 @@ public class AIController : MonoBehaviour {
     float pitchUpThreshold;
     [SerializeField]
     float fineSteeringAngle;
+    [SerializeField]
+    float rollFactor;
     [SerializeField]
     bool canUseMissiles;
     [SerializeField]
@@ -55,6 +61,7 @@ public class AIController : MonoBehaviour {
     Target selfTarget;
     Plane targetPlane;
     Vector3 lastInput;
+    bool isRecoveringSpeed;
 
     float missileDelayTimer;
     float missileCooldownTimer;
@@ -81,7 +88,16 @@ public class AIController : MonoBehaviour {
         //roll level and pull up
         var roll = plane.Rigidbody.rotation.eulerAngles.z;
         if (roll > 180f) roll -= 360f;
-        return new Vector3(-1, 0, Mathf.Clamp(-roll * 0.01f, -1, 1));
+        return new Vector3(-1, 0, Mathf.Clamp(-roll * rollFactor, -1, 1));
+    }
+
+    Vector3 RecoverSpeed() {
+        //roll and pitch level
+        var roll = plane.Rigidbody.rotation.eulerAngles.z;
+        var pitch = plane.Rigidbody.rotation.eulerAngles.x;
+        if (roll > 180f) roll -= 360f;
+        if (pitch > 180f) pitch -= 360f;
+        return new Vector3(Mathf.Clamp(-pitch, -1, 1), 0, Mathf.Clamp(-roll * rollFactor, -1, 1));
     }
 
     Vector3 GetTargetPosition() {
@@ -120,7 +136,7 @@ public class AIController : MonoBehaviour {
             targetInput.y = error.x;
         } else {
             var roll = Vector3.SignedAngle(Vector3.up, rollError, Vector3.forward);
-            targetInput.z = roll * 0.01f;
+            targetInput.z = roll * rollFactor;
         }
 
         targetInput.x = Mathf.Clamp(targetInput.x, -1, 1);
@@ -184,7 +200,7 @@ public class AIController : MonoBehaviour {
     }
 
     void CalculateWeapons(float dt) {
-        if (plane.Target == null || targetPlane.Health == 0) return;
+        if (plane.Target == null) return;
 
         if (canUseMissiles) {
             CalculateMissiles(dt);
@@ -219,6 +235,11 @@ public class AIController : MonoBehaviour {
     }
 
     void CalculateCannon(float dt) {
+        if (targetPlane.Health == 0) {
+            cannonFiring = false;
+            return;
+        }
+
         if (cannonFiring) {
             cannonBurstTimer = Mathf.Max(0, cannonBurstTimer - dt);
 
@@ -266,8 +287,15 @@ public class AIController : MonoBehaviour {
                 targetPosition = GetTargetPosition();
             }
 
-            steering = CalculateSteering(dt, targetPosition);
-            throttle = CalculateThrottle(minSpeed, maxSpeed);
+            if (incomingMissile == null && (plane.LocalVelocity.z < recoverSpeedMin || isRecoveringSpeed)) {
+                isRecoveringSpeed = plane.LocalVelocity.z < recoverSpeedMax;
+
+                steering = RecoverSpeed();
+                throttle = 1;
+            } else {
+                steering = CalculateSteering(dt, targetPosition);
+                throttle = CalculateThrottle(minSpeed, maxSpeed);
+            }
         }
 
         plane.SetControlInput(steering);
