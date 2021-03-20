@@ -215,9 +215,7 @@ public class AIController : MonoBehaviour {
         missileDelayTimer = Mathf.Max(0, missileDelayTimer - dt);
         missileCooldownTimer = Mathf.Max(0, missileCooldownTimer - dt);
 
-        var targetPosition = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
-
-        var error = targetPosition - plane.Rigidbody.position;
+        var error = plane.Target.Position - plane.Rigidbody.position;
         var range = error.magnitude;
         var targetDir = error.normalized;
         var targetAngle = Vector3.Angle(targetDir, plane.Rigidbody.rotation * Vector3.forward);
@@ -251,7 +249,9 @@ public class AIController : MonoBehaviour {
         } else {
             cannonCooldownTimer = Mathf.Max(0, cannonCooldownTimer - dt);
 
-            var error = plane.Target.Position - plane.Rigidbody.position;
+            var targetPosition = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
+
+            var error = targetPosition - plane.Rigidbody.position;
             var range = error.magnitude;
             var targetDir = error.normalized;
             var targetAngle = Vector3.Angle(targetDir, plane.Rigidbody.rotation * Vector3.forward);
