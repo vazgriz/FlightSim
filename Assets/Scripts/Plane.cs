@@ -144,7 +144,7 @@ public class Plane : MonoBehaviour {
         private set {
             health = Mathf.Clamp(value, 0, maxHealth);
 
-            if (health <= MaxHealth * .75f && health > 0) {
+            if (health <= MaxHealth * .5f && health > 0) {
                 damageEffect.SetActive(true);
             } else {
                 damageEffect.SetActive(false);
