@@ -2189,10 +2189,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plane: {fileID: 1030071069971577036}
   steeringSpeed: 5
-  minSpeed: 150
-  maxSpeed: 200
-  recoverSpeedMin: 100
-  recoverSpeedMax: 125
+  minSpeed: 175
+  maxSpeed: 225
+  recoverSpeedMin: 125
+  recoverSpeedMax: 140
   groundCollisionMask:
     serializedVersion: 2
     m_Bits: 1
