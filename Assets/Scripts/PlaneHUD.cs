@@ -210,6 +210,7 @@ public class PlaneHUD : MonoBehaviour {
             return;
         }
 
+        //update target box, missile lock
         var targetDistance = Vector3.Distance(plane.Rigidbody.position, plane.Target.Position);
         var targetPos = TransformToHUDSpace(plane.Target.Position);
         var missileLockPos = plane.MissileLocked ? targetPos : TransformToHUDSpace(plane.Rigidbody.position + plane.MissileLockDirection * targetDistance);
@@ -243,6 +244,7 @@ public class PlaneHUD : MonoBehaviour {
         targetName.text = plane.Target.Name;
         targetRange.text = string.Format("{0:0 m}", targetDistance);
 
+        //update target arrow
         var targetDir = (plane.Target.Position - plane.Rigidbody.position).normalized;
         var targetAngle = Vector3.Angle(cameraTransform.forward, targetDir);
 
@@ -255,6 +257,7 @@ public class PlaneHUD : MonoBehaviour {
             targetArrowGO.SetActive(false);
         }
 
+        //update target lead
         var leadPos = Utilities.FirstOrderIntercept(plane.Rigidbody.position, plane.Rigidbody.velocity, bulletSpeed, plane.Target.Position, plane.Target.Velocity);
         var reticlePos = TransformToHUDSpace(leadPos);
 
@@ -263,6 +266,7 @@ public class PlaneHUD : MonoBehaviour {
             reticle.localPosition = new Vector3(reticlePos.x, reticlePos.y, 0);
 
             var reticlePos2 = new Vector2(reticlePos.x, reticlePos.y);
+            if (Mathf.Sign(targetPos.z) != Mathf.Sign(reticlePos.z)) reticlePos2 = -reticlePos2;    //negate position if reticle and target are on opposite sides
             var targetPos2 = new Vector2(targetPos.x, targetPos.y);
             var reticleError = reticlePos2 - targetPos2;
 
