@@ -693,7 +693,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 5, y: 135}
+  m_AnchoredPosition: {x: 5, y: 145}
   m_SizeDelta: {x: 300, y: 76}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &254807494
@@ -2756,7 +2756,10 @@ MonoBehaviour:
     D-Pad
     Down - Toggle flaps and landing gear
 
-    H - Close help dialog'
+    Space - Toggle AI on your plane
+
+    H
+    - Close help dialog'
 --- !u!222 &1435412853
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3596,7 +3599,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5, y: 5}
-  m_SizeDelta: {x: 300, y: 126}
+  m_SizeDelta: {x: 300, y: 138}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2112024345
 MonoBehaviour:
