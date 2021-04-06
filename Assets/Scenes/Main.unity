@@ -693,7 +693,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 5, y: 145}
+  m_AnchoredPosition: {x: 5, y: 180}
   m_SizeDelta: {x: 300, y: 76}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &254807494
@@ -2756,10 +2756,14 @@ MonoBehaviour:
     D-Pad
     Down - Toggle flaps and landing gear
 
-    Space - Toggle AI on your plane
+    A - Fire Cannon
 
-    H
-    - Close help dialog'
+    B - Launch Missile
+
+    Space
+    - Toggle AI on your plane
+
+    H - Close help dialog'
 --- !u!222 &1435412853
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3599,7 +3603,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5, y: 5}
-  m_SizeDelta: {x: 300, y: 138}
+  m_SizeDelta: {x: 300, y: 170}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2112024345
 MonoBehaviour:
