@@ -220,7 +220,7 @@ public class AIController : MonoBehaviour {
         var targetDir = error.normalized;
         var targetAngle = Vector3.Angle(targetDir, plane.Rigidbody.rotation * Vector3.forward);
 
-        if (!plane.MissileLocked || (targetAngle > missileMaxFireAngle && (180f - targetAngle) > missileMaxFireAngle)) {
+        if (!plane.MissileLocked || !(targetAngle < missileMaxFireAngle || (180f - targetAngle) < missileMaxFireAngle)) {
             //don't fire if not locked or target is too off angle
             //can fire if angle is close to 0 (chasing) or 180 (head on)
             missileDelayTimer = missileLockFiringDelay;
