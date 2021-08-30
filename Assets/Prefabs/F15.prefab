@@ -1741,7 +1741,7 @@ MonoBehaviour:
   maxThrust: 222411
   throttleSpeed: 1
   gLimit: 4
-  gLimitPitch: 8
+  gLimitPitch: 10
   liftPower: 150
   liftAOACurve:
     serializedVersion: 2
@@ -1819,7 +1819,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rudderPower: 100
+  liftStabilityTorque: 1
+  liftStabilityInputBias: 500000
+  rudderPower: 75
   rudderAOACurve:
     serializedVersion: 2
     m_Curve:
@@ -1895,6 +1897,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  rudderStabilityTorque: 1
+  rudderStabilityInputBias: 500000
   flapsLiftPower: 150
   flapsAOABias: 0.5
   flapsDrag: 5

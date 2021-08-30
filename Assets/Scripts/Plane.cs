@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,11 +26,15 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     AnimationCurve inducedDragCurve;
     [SerializeField]
+    float liftStabilityTorque;
+    [SerializeField]
     float rudderPower;
     [SerializeField]
     AnimationCurve rudderAOACurve;
     [SerializeField]
     AnimationCurve rudderInducedDragCurve;
+    [SerializeField]
+    float rudderStabilityTorque;
     [SerializeField]
     float flapsLiftPower;
     [SerializeField]
@@ -328,14 +332,14 @@ public class Plane : MonoBehaviour {
         Rigidbody.AddRelativeForce(drag);
     }
 
-    Vector3 CalculateLift(float angleOfAttack, Vector3 rightAxis, float liftPower, AnimationCurve aoaCurve, AnimationCurve inducedDragCurve) {
+    Vector3 CalculateLift(float angleOfAttack, Vector3 rightAxis, float liftPower, AnimationCurve aoaCurve, AnimationCurve inducedDragCurve, out float liftForce) {
         var liftVelocity = Vector3.ProjectOnPlane(LocalVelocity, rightAxis);    //project velocity onto YZ plane
         var v2 = liftVelocity.sqrMagnitude;                                     //square of velocity
 
         //lift = velocity^2 * coefficient * liftPower
         //coefficient varies with AOA
         var liftCoefficient = aoaCurve.Evaluate(angleOfAttack * Mathf.Rad2Deg);
-        var liftForce = v2 * liftCoefficient * liftPower;
+        liftForce = v2 * liftCoefficient * liftPower;
 
         //lift is perpendicular to velocity
         var liftDirection = Vector3.Cross(liftVelocity.normalized, rightAxis);
@@ -359,13 +363,17 @@ public class Plane : MonoBehaviour {
             AngleOfAttack + (flapsAOABias * Mathf.Deg2Rad), Vector3.right,
             liftPower + flapsLiftPower,
             liftAOACurve,
-            inducedDragCurve
+            inducedDragCurve,
+            out float liftForceMagnitude
         );
 
-        var yawForce = CalculateLift(AngleOfAttackYaw, Vector3.up, rudderPower, rudderAOACurve, rudderInducedDragCurve);
+        var yawForce = CalculateLift(AngleOfAttackYaw, Vector3.up, rudderPower, rudderAOACurve, rudderInducedDragCurve, out float rudderLiftForceMagnitude);
 
         Rigidbody.AddRelativeForce(liftForce);
         Rigidbody.AddRelativeForce(yawForce);
+
+        Rigidbody.AddRelativeTorque(new Vector3((liftForceMagnitude + controlInput.x * Mathf.Abs(liftForceMagnitude)) * liftStabilityTorque, 0, 0));
+        Rigidbody.AddRelativeTorque(new Vector3(0, (rudderLiftForceMagnitude + controlInput.y * Mathf.Abs(rudderLiftForceMagnitude)) * rudderStabilityTorque, 0));
     }
 
     void UpdateAngularDrag() {
