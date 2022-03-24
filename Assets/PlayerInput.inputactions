@@ -11,7 +11,8 @@
                     "id": "a601469b-e3aa-422a-806a-4f7dcba55332",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Throttle",
@@ -19,7 +20,8 @@
                     "id": "0d46f8f2-2f6f-4fe2-8623-427c869c3bde",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "RollPitch",
@@ -27,7 +29,8 @@
                     "id": "7173b259-7215-456e-ba7f-dba1aaad27e1",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Yaw",
@@ -35,7 +38,8 @@
                     "id": "56c160cd-3545-4284-abef-8d6eb62ab74c",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Camera",
@@ -43,7 +47,8 @@
                     "id": "cdd2542b-3da6-4431-be9c-bbf306e4dcd5",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "ToggleFlaps",
@@ -51,7 +56,8 @@
                     "id": "0e572958-b17b-4a43-950d-d9a9324fbc89",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "FireMissile",
@@ -59,7 +65,8 @@
                     "id": "54bc0053-bbe2-45cd-80b6-dd2a4f0dee6d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "FireCannon",
@@ -67,7 +74,8 @@
                     "id": "cc901d01-643f-4c28-918b-23ed83f6433c",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "ToggleAI",
@@ -75,7 +83,8 @@
                     "id": "b0d256fa-cc8c-4a22-925d-479ad7049947",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -114,8 +123,30 @@
                 },
                 {
                     "name": "",
+                    "id": "aa24db83-e3c7-4c50-b38a-f4e54929f821",
+                    "path": "<HID::FrSky Radiomaster TX12 Joystick>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9114f377-1c7f-4991-a591-b668ae086658",
                     "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RollPitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "864cbaab-242a-4b3a-b1a0-c441873f01ac",
+                    "path": "<HID::FrSky Radiomaster TX12 Joystick>/stick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -155,6 +186,17 @@
                     "action": "Yaw",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7b3c7dd9-c38f-4b17-92d4-9ec7d2534b35",
+                    "path": "<HID::FrSky Radiomaster TX12 Joystick>/rx",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",

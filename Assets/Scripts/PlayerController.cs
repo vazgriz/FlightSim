@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour {
         if (plane == null) return;
 
         var input = context.ReadValue<Vector2>();
-        controlInput = new Vector3(input.y, controlInput.y, -input.x);
+        controlInput = new Vector3(-input.y, controlInput.y, -input.x);
     }
 
     public void OnYawInput(InputAction.CallbackContext context) {
