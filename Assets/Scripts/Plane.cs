@@ -16,6 +16,12 @@ public class Plane : MonoBehaviour {
     [SerializeField]
     float gLimitPitch;
 
+    [Header("Airfoils")]
+    [SerializeField]
+    List<Airfoil> airfoils;
+    [SerializeField]
+    List<Airfoil> flapAirfoils;
+
     [Header("Lift")]
     [SerializeField]
     float liftPower;
@@ -328,8 +334,8 @@ public class Plane : MonoBehaviour {
         Rigidbody.AddRelativeForce(drag);
     }
 
-    Vector3 CalculateLift(float angleOfAttack, Vector3 rightAxis, float liftPower, AnimationCurve aoaCurve, AnimationCurve inducedDragCurve) {
-        var liftVelocity = Vector3.ProjectOnPlane(LocalVelocity, rightAxis);    //project velocity onto YZ plane
+    Vector3 CalculateLift(float angleOfAttack, float sweepAngle, Vector3 rightAxis, float liftPower, float inducedDragPower, AnimationCurve aoaCurve, AnimationCurve inducedDragCurve) {
+        var liftVelocity = LocalVelocity * Mathf.Cos(sweepAngle);    //project velocity onto YZ plane
         var v2 = liftVelocity.sqrMagnitude;                                     //square of velocity
 
         //lift = velocity^2 * coefficient * liftPower
@@ -344,28 +350,68 @@ public class Plane : MonoBehaviour {
         //induced drag varies with square of lift coefficient
         var dragForce = liftCoefficient * liftCoefficient;
         var dragDirection = -liftVelocity.normalized;
-        var inducedDrag = dragDirection * v2 * dragForce * this.inducedDrag * inducedDragCurve.Evaluate(Mathf.Max(0, LocalVelocity.z));
+        var inducedDrag = dragDirection * v2 * dragForce * inducedDragPower * inducedDragCurve.Evaluate(Mathf.Max(0, LocalVelocity.z));
 
         return lift + inducedDrag;
     }
 
-    void UpdateLift() {
-        if (LocalVelocity.sqrMagnitude < 1f) return;
+    void UpdateAirfoil(Airfoil airfoil) {
+        float aoa;
+        float aoaSweep;
+        Vector3 direction;
 
-        float flapsLiftPower = FlapsDeployed ? this.flapsLiftPower : 0;
-        float flapsAOABias = FlapsDeployed ? this.flapsAOABias : 0;
+        if (airfoil.Type == Airfoil.AirfoilType.Horizontal) {
+            aoa = AngleOfAttack + airfoil.AOABias * Mathf.Deg2Rad;
+            aoaSweep = AngleOfAttackYaw + airfoil.SweepAngle * Mathf.Deg2Rad;
+            direction = Vector3.right;
+        } else {
+            aoa = AngleOfAttackYaw + airfoil.AOABias * Mathf.Deg2Rad;
+            aoaSweep = AngleOfAttack + airfoil.SweepAngle * Mathf.Deg2Rad;
+            direction = Vector3.up;
+        }
 
-        var liftForce = CalculateLift(
-            AngleOfAttack + (flapsAOABias * Mathf.Deg2Rad), Vector3.right,
-            liftPower + flapsLiftPower,
-            liftAOACurve,
-            inducedDragCurve
+        var force = Rigidbody.rotation * CalculateLift(aoa, aoaSweep, direction, airfoil.LiftPower, airfoil.InducedDrag, liftAOACurve, inducedDragCurve);
+        var position = Rigidbody.position + Rigidbody.rotation * airfoil.LocalPosition;
+        Rigidbody.AddForceAtPosition(force, position);
+
+        Debug.DrawLine(position, position + force / Rigidbody.mass, Color.green);
+    }
+
+    void UpdateLift(float dt) {
+        var effectiveInput = controlInput;
+
+        EffectiveInput = new Vector3(
+            Mathf.Clamp(effectiveInput.x, -1, 1),
+            Mathf.Clamp(effectiveInput.y, -1, 1),
+            Mathf.Clamp(effectiveInput.z, -1, 1)
         );
 
-        var yawForce = CalculateLift(AngleOfAttackYaw, Vector3.up, rudderPower, rudderAOACurve, rudderInducedDragCurve);
+        if (LocalVelocity.sqrMagnitude < 1f) return;
 
-        Rigidbody.AddRelativeForce(liftForce);
-        Rigidbody.AddRelativeForce(yawForce);
+        //float flapsLiftPower = FlapsDeployed ? this.flapsLiftPower : 0;
+        //float flapsAOABias = FlapsDeployed ? this.flapsAOABias : 0;
+        //
+        //var liftForce = CalculateLift(
+        //    AngleOfAttack + (flapsAOABias * Mathf.Deg2Rad), Vector3.right,
+        //    liftPower + flapsLiftPower,
+        //    liftAOACurve,
+        //    inducedDragCurve
+        //);
+        //
+        //var yawForce = CalculateLift(AngleOfAttackYaw, Vector3.up, rudderPower, rudderAOACurve, rudderInducedDragCurve);
+        //
+        //Rigidbody.AddRelativeForce(liftForce);
+        //Rigidbody.AddRelativeForce(yawForce);
+
+        foreach (var airfoil in airfoils) {
+            airfoil.SetInput(dt, controlInput);
+            UpdateAirfoil(airfoil);
+        }
+
+        foreach (var airfoil in flapAirfoils) {
+            airfoil.SetInput(dt, new Vector3(FlapsDeployed ? 1 : 0, 0, 0));
+            UpdateAirfoil(airfoil);
+        }
     }
 
     void UpdateAngularDrag() {
@@ -543,10 +589,10 @@ public class Plane : MonoBehaviour {
 
         //apply updates
         UpdateThrust();
-        UpdateLift();
+        UpdateLift(dt);
 
         if (!Dead) {
-            UpdateSteering(dt);
+            //UpdateSteering(dt);
         }
 
         UpdateDrag();
