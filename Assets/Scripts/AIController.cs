@@ -57,6 +57,10 @@ public class AIController : MonoBehaviour {
     float cannonBurstCooldown;
     [SerializeField]
     float minMissileDodgeDistance;
+    [SerializeField]
+    float reactionDelay;
+    [SerializeField]
+    float reactionDelayDistance;
 
     Target selfTarget;
     Plane targetPlane;
@@ -70,6 +74,13 @@ public class AIController : MonoBehaviour {
     float cannonBurstTimer;
     float cannonCooldownTimer;
 
+    struct ControlInput {
+        public float time;
+        public Vector3 input;
+    }
+
+    Queue<ControlInput> inputQueue;
+
     List<Vector3> dodgeOffsets;
     const float dodgeUpdateInterval = 0.25f;
     float dodgeTimer;
@@ -82,6 +93,7 @@ public class AIController : MonoBehaviour {
         }
 
         dodgeOffsets = new List<Vector3>();
+        inputQueue = new Queue<ControlInput>();
     }
 
     Vector3 AvoidGround() {
@@ -270,6 +282,8 @@ public class AIController : MonoBehaviour {
 
         Vector3 steering;
         float throttle;
+        bool emergency = false;
+        Vector3 targetPosition = plane.Target.Position;
 
         var velocityRot = Quaternion.LookRotation(plane.Rigidbody.velocity.normalized);
         var ray = new Ray(plane.Rigidbody.position, velocityRot * Quaternion.Euler(groundAvoidanceAngle, 0, 0) * Vector3.forward);
@@ -277,12 +291,12 @@ public class AIController : MonoBehaviour {
         if (Physics.Raycast(ray, groundCollisionDistance + plane.LocalAngularVelocity.z, groundCollisionMask.value)) {
             steering = AvoidGround();
             throttle = CalculateThrottle(groundAvoidanceMinSpeed, groundAvoidanceMaxSpeed);
+            emergency = true;
         } else {
-            Vector3 targetPosition;
-
             var incomingMissile = selfTarget.GetIncomingMissile();
             if (incomingMissile != null) {
                 targetPosition = GetMissileDodgePosition(dt, incomingMissile);
+                emergency = true;
             } else {
                 targetPosition = GetTargetPosition();
             }
@@ -298,8 +312,34 @@ public class AIController : MonoBehaviour {
             }
         }
 
-        plane.SetControlInput(steering);
+        inputQueue.Enqueue(new ControlInput {
+            time = Time.time,
+            input = steering
+        });
+
+        //plane.SetControlInput(steering);
         plane.SetThrottleInput(throttle);
+
+        while (inputQueue.Count > 0) {
+            var input = inputQueue.Peek();
+
+            var delay = reactionDelay;
+
+            if (emergency) {
+                delay = 0;
+            }
+
+            if (Vector3.Distance(targetPosition, plane.Rigidbody.position) < reactionDelayDistance) {
+                delay = 0;
+            }
+
+            if (input.time + delay <= Time.time) {
+                plane.SetControlInput(input.input);
+                inputQueue.Dequeue();
+            } else {
+                break;
+            }
+        }
 
         CalculateWeapons(dt);
     }

@@ -212,11 +212,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: -45
-  liftPower: 20
+  liftPower: 15
   inducedDrag: 0
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
-  aoaInputRange: 20
+  aoaInputRange: 30
   trim: -5
 --- !u!1 &645246258484552054
 GameObject:
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 45
-  liftPower: 20
+  liftPower: 30
   inducedDrag: 5
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
@@ -731,7 +731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: -45
-  liftPower: 20
+  liftPower: 30
   inducedDrag: 5
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
@@ -1499,11 +1499,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 45
-  liftPower: 20
+  liftPower: 15
   inducedDrag: 0
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
-  aoaInputRange: 20
+  aoaInputRange: 30
   trim: -5
 --- !u!1 &6418809082610718353
 GameObject:
@@ -1698,7 +1698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: -45
-  liftPower: 5
+  liftPower: 10
   inducedDrag: 0
   inputInfluence: {x: 0, y: 0, z: 1}
   inputSpeed: 5
@@ -1874,7 +1874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 45
-  liftPower: 5
+  liftPower: 10
   inducedDrag: 0
   inputInfluence: {x: 0, y: 0, z: -1}
   inputSpeed: 5
@@ -1926,7 +1926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 0
-  liftPower: 20
+  liftPower: 30
   inducedDrag: 5
   inputInfluence: {x: 0, y: 0, z: 0}
   inputSpeed: 5
@@ -2490,6 +2490,45 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  pitchPID:
+    proportionalGain: 0.1
+    integralGain: 0.1
+    derivativeGain: 0.01
+    outputMin: -1
+    outputMax: 1
+    integralSaturation: 0.5
+    derivativeMeasurement: 0
+    valueLast: 0
+    errorLast: 0
+    integrationStored: 0
+    velocity: 0
+    derivativeInitialized: 0
+  rollPID:
+    proportionalGain: 0.01
+    integralGain: 0
+    derivativeGain: 0.001
+    outputMin: -1
+    outputMax: 1
+    integralSaturation: 0
+    derivativeMeasurement: 0
+    valueLast: 0
+    errorLast: 0
+    integrationStored: 0
+    velocity: 0
+    derivativeInitialized: 0
+  yawPID:
+    proportionalGain: 0.1
+    integralGain: 0
+    derivativeGain: 0.01
+    outputMin: -1
+    outputMax: 1
+    integralSaturation: 0
+    derivativeMeasurement: 0
+    valueLast: 0
+    errorLast: 0
+    integrationStored: 0
+    velocity: 0
+    derivativeInitialized: 0
   dragForward:
     serializedVersion: 2
     m_Curve:
@@ -2711,7 +2750,7 @@ MonoBehaviour:
   maxRudderDeflection: 20
   airbrakeDeflection: 45
   flapsDeflection: 30
-  deflectionSpeed: 5
+  deflectionSpeed: 2
   rightAileron: {fileID: 7098709419306614170}
   leftAileron: {fileID: 9015424067187965477}
   elevators:
@@ -2781,6 +2820,8 @@ MonoBehaviour:
   cannonBurstLength: 0.5
   cannonBurstCooldown: 2.5
   minMissileDodgeDistance: 100
+  reactionDelay: 1
+  reactionDelayDistance: 1000
 --- !u!1001 &938316883078604183
 PrefabInstance:
   m_ObjectHideFlags: 0

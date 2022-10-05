@@ -53,6 +53,12 @@ public class Plane : MonoBehaviour {
     Vector3 turnAcceleration;
     [SerializeField]
     AnimationCurve steeringCurve;
+    [SerializeField]
+    PIDController pitchPID;
+    [SerializeField]
+    PIDController rollPID;
+    [SerializeField]
+    PIDController yawPID;
 
     [Header("Drag")]
     [SerializeField]
@@ -378,13 +384,18 @@ public class Plane : MonoBehaviour {
     }
 
     void UpdateLift(float dt) {
-        var effectiveInput = controlInput;
+        var speed = Mathf.Max(0, LocalVelocity.z);
+        var av = LocalAngularVelocity;
+        var steeringPower = steeringCurve.Evaluate(speed);
 
-        EffectiveInput = new Vector3(
-            Mathf.Clamp(effectiveInput.x, -1, 1),
-            Mathf.Clamp(effectiveInput.y, -1, 1),
-            Mathf.Clamp(effectiveInput.z, -1, 1)
-        );
+        var gForceScaling = CalculateGLimiter(controlInput, turnSpeed * Mathf.Deg2Rad * steeringPower);
+        var targetAV = Vector3.Scale(turnSpeed, controlInput) * gForceScaling;
+
+        float x = pitchPID.Update(dt, av.x * Mathf.Rad2Deg, targetAV.x);
+        float y = yawPID.Update(dt, av.y * Mathf.Rad2Deg, targetAV.y);
+        float z = rollPID.Update(dt, av.z * Mathf.Rad2Deg, targetAV.z);
+
+        EffectiveInput = new Vector3(x, y, z);
 
         if (LocalVelocity.sqrMagnitude < 1f) return;
 
@@ -404,7 +415,7 @@ public class Plane : MonoBehaviour {
         //Rigidbody.AddRelativeForce(yawForce);
 
         foreach (var airfoil in airfoils) {
-            airfoil.SetInput(dt, controlInput);
+            airfoil.SetInput(dt, EffectiveInput);
             UpdateAirfoil(airfoil);
         }
 
