@@ -212,7 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: -45
-  liftPower: 15
+  liftPower: 25
   inducedDrag: 0
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
@@ -264,8 +264,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 45
-  liftPower: 30
-  inducedDrag: 5
+  liftPower: 100
+  inducedDrag: 10
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
   aoaInputRange: 20
@@ -731,8 +731,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: -45
-  liftPower: 30
-  inducedDrag: 5
+  liftPower: 100
+  inducedDrag: 10
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
   aoaInputRange: 20
@@ -1499,7 +1499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 45
-  liftPower: 15
+  liftPower: 25
   inducedDrag: 0
   inputInfluence: {x: 1, y: 0, z: 0}
   inputSpeed: 5
@@ -1698,7 +1698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: -45
-  liftPower: 10
+  liftPower: 25
   inducedDrag: 0
   inputInfluence: {x: 0, y: 0, z: 1}
   inputSpeed: 5
@@ -1874,7 +1874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 45
-  liftPower: 10
+  liftPower: 25
   inducedDrag: 0
   inputInfluence: {x: 0, y: 0, z: -1}
   inputSpeed: 5
@@ -1926,8 +1926,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   sweepAngle: 0
-  liftPower: 30
-  inducedDrag: 5
+  liftPower: 50
+  inducedDrag: 10
   inputInfluence: {x: 0, y: 0, z: 0}
   inputSpeed: 5
   aoaInputRange: 0
@@ -2492,11 +2492,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   pitchPID:
     proportionalGain: 0.1
-    integralGain: 0.1
+    integralGain: 0.25
     derivativeGain: 0.01
     outputMin: -1
     outputMax: 1
-    integralSaturation: 0.5
+    integralSaturation: 1
     derivativeMeasurement: 0
     valueLast: 0
     errorLast: 0

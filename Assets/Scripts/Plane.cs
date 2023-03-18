@@ -385,15 +385,15 @@ public class Plane : MonoBehaviour {
 
     void UpdateLift(float dt) {
         var speed = Mathf.Max(0, LocalVelocity.z);
-        var av = LocalAngularVelocity;
+        var av = LocalAngularVelocity * Mathf.Rad2Deg;
         var steeringPower = steeringCurve.Evaluate(speed);
 
         var gForceScaling = CalculateGLimiter(controlInput, turnSpeed * Mathf.Deg2Rad * steeringPower);
         var targetAV = Vector3.Scale(turnSpeed, controlInput) * gForceScaling;
 
-        float x = pitchPID.Update(dt, av.x * Mathf.Rad2Deg, targetAV.x);
-        float y = yawPID.Update(dt, av.y * Mathf.Rad2Deg, targetAV.y);
-        float z = rollPID.Update(dt, av.z * Mathf.Rad2Deg, targetAV.z);
+        float x = pitchPID.Update(dt, av.x, targetAV.x);
+        float y = yawPID.Update(dt, av.y, targetAV.y);
+        float z = rollPID.Update(dt, av.z, targetAV.z);
 
         EffectiveInput = new Vector3(x, y, z);
 
