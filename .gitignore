@@ -65,3 +65,6 @@ crashlytics-build.properties
 Assets/Scenes/Main/
 
 Assets/Scenes/Main.meta
+UserSettings/
+.vsconfig
+ProjectSettings/boot.config
