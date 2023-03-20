@@ -32,6 +32,8 @@ public class AIController : MonoBehaviour {
     [SerializeField]
     float rollFactor;
     [SerializeField]
+    float yawFactor;
+    [SerializeField]
     bool canUseMissiles;
     [SerializeField]
     bool canUseCannon;
@@ -57,6 +59,12 @@ public class AIController : MonoBehaviour {
     float cannonBurstCooldown;
     [SerializeField]
     float minMissileDodgeDistance;
+    [SerializeField]
+    float reactionDelayMin;
+    [SerializeField]
+    float reactionDelayMax;
+    [SerializeField]
+    float reactionDelayDistance;
 
     Target selfTarget;
     Plane targetPlane;
@@ -70,6 +78,20 @@ public class AIController : MonoBehaviour {
     float cannonBurstTimer;
     float cannonCooldownTimer;
 
+    enum ControlInputType {
+        Input,
+        Position
+    }
+
+    struct ControlInput {
+        public float time;
+        public Vector3 input;
+        public Vector3 targetPosition;
+        public ControlInputType type;
+    }
+
+    Queue<ControlInput> inputQueue;
+
     List<Vector3> dodgeOffsets;
     const float dodgeUpdateInterval = 0.25f;
     float dodgeTimer;
@@ -82,6 +104,7 @@ public class AIController : MonoBehaviour {
         }
 
         dodgeOffsets = new List<Vector3>();
+        inputQueue = new Queue<ControlInput>();
     }
 
     Vector3 AvoidGround() {
@@ -272,19 +295,22 @@ public class AIController : MonoBehaviour {
 
         Vector3 steering;
         float throttle;
+        bool emergency = false;
+        Vector3 targetPosition = plane.Target.Position;
+        ControlInputType type = ControlInputType.Input;
 
         var velocityRot = Quaternion.LookRotation(plane.Rigidbody.velocity.normalized);
         var ray = new Ray(plane.Rigidbody.position, velocityRot * Quaternion.Euler(groundAvoidanceAngle, 0, 0) * Vector3.forward);
 
-        if (Physics.Raycast(ray, groundCollisionDistance + plane.LocalAngularVelocity.z, groundCollisionMask.value)) {
+        if (Physics.Raycast(ray, groundCollisionDistance + plane.LocalVelocity.z, groundCollisionMask.value)) {
             steering = AvoidGround();
             throttle = CalculateThrottle(groundAvoidanceMinSpeed, groundAvoidanceMaxSpeed);
+            emergency = true;
         } else {
-            Vector3 targetPosition;
-
             var incomingMissile = selfTarget.GetIncomingMissile();
             if (incomingMissile != null) {
                 targetPosition = GetMissileDodgePosition(dt, incomingMissile);
+                emergency = true;
             } else {
                 targetPosition = GetTargetPosition();
             }
@@ -294,14 +320,56 @@ public class AIController : MonoBehaviour {
 
                 steering = RecoverSpeed();
                 throttle = 1;
+                emergency = true;
             } else {
-                steering = CalculateSteering(dt, targetPosition);
+                steering = Vector3.zero;
+                type = ControlInputType.Position;
                 throttle = CalculateThrottle(minSpeed, maxSpeed);
             }
         }
 
-        plane.SetControlInput(steering);
+        inputQueue.Enqueue(new ControlInput {
+            time = Time.time,
+            input = steering,
+            targetPosition = targetPosition,
+            type = type
+        });
+
+        //plane.SetControlInput(steering);
         plane.SetThrottleInput(throttle);
+
+        while (inputQueue.Count > 0) {
+            var input = inputQueue.Peek();
+
+            var delay = reactionDelayMax;
+
+            if (emergency) {
+                delay = reactionDelayMin;
+            }
+
+            if (Vector3.Distance(targetPosition, plane.Rigidbody.position) < reactionDelayDistance) {
+                delay = reactionDelayMin;
+            }
+
+            if (input.time + delay <= Time.time) {
+                if (input.type == ControlInputType.Position) {
+                    steering = CalculateSteering(dt, input.targetPosition);
+                    plane.SetControlInput(steering);
+                } else {
+                    steering = input.input;
+
+                    if (isRecoveringSpeed && !emergency) {
+                        //reduce steering strength while recovering speed
+                        steering.x = Mathf.Clamp(steering.x, -0.5f, 0.5f);
+                    }
+
+                    plane.SetControlInput(input.input);
+                }
+                inputQueue.Dequeue();
+            } else {
+                break;
+            }
+        }
 
         CalculateWeapons(dt);
     }
