@@ -125,6 +125,7 @@ public class AIController : MonoBehaviour {
         var errorDir = error.normalized;
         var pitchError = new Vector3(0, error.y, error.z).normalized;
         var rollError = new Vector3(error.x, error.y, 0).normalized;
+        var yawError = new Vector3(error.x, 0, error.z).normalized;
 
         var targetInput = new Vector3();
 
@@ -133,7 +134,8 @@ public class AIController : MonoBehaviour {
         targetInput.x = pitch;
 
         if (Vector3.Angle(Vector3.forward, errorDir) < fineSteeringAngle) {
-            targetInput.y = error.x;
+            var yaw = Vector3.SignedAngle(Vector3.forward, yawError, Vector3.up);
+            targetInput.y = yaw * yawFactor;
         } else {
             var roll = Vector3.SignedAngle(Vector3.up, rollError, Vector3.forward);
             targetInput.z = roll * rollFactor;

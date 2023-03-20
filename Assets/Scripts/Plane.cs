@@ -221,7 +221,7 @@ public class Plane : MonoBehaviour {
 
     public void SetControlInput(Vector3 input) {
         if (Dead) return;
-        controlInput = input.normalized;
+        controlInput = Vector3.ClampMagnitude(input, 1);
     }
 
     public void SetCannonInput(bool input) {
