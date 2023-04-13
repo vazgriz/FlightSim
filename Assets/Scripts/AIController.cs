@@ -92,6 +92,8 @@ public class AIController : MonoBehaviour {
 
     Queue<ControlInput> inputQueue;
 
+    bool dodging;
+    Vector3 lastDodgePoint;
     List<Vector3> dodgeOffsets;
     const float dodgeUpdateInterval = 0.25f;
     float dodgeTimer;
@@ -201,7 +203,7 @@ public class AIController : MonoBehaviour {
 
         foreach (var offset in dodgeOffsets) {
             var dodgePosition = missilePos + offset;
-            var offsetDist = Vector3.Distance(dodgePosition, plane.Rigidbody.position);
+            var offsetDist = Vector3.Distance(dodgePosition, lastDodgePoint);
 
             if (offsetDist < min) {
                 minDodge = dodgePosition;
@@ -209,6 +211,7 @@ public class AIController : MonoBehaviour {
             }
         }
 
+        lastDodgePoint = minDodge;
         return minDodge;
     }
 
@@ -309,9 +312,17 @@ public class AIController : MonoBehaviour {
         } else {
             var incomingMissile = selfTarget.GetIncomingMissile();
             if (incomingMissile != null) {
+                if (dodging == false) {
+                    //start dodging
+                    dodging = true;
+                    lastDodgePoint = plane.Rigidbody.position;
+                    dodgeTimer = 0;
+                }
+
                 targetPosition = GetMissileDodgePosition(dt, incomingMissile);
                 emergency = true;
             } else {
+                dodging = false;
                 targetPosition = GetTargetPosition();
             }
 

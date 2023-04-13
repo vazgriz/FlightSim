@@ -2287,7 +2287,7 @@ MonoBehaviour:
   missileFiringCooldown: 5
   missileMinRange: 500
   missileMaxRange: 1500
-  missileMaxFireAngle: 5
+  missileMaxFireAngle: 10
   bulletSpeed: 1000
   cannonRange: 1000
   cannonMaxFireAngle: 2.5
