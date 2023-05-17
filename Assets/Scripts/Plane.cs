@@ -541,12 +541,16 @@ public class Plane : MonoBehaviour {
         //handle user input
         UpdateThrottle(dt);
 
-        //apply updates
-        UpdateThrust();
-        UpdateLift();
-
         if (!Dead) {
+            //apply updates
+            UpdateThrust();
+            UpdateLift();
             UpdateSteering(dt);
+        } else {
+            //align with velocity
+            Vector3 up = Rigidbody.rotation * Vector3.up;
+            Vector3 forward = Rigidbody.velocity.normalized;
+            Rigidbody.rotation = Quaternion.LookRotation(forward, up);
         }
 
         UpdateDrag();
