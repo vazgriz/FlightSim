@@ -289,7 +289,9 @@ public class AIController : MonoBehaviour {
     }
 
     void SteerToTarget(float dt, Vector3 planePosition) {
+        bool foundTarget = false;
         Vector3 steering = Vector3.zero;
+        Vector3 targetPosition = Vector3.zero;
 
         var delay = reactionDelayMax;
 
@@ -301,11 +303,16 @@ public class AIController : MonoBehaviour {
             var input = inputQueue.Peek();
 
             if (input.time + delay <= Time.time) {
-                steering = CalculateSteering(dt, input.targetPosition);
+                targetPosition = input.targetPosition;
                 inputQueue.Dequeue();
+                foundTarget = true;
             } else {
                 break;
             }
+        }
+
+        if (foundTarget) {
+            steering = CalculateSteering(dt, targetPosition);
         }
 
         plane.SetControlInput(steering);
