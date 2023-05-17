@@ -2294,8 +2294,8 @@ MonoBehaviour:
   cannonBurstLength: 0.5
   cannonBurstCooldown: 2.5
   minMissileDodgeDistance: 100
-  reactionDelayMin: 0.25
-  reactionDelayMax: 1
+  reactionDelayMin: 0.5
+  reactionDelayMax: 2.5
   reactionDelayDistance: 1000
 --- !u!1001 &938316883078604183
 PrefabInstance:
