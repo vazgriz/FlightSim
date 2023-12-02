@@ -11,7 +11,8 @@
                     "id": "a601469b-e3aa-422a-806a-4f7dcba55332",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Throttle",
@@ -19,7 +20,8 @@
                     "id": "0d46f8f2-2f6f-4fe2-8623-427c869c3bde",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "RollPitch",
@@ -27,7 +29,8 @@
                     "id": "7173b259-7215-456e-ba7f-dba1aaad27e1",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Yaw",
@@ -35,7 +38,8 @@
                     "id": "56c160cd-3545-4284-abef-8d6eb62ab74c",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Camera",
@@ -43,7 +47,8 @@
                     "id": "cdd2542b-3da6-4431-be9c-bbf306e4dcd5",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "ToggleFlaps",
@@ -51,7 +56,8 @@
                     "id": "0e572958-b17b-4a43-950d-d9a9324fbc89",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "FireMissile",
@@ -59,7 +65,8 @@
                     "id": "54bc0053-bbe2-45cd-80b6-dd2a4f0dee6d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "FireCannon",
@@ -67,7 +74,8 @@
                     "id": "cc901d01-643f-4c28-918b-23ed83f6433c",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "ToggleAI",
@@ -75,7 +83,8 @@
                     "id": "b0d256fa-cc8c-4a22-925d-479ad7049947",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -114,8 +123,30 @@
                 },
                 {
                     "name": "",
+                    "id": "2eb275d5-48b9-4840-9097-00ceb082b80a",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9114f377-1c7f-4991-a591-b668ae086658",
                     "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RollPitch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a4cb34d9-18ae-43e9-94c9-e135654a72a4",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/stick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -158,8 +189,30 @@
                 },
                 {
                     "name": "",
+                    "id": "8613cb2c-a1ab-44bf-8217-17eb0d472eaa",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/rz",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Yaw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "45163a0d-825d-4388-9771-5cc782697311",
                     "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "15952bd6-fc4a-47c3-9630-dfbb63c3514e",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/hat",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -180,8 +233,30 @@
                 },
                 {
                     "name": "",
+                    "id": "155eb3ae-c31e-4343-890f-82d4f6ebb386",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/button5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleFlaps",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9f0a780e-ba4d-4467-a1fe-9234a00c0440",
                     "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHelp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2d8bff3-929f-4a9c-9f22-854a71ae55c0",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/button4",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -202,6 +277,17 @@
                 },
                 {
                     "name": "",
+                    "id": "c19c6a38-ef7c-4a65-b2b6-d3e156c34467",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/button2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireMissile",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f8cd153b-2c78-4690-b96d-88366b14cb64",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
@@ -213,8 +299,19 @@
                 },
                 {
                     "name": "",
+                    "id": "b85c20df-e8cd-403e-a311-2f376f6d4c3a",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/button15",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireCannon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d71bddd5-5fbb-4ffd-a940-080749cc27ad",
-                    "path": "<Keyboard>/space",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/button3",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
