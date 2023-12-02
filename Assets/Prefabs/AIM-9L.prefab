@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1397158608921222460}
   - component: {fileID: 7883338570026377371}
   m_Layer: 9
-  m_Name: AIM-9B
+  m_Name: AIM-9L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,10 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b80a1be13f9242749ba984725dd924ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 1e+18
-  speed: 400
-  trackingAngle: 90
-  damage: 50
+  lifetime: 65
+  speed: 858
+  trackingAngle: 40
+  damage: 100
   damageRadius: 5
   turningGForce: 10
   collisionMask:
