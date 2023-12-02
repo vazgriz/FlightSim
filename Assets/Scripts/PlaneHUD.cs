@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlaneHUD : MonoBehaviour {
     [SerializeField]
@@ -60,6 +62,8 @@ public class PlaneHUD : MonoBehaviour {
     float bulletSpeed;
     [SerializeField]
     GameObject aiMessage;
+    [SerializeField]
+    PostProcessVolume PPVolume;
 
     [SerializeField]
     List<Graphic> missileWarningGraphics;
@@ -86,6 +90,8 @@ public class PlaneHUD : MonoBehaviour {
     const float metersToKnots = 1.94384f;
     const float metersToFeet = 3.28084f;
 
+    private Vignette VLayer;
+
     void Start() {
         hudCenterGO = hudCenter.gameObject;
         velocityMarkerGO = velocityMarker.gameObject;
@@ -96,6 +102,7 @@ public class PlaneHUD : MonoBehaviour {
         reticleGO = reticle.gameObject;
         targetArrowGO = targetArrow.gameObject;
         missileArrowGO = missileArrow.gameObject;
+        PPVolume.profile.TryGetSettings(out VLayer);
     }
 
     public void SetPlane(Plane plane) {
@@ -173,6 +180,7 @@ public class PlaneHUD : MonoBehaviour {
     void UpdateGForce() {
         var gforce = plane.LocalGForce.y / 9.81f;
         gforceIndicator.text = string.Format("{0:0.0} G", gforce);
+        VLayer.intensity.value = 0.37f + ((gforce - 10f) * 0.12857f);
     }
 
     void UpdateAltitude() {
