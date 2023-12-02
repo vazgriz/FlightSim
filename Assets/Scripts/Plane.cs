@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Plane : MonoBehaviour {
     [SerializeField]
@@ -15,6 +17,8 @@ public class Plane : MonoBehaviour {
     float gLimit;
     [SerializeField]
     float gLimitPitch;
+    [SerializeField]
+    bool gLimiterToggle;
 
     [Header("Lift")]
     [SerializeField]
@@ -229,10 +233,18 @@ public class Plane : MonoBehaviour {
         cannonFiring = input;
     }
 
-    public void ToggleFlaps() {
-        if (LocalVelocity.z < flapsRetractSpeed) {
+    public void ToggleFlaps()
+    {
+        if (LocalVelocity.z < flapsRetractSpeed)
+        {
             FlapsDeployed = !FlapsDeployed;
         }
+    }
+
+    public void ToggleGLimiter()
+    {
+        gLimiterToggle = !gLimiterToggle;
+        Debug.Log("GLimiter Changed");
     }
 
     public void ApplyDamage(float damage) {
@@ -393,6 +405,13 @@ public class Plane : MonoBehaviour {
     }
 
     float CalculateGLimiter(Vector3 controlInput, Vector3 maxAngularVelocity) {
+
+        if(gLimiterToggle == true)
+        {
+            return 1.33f;
+        }
+        
+
         if (controlInput.magnitude < 0.01f) {
             return 1;
         }

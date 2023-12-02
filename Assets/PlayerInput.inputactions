@@ -85,6 +85,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleGLimiter",
+                    "type": "Button",
+                    "id": "c77b74d2-3d7a-4b90-965b-85973672fe4a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -316,6 +325,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleAI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a83b4be7-b8c5-4774-a1b4-4ed345442b51",
+                    "path": "<HID::Logitech X52 Professional H.O.T.A.S.>/button6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleGLimiter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e095e6a2-b47c-459e-bede-3e4f71b44ba4",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleGLimiter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

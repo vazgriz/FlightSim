@@ -67,13 +67,26 @@ public class PlayerController : MonoBehaviour {
         planeCamera.SetInput(input);
     }
 
-    public void OnFlapsInput(InputAction.CallbackContext context) {
+    public void OnFlapsInput(InputAction.CallbackContext context)
+    {
         if (plane == null) return;
 
-        if (context.phase == InputActionPhase.Performed) {
+        if (context.phase == InputActionPhase.Performed)
+        {
             plane.ToggleFlaps();
         }
     }
+
+    public void OnGForceInput(InputAction.CallbackContext context)
+    {
+        if (plane == null) return;
+
+        if (context.phase == InputActionPhase.Performed)
+        {
+            plane.ToggleGLimiter();
+        }
+    }
+
 
     public void OnFireMissile(InputAction.CallbackContext context) {
         if (plane == null) return;
@@ -101,10 +114,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void Update() {
+    void Update()
+    {
         if (plane == null) return;
         if (aiController.enabled) return;
 
         plane.SetControlInput(controlInput);
+
+        
     }
 }
