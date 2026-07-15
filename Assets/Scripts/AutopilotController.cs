@@ -216,6 +216,8 @@ public class AutopilotController : MonoBehaviour {
     float currentGlideSlope;
     float currentLandingAngle;
 
+    bool navigateApplyTurn;
+
     public Plane Plane {
         get {
             return plane;
@@ -376,12 +378,12 @@ public class AutopilotController : MonoBehaviour {
         return pitchInput;
     }
 
-    float CalculateNavigatePitchHoldMode(float dt, float targetPitch, out bool applyTurn) {
+    float CalculateNavigatePitchHoldMode(float dt, float targetPitch) {
         currentTargetPitch = targetPitch;
 
         // apply turn only if pitch is within a safe threshold
         var pitch = plane.PitchYawRoll.x;
-        applyTurn = (Mathf.Abs(targetPitch - pitch) < bankPitchThreshold);
+        navigateApplyTurn = (Mathf.Abs(targetPitch - pitch) < bankPitchThreshold);
 
         return CalculatePitchHold(dt, targetPitch);
     }
@@ -392,7 +394,7 @@ public class AutopilotController : MonoBehaviour {
     /// <param name="dt"></param>
     /// <param name="targetClimbRate"></param>
     /// <returns>Joystick pitch command</returns>
-    float CalculateNavigateClimbRateMode(float dt, float targetClimbRate, out bool applyTurn) {
+    float CalculateNavigateClimbRateMode(float dt, float targetClimbRate) {
         currentTargetClimbRate = targetClimbRate;
 
         // convert m/s to ft/min
@@ -400,7 +402,7 @@ public class AutopilotController : MonoBehaviour {
         var verticalAccelFt = plane.GForce.y * Units.metersToFeet * 60;
 
         var pitchTarget = climbRateController.Update(dt, verticalSpeedFt, targetClimbRate, verticalAccelFt);
-        var pitchInput = CalculateNavigatePitchHoldMode(dt, pitchTarget, out applyTurn);
+        var pitchInput = CalculateNavigatePitchHoldMode(dt, pitchTarget);
 
         return pitchInput;
     }
@@ -411,13 +413,13 @@ public class AutopilotController : MonoBehaviour {
     /// <param name="dt"></param>
     /// <param name="targetAltitudeFt"></param>
     /// <returns>Joystick pitch command</returns>
-    float CalculateNavigateAltitudeHoldMode(float dt, float targetAltitudeFt, out bool applyTurn) {
+    float CalculateNavigateAltitudeHoldMode(float dt, float targetAltitudeFt) {
         // convert m to ft, m/s to ft/min
         var altitudeFt = plane.Rigidbody.position.y * Units.metersToFeet;
         var verticalSpeedFt = plane.Rigidbody.velocity.y * Units.metersToFeet * 60;
 
         var targetClimbRate = altitudeHoldController.Update(dt, altitudeFt, targetAltitudeFt, verticalSpeedFt);
-        var pitchInput = CalculateNavigateClimbRateMode(dt, targetClimbRate, out applyTurn);
+        var pitchInput = CalculateNavigateClimbRateMode(dt, targetClimbRate);
 
         return pitchInput;
     }
@@ -430,9 +432,9 @@ public class AutopilotController : MonoBehaviour {
     /// <param name="targetFlightPath"></param>
     /// <param name="flightPathVelocity"></param>
     /// <returns>Joystick pitch command</returns>
-    float CalculateNavigateFlightPathMode(float dt, float targetFlightPath, out bool applyTurn) {
+    float CalculateNavigateFlightPathMode(float dt, float targetFlightPath) {
         currentTargetFlightPath = targetFlightPath;
-        applyTurn = (Mathf.Abs(targetFlightPath - currentFlightPath.Value) < bankPitchThreshold);
+        navigateApplyTurn = (Mathf.Abs(targetFlightPath - currentFlightPath.Value) < bankPitchThreshold);
 
         // increase pitch strength when rolled
         var effectiveRoll = Mathf.Clamp(plane.PitchYawRoll.z, -maxRoll, maxRoll);
@@ -599,9 +601,9 @@ public class AutopilotController : MonoBehaviour {
         var yawRate = GetYawRate(plane);
         var targetHeading = Utilities.MapAngleTo180(navigateMode.targetHeading);
 
-        var pitchInput = CalculateNavigatePitchControl(dt, out bool applyTurn);
+        var pitchInput = CalculateNavigatePitchControl(dt);
 
-        if (!applyTurn) {
+        if (!navigateApplyTurn) {
             // ignore heading error until pitch is within threshold
             targetHeading = currentHeading;
         }
@@ -613,24 +615,22 @@ public class AutopilotController : MonoBehaviour {
         SetControlInput(plane, steering);
     }
 
-    float CalculateNavigatePitchControl(float dt, out bool applyTurn) {
+    float CalculateNavigatePitchControl(float dt) {
         float pitchInput = 0;
+        navigateApplyTurn = false;
 
         switch (navigateMode.pitchControlMode) {
-            default:
-                applyTurn = false;
-                break;
             case NavigateModeState.PitchControlMode.PitchMode:
-                pitchInput = CalculateNavigatePitchHoldMode(dt, navigateMode.targetPitch, out applyTurn);
+                pitchInput = CalculateNavigatePitchHoldMode(dt, navigateMode.targetPitch);
                 break;
             case NavigateModeState.PitchControlMode.FlightPathMode:
-                pitchInput = CalculateNavigateFlightPathMode(dt, navigateMode.targetPitch, out applyTurn);
+                pitchInput = CalculateNavigateFlightPathMode(dt, navigateMode.targetPitch);
                 break;
             case NavigateModeState.PitchControlMode.AltitudeHoldMode:
-                pitchInput = CalculateNavigateAltitudeHoldMode(dt, navigateMode.targetAltitudeFt, out applyTurn);
+                pitchInput = CalculateNavigateAltitudeHoldMode(dt, navigateMode.targetAltitudeFt);
                 break;
             case NavigateModeState.PitchControlMode.ClimbRateHold:
-                pitchInput = CalculateNavigateClimbRateMode(dt, navigateMode.targetClimbRateFtPerMin, out applyTurn);
+                pitchInput = CalculateNavigateClimbRateMode(dt, navigateMode.targetClimbRateFtPerMin);
                 break;
         }
 
@@ -662,9 +662,9 @@ public class AutopilotController : MonoBehaviour {
         var yawRate = GetYawRate(plane);
         var targetHeading = Utilities.MapAngleTo180(navigateMode.targetHeading);
 
-        var pitchInput = CalculateNavigateFlightPathMode(dt, navigateMode.targetPitch, out bool applyTurn);
+        var pitchInput = CalculateNavigateFlightPathMode(dt, navigateMode.targetPitch);
 
-        if (!applyTurn) {
+        if (!navigateApplyTurn) {
             // ignore heading error until pitch is within threshold
             targetHeading = currentHeading;
         }
@@ -723,7 +723,7 @@ public class AutopilotController : MonoBehaviour {
     void HandleFinishTakeoff(float dt) {
         SetThrottleSpeedHold(dt, takeoffMode.takeoffTargetSpeedKts);
 
-        var pitchInput = CalculateNavigateClimbRateMode(dt, takeoffMode.finishTakeoffClimbRateFtPerMin, out _);
+        var pitchInput = CalculateNavigateClimbRateMode(dt, takeoffMode.finishTakeoffClimbRateFtPerMin);
         var rollInput = CalculateRollHold(dt, 0);
 
         var steering = new Vector3(pitchInput, 0, rollInput);
@@ -993,7 +993,7 @@ public class AutopilotController : MonoBehaviour {
         float flareT = Mathf.InverseLerp(landingMode.flareStartAltitudeFt, landingMode.flareEndAltitudeFt, altitude);
         float descentRate = Mathf.Lerp(landingMode.flareDescentStartFtPerMin, landingMode.flareDescentEndFtPerMin, flareT);
 
-        var pitchInput = CalculateNavigateClimbRateMode(dt, descentRate, out _);
+        var pitchInput = CalculateNavigateClimbRateMode(dt, descentRate);
         var rollInput = CalculateRollHold(dt, 0);
         var yawInput = CalculateYawHeading(dt, currentHeading, targetHeading);
 
