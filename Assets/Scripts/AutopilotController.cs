@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 
 public class AutopilotController : MonoBehaviour {
+
     public enum AutopilotMode {
         Idle,
         Takeoff,
@@ -914,17 +915,12 @@ public class AutopilotController : MonoBehaviour {
         takeoffMode.runwayAltitude = landingMode.touchdownPosition.y;
     }
 
-    bool CheckLandingAbort() {
-        bool crossTrackCheck = Mathf.Abs(currentLandingCrossTrack.Value) > landingMode.abortApproachMaxCrossTrackError;
-        bool glideSlopeCheck = currentGlideSlope < landingMode.abortApproachMinGlideSlope && currentGlideSlope > landingMode.abortApproachMaxGlideSlope;
-        bool angleCheck = currentLandingAngle > landingMode.abortApproachMaxAngle;
-        bool distanceCheck = currentLandingDistance < landingMode.approachDistance; // if close enough to attempt landing
+    bool CheckLandingAlignment() {
+        bool crossTrackCheck = Mathf.Abs(currentLandingCrossTrack.Value) < landingMode.abortApproachMaxCrossTrackError;
+        bool glideSlopeCheck = currentGlideSlope > landingMode.abortApproachMinGlideSlope && currentGlideSlope < landingMode.abortApproachMaxGlideSlope;
+        bool angleCheck = currentLandingAngle < landingMode.abortApproachMaxAngle;
 
-        if ((crossTrackCheck || glideSlopeCheck || angleCheck) && distanceCheck) {
-            return true;
-        }
-
-        return false;
+        return crossTrackCheck && glideSlopeCheck && angleCheck;
     }
 
     void SteerLandingApproach(float dt) {
@@ -953,11 +949,7 @@ public class AutopilotController : MonoBehaviour {
         SetThrottleSpeedHold(dt, landingMode.approachSpeedKts);
         SteerLandingApproach(dt);
 
-        bool crossTrackCheck = (Mathf.Abs(currentLandingCrossTrack.Value) < landingMode.approachMaxCrossTrackError);
-        bool glideSlopeCheck = (currentGlideSlope > landingMode.approachMinGlideSlope) && (currentGlideSlope < landingMode.approachMaxGlideSlope);
-        bool angleCheck = (currentLandingAngle < landingMode.approachMaxAngle);
-
-        if (crossTrackCheck && glideSlopeCheck && angleCheck) {
+        if (CheckLandingAlignment()) {
             landingMode.state = LandingModeState.LandingState.Approach;
         } else if (currentLandingDistance < landingMode.approachDistance) {
             AbortLandingToTakeoff();
@@ -977,10 +969,10 @@ public class AutopilotController : MonoBehaviour {
         bool altitudeCheck = (altitude <= landingMode.flareStartAltitudeFt);
         bool thresholdCheck = (currentLandingDistance < 0);
 
-        if (CheckLandingAbort()) {
-            AbortLandingToTakeoff();
-        } else if (altitudeCheck || thresholdCheck) {
+        if (altitudeCheck || thresholdCheck) {
             landingMode.state = LandingModeState.LandingState.Flare;
+        } else if (!CheckLandingAlignment()) {
+            AbortLandingToTakeoff();
         }
     }
 
@@ -1000,11 +992,11 @@ public class AutopilotController : MonoBehaviour {
         var steering = new Vector3(pitchInput, yawInput, rollInput);
         SetControlInput(plane, steering);
 
-        if (CheckLandingAbort()) {
-            AbortLandingToTakeoff();
-        } else if (plane.Grounded) {
+        if (plane.Grounded) {
             landingMode.state = LandingModeState.LandingState.Touchdown;
-        }
+        } else if (!CheckLandingAlignment()) {
+            AbortLandingToTakeoff();
+        } 
     }
 
     void HandleLandingTouchdown(float dt) {
