@@ -358,7 +358,9 @@ public class AutopilotController : MonoBehaviour {
     /// <param name="pitchRate"></param>
     /// <returns>Joystick pitch command</returns>
     float CalculateFlightPathHold(float dt, float targetFlightPath) {
-        var pitchInput = pitchHoldController.Update(dt, currentFlightPath.Value, targetFlightPath, currentFlightPath.Velocity);
+        var pitch = currentFlightPath.Value;
+        var pitchRate = currentFlightPath.Velocity;
+        var pitchInput = pitchHoldController.Update(dt, pitch, targetFlightPath, pitchRate);
 
         return pitchInput;
     }
