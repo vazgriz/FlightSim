@@ -461,7 +461,7 @@ public class AutopilotController : MonoBehaviour {
         return rollInput;
     }
 
-    float CalculateRollBank(float dt, float targetHeading) {
+    float CalculateTurnBank(float dt, float targetHeading) {
         var heading = plane.PitchYawRoll.y;
         var turnRate = GetYawRate(plane);
         var roll = plane.PitchYawRoll.z;
@@ -611,7 +611,7 @@ public class AutopilotController : MonoBehaviour {
             targetHeading = currentHeading;
         }
 
-        var rollInput = CalculateRollBank(dt, targetHeading);
+        var rollInput = CalculateTurnBank(dt, targetHeading);
         var yawInput = CalculateYawSlip(dt, 0, yawRate);
 
         var steering = new Vector3(pitchInput, yawInput, rollInput);
@@ -655,10 +655,8 @@ public class AutopilotController : MonoBehaviour {
         var error2D = new Vector3(error.x, 0, error.z);
         var direction2D = error2D.normalized;
 
-        var cross = Vector3.Cross(direction2D, Vector3.up);
-
         navigateMode.targetHeading = Vector3.SignedAngle(Vector3.forward, direction2D, Vector3.up);
-        navigateMode.targetPitch = Vector3.SignedAngle(direction2D, direction, cross);
+        navigateMode.targetPitch = 90 - Vector3.Angle(Vector3.up, direction);
 
         SetThrottleSpeedHold(dt, navigateMode.targetSpeedKts);
 
@@ -672,7 +670,7 @@ public class AutopilotController : MonoBehaviour {
             targetHeading = currentHeading;
         }
 
-        var rollInput = CalculateRollBank(dt, targetHeading);
+        var rollInput = CalculateTurnBank(dt, targetHeading);
         var yawInput = CalculateYawSlip(dt, 0, yawRate);
 
         var steering = new Vector3(pitchInput, yawInput, rollInput);
@@ -925,6 +923,22 @@ public class AutopilotController : MonoBehaviour {
         return crossTrackCheck && glideSlopeCheck && angleCheck;
     }
 
+    bool CheckLandingFlareAlignment() {
+        // do not check glide slope (grows to 90 when crossing threshold)
+        bool crossTrackCheck = Mathf.Abs(currentLandingCrossTrack.Value) < landingMode.abortApproachMaxCrossTrackError;
+        bool angleCheck = currentLandingAngle < landingMode.abortApproachMaxAngle;
+
+        return crossTrackCheck && angleCheck;
+    }
+
+    bool CheckLandingFlareStart() {
+        float altitude = currentLandingAltitude * Units.metersToFeet;
+        bool altitudeCheck = (altitude <= landingMode.flareStartAltitudeFt);
+        bool thresholdCheck = (currentLandingDistance < 0);
+
+        return altitudeCheck || thresholdCheck;
+    }
+
     void SteerLandingApproach(float dt) {
         var pitchRate = GetPitchRate(plane);
         var yawRate = GetYawRate(plane);
@@ -940,7 +954,7 @@ public class AutopilotController : MonoBehaviour {
         }
 
         var pitchInput = CalculateFlightPathHold(dt, targetFlightPath);
-        var rollInput = CalculateRollBank(dt, targetHeading);
+        var rollInput = CalculateTurnBank(dt, targetHeading);
         var yawInput = CalculateYawSlip(dt, 0, yawRate);
 
         var steering = new Vector3(pitchInput, yawInput, rollInput);
@@ -967,11 +981,7 @@ public class AutopilotController : MonoBehaviour {
             plane.ToggleFlaps();
         }
 
-        float altitude = currentLandingAltitude * Units.metersToFeet;
-        bool altitudeCheck = (altitude <= landingMode.flareStartAltitudeFt);
-        bool thresholdCheck = (currentLandingDistance < 0);
-
-        if (altitudeCheck || thresholdCheck) {
+        if (CheckLandingFlareStart()) {
             landingMode.state = LandingModeState.LandingState.Flare;
         } else if (!CheckLandingAlignment()) {
             AbortLandingToTakeoff();
@@ -996,7 +1006,7 @@ public class AutopilotController : MonoBehaviour {
 
         if (plane.Grounded) {
             landingMode.state = LandingModeState.LandingState.Touchdown;
-        } else if (!CheckLandingAlignment()) {
+        } else if (!CheckLandingFlareAlignment()) {
             AbortLandingToTakeoff();
         } 
     }
