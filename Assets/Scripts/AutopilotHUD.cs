@@ -251,7 +251,7 @@ public class AutopilotHUD : MonoBehaviour {
         };
 
         landingDescentRateInput.OnValueChanged += (float value) => {
-            autopilot.landingMode.flareDescentStartFtPerMin = value;
+            autopilot.landingMode.flareDescentFtPerMin = value;
         };
 
         landingFlareAltitudeInput.OnValueChanged += (float value) => {
@@ -297,7 +297,7 @@ public class AutopilotHUD : MonoBehaviour {
     void InitLandingMode() {
         landingSpeedInput.SetValue(autopilot.landingMode.approachSpeedKts);
         landingGlideSlopeInput.SetValue(autopilot.landingMode.idealGlideSlope);
-        landingDescentRateInput.SetValue(autopilot.landingMode.flareDescentStartFtPerMin);
+        landingDescentRateInput.SetValue(autopilot.landingMode.flareDescentFtPerMin);
         landingFlareAltitudeInput.SetValue(autopilot.landingMode.flareStartAltitudeFt);
     }
 

@@ -5,7 +5,6 @@ using System.Text;
 using UnityEngine;
 
 public class AutopilotController : MonoBehaviour {
-
     public enum AutopilotMode {
         Idle,
         Takeoff,
@@ -100,10 +99,8 @@ public class AutopilotController : MonoBehaviour {
         public float approachMinGlideSlope;
         public float approachMaxGlideSlope;
         public float approachMaxAngle;
-        public float flareDescentStartFtPerMin;
-        public float flareDescentEndFtPerMin;
+        public float flareDescentFtPerMin;
         public float flareStartAltitudeFt;
-        public float flareEndAltitudeFt;
 
         public float captureMinDistance;
         public float captureMaxDistance;
@@ -447,10 +444,8 @@ public class AutopilotController : MonoBehaviour {
         return Mathf.Clamp(pitchInput / rollFactor, -1, 1);
     }
 
-    float CalculateGlideSlopeTarget(float dt, float glideSlope, float targetGlideSlope, float pitchRate) {
-        // glide slope measures degrees downwards, convert to flight path which is degrees upward
-        var bias = glideSlopeController.Update(dt, glideSlope, targetGlideSlope, pitchRate);
-        return -targetGlideSlope + bias;
+    float CalculateGlideSlopeBias(float dt, float glideSlope, float targetGlideSlope, float pitchRate) {
+        return glideSlopeController.Update(dt, glideSlope, targetGlideSlope, pitchRate);
     }
 
     float CalculateRollHold(float dt, float targetRoll) {
@@ -474,9 +469,8 @@ public class AutopilotController : MonoBehaviour {
         return rollInput;
     }
 
-    float CalculateCrossTrackTarget(float dt, float targetHeading, float crossTrackError, float crossTrackVelocity) {
-        float bias = crossTrackController.Update(dt, crossTrackError, 0, crossTrackVelocity);
-        return targetHeading + bias;
+    float CalculateCrossTrackBias(float dt, float crossTrackError, float crossTrackVelocity) {
+        return crossTrackController.Update(dt, crossTrackError, 0, crossTrackVelocity);
     }
 
     float CalculateYawSlip(float dt, float targetSlip, float yawRate) {
@@ -943,8 +937,12 @@ public class AutopilotController : MonoBehaviour {
         var pitchRate = GetPitchRate(plane);
         var yawRate = GetYawRate(plane);
 
-        var targetHeading = CalculateCrossTrackTarget(dt, currentLandingHeading, currentLandingCrossTrack.Value, currentLandingCrossTrack.Velocity);
-        var targetFlightPath = CalculateGlideSlopeTarget(dt, currentGlideSlope, landingMode.idealGlideSlope, pitchRate);
+        var headingBias = CalculateCrossTrackBias(dt, currentLandingCrossTrack.Value, currentLandingCrossTrack.Velocity);
+        var targetHeading = currentLandingHeading + headingBias;
+
+        // glide slope measures degrees downwards, negate to convert to flight path
+        var flightPathBias = CalculateGlideSlopeBias(dt, currentGlideSlope, landingMode.idealGlideSlope, pitchRate);
+        var targetFlightPath = -landingMode.idealGlideSlope + flightPathBias;
 
         var pitchError = Mathf.Abs(targetFlightPath - currentFlightPath.Value);
 
@@ -991,13 +989,10 @@ public class AutopilotController : MonoBehaviour {
     void HandleLandingFlare(float dt) {
         SetThrottleSpeedHold(dt, landingMode.approachSpeedKts);
 
-        var targetHeading = CalculateCrossTrackTarget(dt, currentLandingHeading, currentLandingCrossTrack.Value, currentLandingCrossTrack.Velocity);
+        var headingBias = CalculateCrossTrackBias(dt, currentLandingCrossTrack.Value, currentLandingCrossTrack.Velocity);
+        var targetHeading = currentLandingHeading + headingBias;
 
-        float altitude = currentLandingAltitude * Units.metersToFeet;
-        float flareT = Mathf.InverseLerp(landingMode.flareStartAltitudeFt, landingMode.flareEndAltitudeFt, altitude);
-        float descentRate = Mathf.Lerp(landingMode.flareDescentStartFtPerMin, landingMode.flareDescentEndFtPerMin, flareT);
-
-        var pitchInput = CalculateNavigateClimbRateMode(dt, descentRate);
+        var pitchInput = CalculateNavigateClimbRateMode(dt, landingMode.flareDescentFtPerMin);
         var rollInput = CalculateRollHold(dt, 0);
         var yawInput = CalculateYawHeading(dt, currentHeading, targetHeading);
 
